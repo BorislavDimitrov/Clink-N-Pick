@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>16c30159-cc3e-4bf0-81b1-973f79352ba4</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="Hangfire.Console" Version="1.4.3" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
+    <PackageReference Include="Stripe.net" Version="44.10.0-beta.1" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClickNPick.Domain\ClickNPick.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DtoModels\PromotionPricings\Request\" />
+  </ItemGroup>
+
+</Project>
