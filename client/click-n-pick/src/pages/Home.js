@@ -104,13 +104,9 @@ function Home() {
       </div>
 
       <body>
-        <section class="bg-white dark:bg-gray-900">
-          <div class="py-8 lg:py-16 mx-auto max-w-screen-xl px-4">
-            <h2 class="mb-8 lg:mb-16 text-3xl font-extrabold tracking-tight leading-tight text-center text-gray-900 dark:text-white md:text-4xl">
-              You’ll be in good company
-            </h2>
-          </div>
-        </section>
+        <h2 class="mb-8 lg:mb-16 text-3xl font-extrabold tracking-tight leading-tight text-center text-gray-900 dark:text-white md:text-4xl">
+          And many other cateoreis
+        </h2>
       </body>
     </>
   );
