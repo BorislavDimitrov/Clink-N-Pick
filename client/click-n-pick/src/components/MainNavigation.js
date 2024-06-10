@@ -1,7 +1,6 @@
 import NavbarLogo from "../img/navbarLogo.png";
 import { GetUserImageUrl, RemoveUserImageUrl } from "../Utility/user";
 import { isAdmin } from "../Utility/auth";
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
@@ -166,7 +165,7 @@ function MainNavigation() {
                       Settings
                     </Link>
                   </li>
-                  <li className="py-2">
+                  <li className="py-2 border-t-2">
                     <Link
                       to="/products/myProducts"
                       className={
@@ -176,14 +175,25 @@ function MainNavigation() {
                       My Products
                     </Link>
                   </li>
-                  <li className="py-2">
+                  <li className="py-2 border-t-2">
                     <Link
-                      to="/delivery/MyShipmentRequest"
+                      to="/delivery/ShipmentsToReceive"
                       className={
                         "text-gray-800 hover:text-blue-400 duration-500"
                       }
                     >
-                      My Requested Shipments
+                      Shipments to receive
+                    </Link>
+                  </li>
+
+                  <li className="py-2 border-t-2">
+                    <Link
+                      to="/delivery/ShipmentsToSend"
+                      className={
+                        "text-gray-800 hover:text-blue-400 duration-500"
+                      }
+                    >
+                      Shipments to send
                     </Link>
                   </li>
                   <li className="py-2">

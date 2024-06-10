@@ -20,7 +20,8 @@ import AdminCategories from "./pages/AdminCategories";
 import EditCategory from "./pages/EditCategory";
 import CreateCategory from "./pages/CreateCategory";
 import RequestDelivery from "./pages/RequestDelivery";
-import MyShipmentRequest from "./pages/MyShipmentRequest";
+import ShipmentsToRecieve from "./pages/ShipmentsToReceive";
+import ShipmentsToSend from "./pages/ShipmentsToSend";
 
 const Router = createBrowserRouter([
   {
@@ -81,8 +82,12 @@ const Router = createBrowserRouter([
         element: <RequestDelivery />,
       },
       {
-        path: "/Delivery/MyShipmentRequest",
-        element: <RequestDelivery />,
+        path: "/Delivery/ShipmentsToReceive",
+        element: <ShipmentsToRecieve />,
+      },
+      {
+        path: "/Delivery/ShipmentsToSend",
+        element: <ShipmentsToSend />,
       },
       {
         path: "/Administration/Categories",
