@@ -1,4 +1,5 @@
 ﻿using ClickNPick.Application.DtoModels;
+using ClickNPick.Application.DtoModels.Delivery.Response;
 using ClickNPick.Web.Models.Delivery.Request;
 using ClickNPick.Web.Models.Delivery.Response;
 
@@ -18,6 +19,10 @@ namespace ClickNPick.Application.Services.Delivery
 
         Task<GetShipmentStatusesResponseDto?> GetShipmentStatusesAsync(GetShipmentStatusesRequestDto requestModel, CancellationToken cancellationToken = default);
 
-        Task<string> CreateShipmentRequest(RequestShipmentRequestDto model);
+        Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model);
+
+        Task<ShipmentListingResponseDto> GetShipmentsToSendAsync(string userId);
+
+        Task<ShipmentListingResponseDto> GetShipmentsToReceiveAsync(string userId);
     }
 }

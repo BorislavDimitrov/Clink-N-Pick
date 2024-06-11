@@ -74,7 +74,7 @@ namespace ClickNPick.Application.Services.Delivery
         public async Task<GetShipmentStatusesResponseDto?> GetShipmentStatusesAsync(GetShipmentStatusesRequestDto requestModel, CancellationToken cancellationToken = default)
             => await PostAsync<GetShipmentStatusesResponseDto>(EcontClientEndpoints.GetShipmentStatuses, requestModel, cancellationToken);
 
-        public async Task<string> CreateShipmentRequest(RequestShipmentRequestDto model)
+        public async Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model)
         {
 
             var product = await _productsService.GetByIdAsync(model.ProductId);
@@ -115,6 +115,46 @@ namespace ClickNPick.Application.Services.Delivery
             return newShipmentRequest.Id;
         }
 
+        public async Task<ShipmentListingResponseDto> GetShipmentsToSendAsync(string userId)
+        {
+            var user = await _usersService.GetByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var shipmentsToSend = await _shipmentRequestRepository
+                .All()
+                .Where(x => x.SellerId == userId)
+                .Include(x => x.Product)
+                .Include(x => x.Buyer)
+                .Include(x => x.Seller)
+                .ToListAsync();
+
+            return ShipmentListingResponseDto.FromShipmentRequests(shipmentsToSend);         
+        }
+
+        public async Task<ShipmentListingResponseDto> GetShipmentsToReceiveAsync(string userId)
+        {
+            var user = await _usersService.GetByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var shipmentsToReceive = await _shipmentRequestRepository
+                .All()
+                .Where(x => x.BuyerId == userId)
+                .Include(x => x.Product)
+                .Include(x => x.Seller)
+                .Include(x => x.Buyer)
+                .ToListAsync();
+
+            return ShipmentListingResponseDto.FromShipmentRequests(shipmentsToReceive);
+        }
+
         private async Task<T?> PostAsync<T>(string path, object body, CancellationToken cancellationToken = default)
         {
             var jsonData = JsonConvert.SerializeObject(body);
@@ -143,7 +183,5 @@ namespace ClickNPick.Application.Services.Delivery
                 => CacheKeyGenerator<T>.GenerateCacheKey(
                     string.Format(CacheKeyPrefix, typeof(T).Name),
                     new CacheParameterCollection<T>(requestModel));
-
-        
     }
 }
