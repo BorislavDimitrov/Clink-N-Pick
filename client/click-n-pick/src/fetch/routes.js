@@ -40,6 +40,8 @@ const paymentsRoutes = {
 const deliveryRoutes = {
   createLabel: "api/Delivery/CreateLabel",
   requestShipment: "api/Delivery/RequestShipment",
+  getShipmentsToReceive: "api/Delivery/ShipmentsToReceive",
+  getShipmentsToSend: "api/Delivery/ShipmentsToSend",
 };
 
 const promotionsRoutes = {
