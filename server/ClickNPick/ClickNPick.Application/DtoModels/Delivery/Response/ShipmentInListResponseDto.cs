@@ -18,7 +18,7 @@ namespace ClickNPick.Application.DtoModels.Delivery.Response
 
         public string ProductTitle { get; set; }
 
-        public string ShipmentStatus { get; set; }
+        public string Status { get; set; }
 
         public static ShipmentInListResponseDto FromShipmentRequest(ShipmentRequest shipmentRequest)
         {
@@ -31,7 +31,7 @@ namespace ClickNPick.Application.DtoModels.Delivery.Response
                 BuyerUsername = shipmentRequest.Buyer.UserName,
                 ProductId = shipmentRequest.ProductId,
                 ProductTitle = shipmentRequest.Product.Title,
-                ShipmentStatus = shipmentRequest.ShipmentStatus.ToString()
+                Status = shipmentRequest.ShipmentStatus.ToString()
             };
         }
     }
