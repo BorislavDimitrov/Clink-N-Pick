@@ -352,36 +352,7 @@ public class ProductsService : IProductsService
         }
 
         return products;
-    }
-
-    private IQueryable<Product> OrderProductsBy(IQueryable<Product> products, string? orderBy)
-    {
-        switch (orderBy)
-        {
-            case "DateAsc":
-                products = products
-                    .OrderByDescending(x => x.IsPromoted)
-                    .ThenBy(x => x.CreatedOn);
-                break;
-            case "PriceDesc":
-                products = products
-                    .OrderByDescending(x => x.IsPromoted)
-                    .ThenByDescending(x => x.Price);
-                break;
-            case "PriceAsc":
-                products = products
-                    .OrderByDescending(x => x.IsPromoted)
-                    .ThenBy(x => x.Price);
-                break;
-            default:
-                products = products
-                    .OrderByDescending(x => x.IsPromoted)
-                    .ThenByDescending(x => x.CreatedOn);
-                break;
-        }
-
-        return products;
-    }
+    }  
 
     public async Task<ProductListingResponseDto> SearchAsync(FilterPaginationDto model)
     {
@@ -436,6 +407,38 @@ public class ProductsService : IProductsService
         productsResult.TotalItems = totalItems;
 
         return productsResult;
+    }
+
+    public Task<Product> GetByIdAsync(string id)
+        => _productsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+    private IQueryable<Product> OrderProductsBy(IQueryable<Product> products, string? orderBy)
+    {
+        switch (orderBy)
+        {
+            case "DateAsc":
+                products = products
+                    .OrderByDescending(x => x.IsPromoted)
+                    .ThenBy(x => x.CreatedOn);
+                break;
+            case "PriceDesc":
+                products = products
+                    .OrderByDescending(x => x.IsPromoted)
+                    .ThenByDescending(x => x.Price);
+                break;
+            case "PriceAsc":
+                products = products
+                    .OrderByDescending(x => x.IsPromoted)
+                    .ThenBy(x => x.Price);
+                break;
+            default:
+                products = products
+                    .OrderByDescending(x => x.IsPromoted)
+                    .ThenByDescending(x => x.CreatedOn);
+                break;
+        }
+
+        return products;
     }
 }
 

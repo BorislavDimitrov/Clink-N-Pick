@@ -1,6 +1,7 @@
 ﻿using ClickNPick.Application.DtoModels;
 using ClickNPick.Application.DtoModels.Products.Request;
 using ClickNPick.Application.DtoModels.Products.Response;
+using ClickNPick.Domain.Models;
 
 namespace ClickNPick.Application.Services.Products;
 
@@ -25,4 +26,6 @@ public interface IProductsService
      Task<ProductListingResponseDto> SearchAsync(FilterPaginationDto model);
 
     Task<ProductListingResponseDto> GetUserProductsAsync(UserProductsRequestDto model);
+
+    Task<Product> GetByIdAsync(string id);
 }

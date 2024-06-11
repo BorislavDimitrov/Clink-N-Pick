@@ -4,7 +4,11 @@ using ClickNPick.Application.Common;
 using ClickNPick.Application.Configurations.Cache;
 using ClickNPick.Application.Constants;
 using ClickNPick.Application.DtoModels;
+using ClickNPick.Application.DtoModels.Delivery.Response;
 using ClickNPick.Application.Exceptions.Identity;
+using ClickNPick.Application.Exceptions.Products;
+using ClickNPick.Application.Services.Products;
+using ClickNPick.Application.Services.Users;
 using ClickNPick.Domain.Models;
 using ClickNPick.Web.Models.Delivery.Request;
 using ClickNPick.Web.Models.Delivery.Response;
@@ -25,21 +29,22 @@ namespace ClickNPick.Application.Services.Delivery
         private readonly HttpClient _httpClient;
         private readonly ICacheService _cacheService;
         private readonly IRepository<ShipmentRequest> _shipmentRequestRepository;
-        private readonly IRepository<Product> _produtctRepository;
-        private readonly IRepository<User> _userRepository;
+        private readonly IUsersService _usersService;
+        private readonly IProductsService _productsService;
 
         public DeliveryService(
             HttpClient httpClient,
             ICacheService cacheService,
              IRepository<ShipmentRequest> shipmentRequestRepository,
-             IRepository<Product> produtctRepository,
-             IRepository<User> userRepository)
+             IUsersService usersService,
+             IProductsService productsService
+             )
         {
             _httpClient = httpClient;
             _cacheService = cacheService;
             _shipmentRequestRepository = shipmentRequestRepository;
-            _produtctRepository = produtctRepository;
-            _userRepository = userRepository;
+            _usersService = usersService;
+            _productsService = productsService;
         }
 
         public async Task<CountriesResponseDto> GetCountriesAsync(CancellationToken cancellationToken = default)
@@ -72,21 +77,26 @@ namespace ClickNPick.Application.Services.Delivery
         public async Task<string> CreateShipmentRequest(RequestShipmentRequestDto model)
         {
 
-            var product = await _produtctRepository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == model.ProductId);
+            var product = await _productsService.GetByIdAsync(model.ProductId);
+
+            if (product == null)
+            {
+                throw new ProductNotFoundException();
+            }
 
             if (model.BuyerId == product.CreatorId)
             {
                 throw new InvalidOperationException("A creator of a product cannot request its own shipment.");
             }
 
-            var buyer = await _userRepository.All().FirstOrDefaultAsync(x => x.Id == model.BuyerId);
+            var buyer = await _usersService.GetByIdAsync(model.BuyerId);
 
             if (buyer == null)
             {
                 throw new UserNotFoundException();
             }
 
-            var seller = await _userRepository.All().FirstOrDefaultAsync(x => x.Id == product.CreatorId);
+            var seller = await _usersService.GetByIdAsync(product.CreatorId);
 
             if (seller == null)
             {
@@ -127,10 +137,13 @@ namespace ClickNPick.Application.Services.Delivery
                 NullValueHandling = NullValueHandling.Ignore
             });
         }
+
         private string GetCacheKey<T>(T requestModel)
             where T : ICacheable
                 => CacheKeyGenerator<T>.GenerateCacheKey(
                     string.Format(CacheKeyPrefix, typeof(T).Name),
-                    new CacheParameterCollection<T>(requestModel));     
+                    new CacheParameterCollection<T>(requestModel));
+
+        
     }
 }
