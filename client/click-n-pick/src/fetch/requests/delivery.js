@@ -39,7 +39,7 @@ const shipmentsToSend = async (data) => {
 const shipmentsToReceive = async (data) => {
   const sendDto = new SendDto(
     httpMethod.get(),
-    `${baseUrl}${deliveryRoutes.ShipmentsToReceive}}`
+    `${baseUrl}${deliveryRoutes.getShipmentsToReceive}`
   );
 
   return await request.send(sendDto);
