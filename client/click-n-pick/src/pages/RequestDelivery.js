@@ -8,8 +8,6 @@ function RequestDelivery() {
   const params = useParams();
 
   const [shippingLabelServices, setShippingLabelServices] = useState({
-    cdAmount: 0,
-    cdType: "",
     SmsNotification: false,
     GoodsReceipt: false,
     DeliveryReceipt: false,
@@ -39,7 +37,6 @@ function RequestDelivery() {
     });
     console.log(inputInfo);
     inputInfo["ReceiverOfficeCode"] = address.office.code;
-    inputInfo["Mode"] = "create";
     inputInfo["ReceiverName"] = clientRecieverProfile.Name;
     inputInfo["ReceiverPhoneNumber"] = clientRecieverProfile.Phones[0];
     inputInfo["SmsNotification"] = shippingLabelServices.SmsNotification;
@@ -110,7 +107,7 @@ function RequestDelivery() {
               </label>
               <input
                 type="text"
-                name="name"
+                name="ReceiverName"
                 onChange={(e) => {
                   setClientRecieverProfile((prevClientProfile) => ({
                     ...prevClientProfile,
