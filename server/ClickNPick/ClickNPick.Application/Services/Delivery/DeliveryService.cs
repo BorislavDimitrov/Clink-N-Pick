@@ -221,6 +221,12 @@ namespace ClickNPick.Application.Services.Delivery
                 async () => await PostAsync<CitiesResponseDto>(EcontClientEndpoints.Cities, new { countryCode = CountryCode }, cancellationToken),
                 TimeSpan.FromMinutes(CacheExpirationMinutes));
 
+        public async Task<QuartersResponseDto?> GetQuartersAsync(int cityId, CancellationToken cancellationToken = default)
+    => await _cacheService.GetOrCreateAsync<QuartersResponseDto>(
+        cityId.ToString(),
+        async () => await PostAsync<QuartersResponseDto>(EcontClientEndpoints.Quarters, new { cityID = cityId }, cancellationToken),
+        TimeSpan.FromMinutes(CacheExpirationMinutes));
+
         public async Task<bool> IsUserSenderOfShipment(string shipmentId, string userId)
             => await _shipmentRequestRepository
             .All()

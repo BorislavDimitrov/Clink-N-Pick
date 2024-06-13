@@ -25,6 +25,14 @@ namespace ClickNPick.Web.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetQuarters([FromQuery]int cityId)
+        {
+            var result = await _deliveryService.GetQuartersAsync(cityId);
+            var response = QuartersResponseModel.FromQuartersResponseDto(result);
+            return Ok(response);
+        }
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> RequestShipment(RquestShipmentRequestModel model)
