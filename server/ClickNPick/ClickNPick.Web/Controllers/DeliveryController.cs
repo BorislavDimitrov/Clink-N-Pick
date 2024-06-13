@@ -18,46 +18,10 @@ namespace ClickNPick.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCountries()
+        public async Task<IActionResult> GetCities()
         {
-            var result = await _deliveryService.GetCountriesAsync();
-            var response = CountriesResponseModel.FromCountriesResponseModelDto(result);
-            return Ok(response);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetCities([FromQuery] GetCitiesRequestModel model)
-        {
-            var dto = model.ToGetCitiesRequestDto();
-            var result = await _deliveryService.GetCitiesAsync(dto);
+            var result = await _deliveryService.GetCitiesAsync();
             var response = CitiesResponseModel.FromCitiesResponseDto(result);
-            return Ok(response);
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult?> DeleteLabel([FromQuery] DeleteLabelsRequestModel requestModel)
-        {
-            var dto = requestModel.ToDeleteLabelsRequestDto();
-            var result = await _deliveryService.DeleteLabelsAsync(dto);
-            var response = DeleteLabelsResponseModel.FromDeleteLabelsResponseDto(result);
-            return Ok(response);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetOffices([FromQuery] GetOfficesRequestModel inputModel)
-        {
-            var dto = inputModel.ToGetOfficesRequestDto();
-            var result = await _deliveryService.GetOfficesAsync(dto);
-            var response = OfficesResponseModel.FromOfficesResponseDto(result);
-            return Ok(response);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ShipmentStatuses([FromQuery] GetShipmentStatusesRequestModel requestModel)
-        {
-            var dto = requestModel.ToGetShipmentStatusesRequestDto();
-            var result = await _deliveryService.GetShipmentStatusesAsync(dto);
-            var response = GetShipmentStatusesResponseModel.FromGetShipmentStatusesResponseDto(result);
             return Ok(response);
         }
 

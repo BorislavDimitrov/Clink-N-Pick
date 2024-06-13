@@ -4,6 +4,7 @@ using ClickNPick.Application.Common;
 using ClickNPick.Application.Configurations.Cache;
 using ClickNPick.Application.Constants;
 using ClickNPick.Application.DeliveryModels.Request;
+using ClickNPick.Application.DeliveryModels.Response;
 using ClickNPick.Application.DtoModels.Delivery.Request;
 using ClickNPick.Application.DtoModels.Delivery.Response;
 using ClickNPick.Application.Exceptions.Delivery;
@@ -24,6 +25,7 @@ namespace ClickNPick.Application.Services.Delivery
 {
     public class DeliveryService : IDeliveryService
     {
+        private const string CountryCode = "BGR";
         private const string CdType = "get";
         private const string Mode = "create";
         private const double CacheExpirationMinutes = 60;
@@ -51,29 +53,13 @@ namespace ClickNPick.Application.Services.Delivery
             _productsService = productsService;
         }
 
-        public async Task<CountriesResponseDto> GetCountriesAsync(CancellationToken cancellationToken = default)
-            => await _cacheService.GetOrCreateAsync<CountriesResponseDto>(
-                $"{nameof(this.GetCountriesAsync)}",
-                async () => await PostAsync<CountriesResponseDto>(EcontClientEndpoints.Countries, new { }, cancellationToken),
-                TimeSpan.FromMinutes(CacheExpirationMinutes));
+        
 
-        public async Task<CitiesResponseDto?> GetCitiesAsync(GetCitiesRequestDto requestModel, CancellationToken cancellationToken = default)
-            => await _cacheService.GetOrCreateAsync<CitiesResponseDto>(
-                this.GetCacheKey(requestModel),
-                async () => await PostAsync<CitiesResponseDto>(EcontClientEndpoints.Cities, requestModel, cancellationToken),
-                TimeSpan.FromMinutes(CacheExpirationMinutes));
-
-        public async Task<OfficesResponseDto?> GetOfficesAsync(GetOfficesRequestDto requestModel, CancellationToken cancellationToken = default)
-            => await _cacheService.GetOrCreateAsync<OfficesResponseDto>(
-                this.GetCacheKey(requestModel),
-                async () => await PostAsync<OfficesResponseDto>(EcontClientEndpoints.Offices, requestModel, cancellationToken),
-                TimeSpan.FromMinutes(CacheExpirationMinutes));
-
-        public async Task<DeleteLabelsResponseDto?> DeleteLabelsAsync(DeleteLabelsRequestDto requestModel, CancellationToken cancellationToken = default)
+        public async Task<DeleteLabelsResponseDto?> DeleteLabelsAsync(DeleteLabelsRequest requestModel, CancellationToken cancellationToken = default)
             => await PostAsync<DeleteLabelsResponseDto>(EcontClientEndpoints.DeleteLabels, requestModel, cancellationToken);
 
-        public async Task<GetShipmentStatusesResponseDto?> GetShipmentStatusesAsync(GetShipmentStatusesRequestDto requestModel, CancellationToken cancellationToken = default)
-            => await PostAsync<GetShipmentStatusesResponseDto>(EcontClientEndpoints.GetShipmentStatuses, requestModel, cancellationToken);
+        public async Task<GetShipmentStatusesResponse?> GetShipmentStatusesAsync(GetShipmentStatusesRequest requestModel, CancellationToken cancellationToken = default)
+            => await PostAsync<GetShipmentStatusesResponse>(EcontClientEndpoints.GetShipmentStatuses, requestModel, cancellationToken);
 
         public async Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model)
         {
@@ -229,13 +215,20 @@ namespace ClickNPick.Application.Services.Delivery
             .All()
             .FirstOrDefaultAsync(x => x.Id == id);
 
+        public async Task<CitiesResponseDto?> GetCitiesAsync(CancellationToken cancellationToken = default)
+            => await _cacheService.GetOrCreateAsync<CitiesResponseDto>(
+                CountryCode,
+                async () => await PostAsync<CitiesResponseDto>(EcontClientEndpoints.Cities, new { countryCode = CountryCode }, cancellationToken),
+                TimeSpan.FromMinutes(CacheExpirationMinutes));
+
         public async Task<bool> IsUserSenderOfShipment(string shipmentId, string userId)
             => await _shipmentRequestRepository
             .All()
             .FirstOrDefaultAsync(x => x.Id == shipmentId && x.SellerId == userId) == null ? false : true;
 
-        private async Task<CreateLabelResponseDto?> CreateLabelAsync(CreateLabelRequest requestModel, CancellationToken cancellationToken = default)
-            => await PostAsync<CreateLabelResponseDto>(EcontClientEndpoints.CreateLabel, requestModel, cancellationToken);
+
+        private async Task<CreateLabelResponse?> CreateLabelAsync(CreateLabelRequest requestModel, CancellationToken cancellationToken = default)
+            => await PostAsync<CreateLabelResponse>(EcontClientEndpoints.CreateLabel, requestModel, cancellationToken);
 
         private async Task<T?> PostAsync<T>(string path, object body, CancellationToken cancellationToken = default)
         {
