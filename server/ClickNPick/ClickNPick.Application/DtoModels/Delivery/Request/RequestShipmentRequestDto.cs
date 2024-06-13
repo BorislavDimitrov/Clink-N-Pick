@@ -1,11 +1,9 @@
 ﻿using ClickNPick.Domain.Models;
 
-namespace ClickNPick.Application.DtoModels
+namespace ClickNPick.Application.DtoModels.Delivery.Request
 {
     public class RequestShipmentRequestDto
     {
-        public string ShipmentNumber { get; set; }
-
         public string EmailOnDelivery { get; set; }
 
         public string ReceiverPhoneNumber { get; set; }
@@ -32,16 +30,16 @@ namespace ClickNPick.Application.DtoModels
         {
             return new ShipmentRequest
             {
-                EmailOnDelivery = this.EmailOnDelivery,
-                ReceiverPhoneNumber = this.ReceiverPhoneNumber,
-                ReceiverName = this.ReceiverName,
-                InvoiceBeforePayCD = this.InvoiceBeforePayCD,
-                SmsOnDelivery = this.SmsOnDelivery,
-                SmsNotification = this.SmsNotification,
-                GoodsReceipt = this.GoodsReceipt,
-                DeliveryReceipt = this.DeliveryReceipt,
-                ReceiverOfficeCode = this.ReceiverOfficeCode,
-                ProductId = this.ProductId,
+                EmailOnDelivery = EmailOnDelivery,
+                ReceiverPhoneNumber = ReceiverPhoneNumber,
+                ReceiverName = ReceiverName,
+                InvoiceBeforePayCD = InvoiceBeforePayCD,
+                SmsOnDelivery = SmsOnDelivery,
+                SmsNotification = SmsNotification,
+                GoodsReceipt = GoodsReceipt,
+                DeliveryReceipt = DeliveryReceipt,
+                ReceiverOfficeCode = ReceiverOfficeCode,
+                ProductId = ProductId,
             };
         }
     }

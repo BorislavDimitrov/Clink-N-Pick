@@ -2,9 +2,9 @@
 using ClickNPick.Application.Common;
 using Newtonsoft.Json;
 
-namespace ClickNPick.Web.Models.Delivery.Request;
+namespace ClickNPick.Application.DeliveryModels.Request;
 
-public class CreateLabelRequestModel
+public class CreateLabelRequest
 {
     [JsonProperty("label")]
     public ShippingLabel? Label { get; set; }
@@ -19,15 +19,4 @@ public class CreateLabelRequestModel
     [JsonProperty("mode")]
     [RequestSupportedValues<string>("validate", "calculate", "create", "calculate_with_block")]
     public string? Mode { get; set; }
-
-    public CreateLabelRequestDto ToCreateLabelRequestDto()
-    {
-        return new CreateLabelRequestDto()
-        {
-            Label = this.Label,
-            RequestCourierTimeFrom = RequestCourierTimeFrom,
-            RequestCourierTimeTo = RequestCourierTimeTo,
-            Mode = this.Mode,
-        };
-    }
 }

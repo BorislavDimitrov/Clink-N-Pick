@@ -1,8 +1,8 @@
-﻿using ClickNPick.Application.DtoModels;
+﻿using ClickNPick.Application.DtoModels.Delivery.Request;
 
 namespace ClickNPick.Web.Models.Delivery.Request
 {
-    public class RquestShipment
+    public class RquestShipmentRequestModel
     {
         public string EmailOnDelivery { get; set; }
 
