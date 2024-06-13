@@ -1,9 +1,9 @@
 ﻿using ClickNPick.Application.Common;
 using Newtonsoft.Json;
 
-namespace ClickNPick.Web.Models.Delivery.Response;
+namespace ClickNPick.Application.DeliveryModels.Response;
 
-public class GetShipmentStatusesResponseDto
+public class GetShipmentStatusesResponse
 {
     [JsonProperty("shipmentStatuses")]
     public IEnumerable<ShipmentStatusResultElement> ShipmentStatuses { get; set; }

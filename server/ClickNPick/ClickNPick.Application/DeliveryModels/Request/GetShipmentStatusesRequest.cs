@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace ClickNPick.Web.Models.Delivery.Request;
+namespace ClickNPick.Application.DeliveryModels.Request;
 
-public class GetShipmentStatusesRequestDto
+public class GetShipmentStatusesRequest
 {
     [JsonProperty(
         PropertyName = "shipmentNumbers",

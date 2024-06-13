@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ClickNPick.Web.Models.Delivery.Response;
 
-public class CreateLabelResponseDto
+public class CreateLabelResponse
 {
     [JsonProperty("label")]
     public ShipmentStatus? Label { get; set; }
@@ -16,4 +16,5 @@ public class CreateLabelResponseDto
 
     [JsonProperty("payAfterAcceptIgnored")]
     public string? PayAfterAcceptIgnored { get; set; }
+
 }
