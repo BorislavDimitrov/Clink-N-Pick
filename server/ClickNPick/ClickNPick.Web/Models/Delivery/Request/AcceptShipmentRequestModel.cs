@@ -40,6 +40,7 @@ namespace ClickNPick.Web.Models.Delivery.Request
                 Weight = this.Weight,
                 ShipmentDescription = this.ShipmentDescription,
                 OrderNumber = this.OrderNumber,
+                SenderOfficeCode = this.SenderOfficeCode,
             };
         }
     }

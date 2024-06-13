@@ -22,6 +22,8 @@
 
         public string OrderNumber { get; set; }
 
+        public string? SenderOfficeCode { get; set; }
+
         public string UserId { get; set; }
     }
 }
