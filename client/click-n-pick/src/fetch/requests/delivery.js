@@ -55,6 +55,15 @@ const getCities = async (data) => {
   return await request.send(sendDto);
 };
 
+const getQuarters = async (data) => {
+  const sendDto = new SendDto(
+    httpMethod.get(),
+    `${baseUrl}${deliveryRoutes.getQuarters}?${data}`
+  );
+
+  return await request.send(sendDto);
+};
+
 const shipmentsToReceive = async (data) => {
   const sendDto = new SendDto(
     httpMethod.get(),
@@ -70,4 +79,5 @@ export {
   shipmentsToReceive,
   acceptShipment,
   getCities,
+  getQuarters,
 };
