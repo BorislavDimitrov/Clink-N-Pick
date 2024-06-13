@@ -3,8 +3,10 @@ using ClickNPick.Application.Abstractions.Services;
 using ClickNPick.Application.Common;
 using ClickNPick.Application.Configurations.Cache;
 using ClickNPick.Application.Constants;
-using ClickNPick.Application.DtoModels;
+using ClickNPick.Application.DeliveryModels.Request;
+using ClickNPick.Application.DtoModels.Delivery.Request;
 using ClickNPick.Application.DtoModels.Delivery.Response;
+using ClickNPick.Application.Exceptions.Delivery;
 using ClickNPick.Application.Exceptions.Identity;
 using ClickNPick.Application.Exceptions.Products;
 using ClickNPick.Application.Services.Products;
@@ -22,6 +24,8 @@ namespace ClickNPick.Application.Services.Delivery
 {
     public class DeliveryService : IDeliveryService
     {
+        private const string CdType = "get";
+        private const string Mode = "create";
         private const double CacheExpirationMinutes = 60;
         private const string CacheKeyPrefix = "CacheKey:{0}";
         private const string JsonMediaType = "application/json";
@@ -64,9 +68,6 @@ namespace ClickNPick.Application.Services.Delivery
                 this.GetCacheKey(requestModel),
                 async () => await PostAsync<OfficesResponseDto>(EcontClientEndpoints.Offices, requestModel, cancellationToken),
                 TimeSpan.FromMinutes(CacheExpirationMinutes));
-
-        public async Task<CreateLabelResponseDto?> CreateLabelAsync(CreateLabelRequestDto requestModel, CancellationToken cancellationToken = default)
-            => await PostAsync<CreateLabelResponseDto>(EcontClientEndpoints.CreateLabel, requestModel, cancellationToken);
 
         public async Task<DeleteLabelsResponseDto?> DeleteLabelsAsync(DeleteLabelsRequestDto requestModel, CancellationToken cancellationToken = default)
             => await PostAsync<DeleteLabelsResponseDto>(EcontClientEndpoints.DeleteLabels, requestModel, cancellationToken);
@@ -115,6 +116,74 @@ namespace ClickNPick.Application.Services.Delivery
             return newShipmentRequest.Id;
         }
 
+        public async Task AcceptShipmentAsync(AcceptShipmentRequestDto model)
+        {
+            var user = await _usersService.GetByIdAsync(model.UserId);
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var shipmentRequest = await GetByIdAsync(model.RequestShipmentId);
+
+            if (shipmentRequest == null)
+            {
+                throw new ShipmentRequestNotFoundException();
+            }
+
+            if (await IsUserSenderOfShipment(model.RequestShipmentId, model.UserId) == false)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var labelRequest = new CreateLabelRequest();
+            labelRequest.Mode = Mode;
+
+            var shippingLabel = new ShippingLabel();
+
+            var receiverProfile = new ClientProfile()
+            {
+                Name = shipmentRequest.ReceiverName,
+                Phones = new List<string> { shipmentRequest.ReceiverPhoneNumber },
+            };
+
+            shippingLabel.ReceiverClient = receiverProfile;
+
+            var senderProfile = new ClientProfile()
+            {
+                Name = model.SenderName,
+                Phones = new List<string> { model.SenderPhoneNumber }
+            };
+
+            shippingLabel.SenderClient = senderProfile;
+
+            shippingLabel.EmailOnDelivery = shipmentRequest.EmailOnDelivery;
+            shippingLabel.SmsOnDelivery = shipmentRequest.SmsOnDelivery;
+            shippingLabel.ReceiverOfficeCode = shipmentRequest.ReceiverOfficeCode;
+            shippingLabel.SenderOfficeCode = model.SenderOfficeCode;
+            var shippingServices = new ShippingLabelServices();
+            shippingServices.InvoiceBeforePayCd = shipmentRequest.InvoiceBeforePayCD;
+            shippingServices.SmsNotification = shipmentRequest.SmsNotification;
+            shippingServices.GoodsReceipt = shipmentRequest.GoodsReceipt;
+            shippingServices.DeliveryReceipt = shipmentRequest.DeliveryReceipt;     
+
+            shippingLabel.SendDate = model.SendDate;
+            shippingLabel.PackCount = model.PackCount;
+            shippingLabel.PaymentReceiverAmount = model.PaymentReceiverAmount;
+            shippingLabel.ShipmentType = model.ShipmentType;
+            shippingLabel.Weight = model.Weight;
+            shippingLabel.ShipmentDescription = model.ShipmentDescription;
+            shippingLabel.OrderNumber = model.OrderNumber;
+            shippingServices.CdType = CdType;
+
+            shippingLabel.Services = shippingServices;
+
+            labelRequest.Label = shippingLabel;
+
+            await CreateLabelAsync(labelRequest);
+        }
+
         public async Task<ShipmentListingResponseDto> GetShipmentsToSendAsync(string userId)
         {
             var user = await _usersService.GetByIdAsync(userId);
@@ -154,6 +223,19 @@ namespace ClickNPick.Application.Services.Delivery
 
             return ShipmentListingResponseDto.FromShipmentRequests(shipmentsToReceive);
         }
+
+        public async Task<ShipmentRequest?> GetByIdAsync(string id)
+            => await _shipmentRequestRepository
+            .All()
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        public async Task<bool> IsUserSenderOfShipment(string shipmentId, string userId)
+            => await _shipmentRequestRepository
+            .All()
+            .FirstOrDefaultAsync(x => x.Id == shipmentId && x.SellerId == userId) == null ? false : true;
+
+        private async Task<CreateLabelResponseDto?> CreateLabelAsync(CreateLabelRequest requestModel, CancellationToken cancellationToken = default)
+            => await PostAsync<CreateLabelResponseDto>(EcontClientEndpoints.CreateLabel, requestModel, cancellationToken);
 
         private async Task<T?> PostAsync<T>(string path, object body, CancellationToken cancellationToken = default)
         {

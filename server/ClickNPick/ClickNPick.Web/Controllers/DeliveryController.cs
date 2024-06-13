@@ -34,15 +34,6 @@ namespace ClickNPick.Web.Controllers
             return Ok(response);
         }
 
-        [HttpPost]
-        public async Task<IActionResult?> CreateLabel([FromBody] CreateLabelRequestModel requestModel)
-        {
-            var dto = requestModel.ToCreateLabelRequestDto();
-            var result = await _deliveryService.CreateLabelAsync(dto);
-            var response = CreateLabelResponseModel.FromCreateLabelResponseDto(result);
-            return Ok(response);
-        }
-
         [HttpDelete]
         public async Task<IActionResult?> DeleteLabel([FromQuery] DeleteLabelsRequestModel requestModel)
         {
@@ -72,12 +63,25 @@ namespace ClickNPick.Web.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> RequestShipment(RquestShipment model)
+        public async Task<IActionResult> RequestShipment(RquestShipmentRequestModel model)
         {
             var userId = HttpContext.User.GetId();
             var dto = model.ToRequestShipmentRequestDto();
             dto.BuyerId = userId;
             await _deliveryService.CreateShipmentRequestAsync(dto);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> AcceptShipment(AcceptShipmentRequestModel model)
+        {
+            var userId = HttpContext.User.GetId();
+            var dto = model.ToAcceptShipmentRequestDto();
+            dto.UserId = userId;
+
+            await _deliveryService.AcceptShipmentAsync(dto);
 
             return Ok();
         }
