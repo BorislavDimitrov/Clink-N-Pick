@@ -42,6 +42,7 @@ const deliveryRoutes = {
   requestShipment: "api/Delivery/RequestShipment",
   getShipmentsToReceive: "api/Delivery/ShipmentsToReceive",
   getShipmentsToSend: "api/Delivery/ShipmentsToSend",
+  acceptShipment: "api/Delivery/AcceptShipment",
 };
 
 const promotionsRoutes = {

@@ -22,6 +22,7 @@ import CreateCategory from "./pages/CreateCategory";
 import RequestDelivery from "./pages/RequestDelivery";
 import ShipmentsToRecieve from "./pages/ShipmentsToReceive";
 import ShipmentsToSend from "./pages/ShipmentsToSend";
+import AcceptDelivery from "./pages/AcceptDelivery";
 
 const Router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ const Router = createBrowserRouter([
       {
         path: "/Delivery/Request/:id",
         element: <RequestDelivery />,
+      },
+      {
+        path: "/Delivery/Accept/:id",
+        element: <AcceptDelivery />,
       },
       {
         path: "/Delivery/ShipmentsToReceive",
