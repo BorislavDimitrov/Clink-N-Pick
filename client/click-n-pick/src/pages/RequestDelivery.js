@@ -2,9 +2,13 @@ import ReactIframe from "react-iframe";
 import { useState, useEffect, useRef } from "react";
 import { requestShipment } from "../fetch/requests/delivery";
 import { useParams } from "react-router-dom";
+import { getCities } from "../fetch/requests/delivery";
 
 function RequestDelivery() {
+  const [deliverTo, setDeliverTo] = useState("Office");
   const [address, setAddress] = useState();
+  const [cities, setCities] = useState([]);
+  const [city, setCity] = useState("");
   const params = useParams();
 
   const [shippingLabelServices, setShippingLabelServices] = useState({
@@ -14,10 +18,30 @@ function RequestDelivery() {
     InvoiceBeforePayCD: false,
   });
 
-  const [clientRecieverProfile, setClientRecieverProfile] = useState({
+  const [clientRecieverProfile, setClientReceiverProfile] = useState({
     name: "",
     phones: "",
   });
+
+  useEffect(() => {
+    (async function () {
+      const response = await getCities();
+      var data = await response.json();
+
+      setCities(data.cities);
+      setCity(data.cities[0].id);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async function () {
+      const response = await getCities();
+      var data = await response.json();
+
+      setCities(data.cities);
+      setCity(data.cities[0].id);
+    })();
+  }, []);
 
   function getAddress(event) {
     console.log(event.data);
@@ -27,6 +51,7 @@ function RequestDelivery() {
   const formRef = useRef(null);
 
   async function handleSubmit(event) {
+    debugger;
     console.log("shipments service:");
     console.log(shippingLabelServices);
     event.preventDefault();
@@ -73,7 +98,23 @@ function RequestDelivery() {
   return (
     <>
       <div className="flex flex-col items-center h-screen">
-        <div className="w-full max-w-5xl p-4">
+        <div className="w-full max-w-5xl p-4 mt-20">
+          <div className="flex justify-center mb-10">
+            <button
+              disabled={deliverTo === "Office"}
+              onClick={() => setDeliverTo("Office")}
+              className="mx-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              To Office
+            </button>
+            <button
+              disabled={deliverTo === "Address"}
+              onClick={() => setDeliverTo("Address")}
+              className="mx-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            >
+              To Address
+            </button>
+          </div>
           <form
             ref={formRef}
             className="grid grid-cols-1 md:grid-cols-3 gap-4"
@@ -109,7 +150,7 @@ function RequestDelivery() {
                 type="text"
                 name="ReceiverName"
                 onChange={(e) => {
-                  setClientRecieverProfile((prevClientProfile) => ({
+                  setClientReceiverProfile((prevClientProfile) => ({
                     ...prevClientProfile,
                     ["Name"]: e.target.value,
                   }));
@@ -126,7 +167,7 @@ function RequestDelivery() {
                 type="text"
                 name="ReceiverPhoneNumber"
                 onChange={(e) => {
-                  setClientRecieverProfile((prevClientProfile) => ({
+                  setClientReceiverProfile((prevClientProfile) => ({
                     ...prevClientProfile,
                     ["Phones"]: [e.target.value],
                   }));
@@ -135,7 +176,63 @@ function RequestDelivery() {
                 placeholder="Receiver Phone"
               />
             </div>
+            {deliverTo === "Address" && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    City
+                  </label>
+                  <select
+                    name="ShipmentType"
+                    defaultValue={cities.length > 0 ? cities[0].nameEn : ""}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    {cities &&
+                      cities.map((city) => (
+                        <option key={city.id} value={city.nameEn}>
+                          {`${city.nameEn}, ${city.regionNameEn}`}
+                        </option>
+                      ))}
+                  </select>
+                </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Quarter
+                  </label>
+                  <select
+                    name="ShipmentType"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    <option value="document">Document</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Street
+                  </label>
+                  <select
+                    name="ShipmentType"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    <option value="document">Document</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Additional Info
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    name="AdditionalInfo"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Additional Info"
+                  />
+                </div>
+              </>
+            )}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 SMS Notification
@@ -184,18 +281,22 @@ function RequestDelivery() {
                 className="mt-1 block"
               />
             </div>
-            <div>
+            <div className="flex justify-center mt-4">
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="w-full md:w-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Submit
               </button>
             </div>
           </form>
         </div>
-        <div className="flex-grow w-full flex items-center justify-center">
-          <div className="w-3/4 h-3/4">
+        <div
+          className={`flex-grow w-full flex items-center justify-center ${
+            deliverTo === "Office" ? "block" : "hidden"
+          }`}
+        >
+          <div className=" w-4/5 h-4/5">
             <ReactIframe
               className="w-full h-full"
               title="Econt Office Locator"

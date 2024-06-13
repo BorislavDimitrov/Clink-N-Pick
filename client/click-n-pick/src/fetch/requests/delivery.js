@@ -46,6 +46,15 @@ const shipmentsToSend = async (data) => {
   return await request.send(sendDto);
 };
 
+const getCities = async (data) => {
+  const sendDto = new SendDto(
+    httpMethod.get(),
+    `${baseUrl}${deliveryRoutes.getCities}`
+  );
+
+  return await request.send(sendDto);
+};
+
 const shipmentsToReceive = async (data) => {
   const sendDto = new SendDto(
     httpMethod.get(),
@@ -55,4 +64,10 @@ const shipmentsToReceive = async (data) => {
   return await request.send(sendDto);
 };
 
-export { requestShipment, shipmentsToSend, shipmentsToReceive, acceptShipment };
+export {
+  requestShipment,
+  shipmentsToSend,
+  shipmentsToReceive,
+  acceptShipment,
+  getCities,
+};

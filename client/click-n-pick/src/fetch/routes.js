@@ -43,6 +43,7 @@ const deliveryRoutes = {
   getShipmentsToReceive: "api/Delivery/ShipmentsToReceive",
   getShipmentsToSend: "api/Delivery/ShipmentsToSend",
   acceptShipment: "api/Delivery/AcceptShipment",
+  getCities: "api/Delivery/GetCities",
 };
 
 const promotionsRoutes = {
