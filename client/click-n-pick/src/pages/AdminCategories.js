@@ -20,7 +20,6 @@ function AdminCategories() {
   }, []);
 
   async function handleOnClick(id) {
-    debugger;
     try {
       const response = await deleteCategory(id);
       console.log(response);
