@@ -45,6 +45,7 @@ const deliveryRoutes = {
   acceptShipment: "api/Delivery/AcceptShipment",
   getCities: "api/Delivery/GetCities",
   getQuarters: "api/Delivery/GetQuarters",
+  getStreets: "api/Delivery/GetStreets",
 };
 
 const promotionsRoutes = {

@@ -1,15 +1,21 @@
 import ReactIframe from "react-iframe";
 import { useState, useEffect, useRef } from "react";
-import { requestShipment } from "../fetch/requests/delivery";
 import { useParams } from "react-router-dom";
-import { getCities, getQuarters } from "../fetch/requests/delivery";
+import {
+  requestShipment,
+  getCities,
+  getQuarters,
+  getStreets,
+} from "../fetch/requests/delivery";
 
 function RequestDelivery() {
   const [deliverTo, setDeliverTo] = useState("Office");
   const [address, setAddress] = useState();
   const [cities, setCities] = useState([]);
   const [quarters, setQuarters] = useState([]);
-  const [cityId, setCityId] = useState("");
+  const [streets, setStreets] = useState([]);
+  const [cityId, setCityId] = useState(1);
+  const [cityPostCode, setCityPostCode] = useState();
   const params = useParams();
 
   const [shippingLabelServices, setShippingLabelServices] = useState({
@@ -47,6 +53,19 @@ function RequestDelivery() {
     })();
   }, [cityId]);
 
+  useEffect(() => {
+    (async function () {
+      const params = new URLSearchParams({
+        cityId: cityId,
+      });
+
+      const response = await getStreets(params);
+      var data = await response.json();
+
+      setStreets(data.streets);
+    })();
+  }, [cityId]);
+
   function getAddress(event) {
     console.log(event.data);
     setAddress(event.data);
@@ -55,17 +74,23 @@ function RequestDelivery() {
   const formRef = useRef(null);
 
   async function handleSubmit(event) {
-    debugger;
-    console.log("shipments service:");
-    console.log(shippingLabelServices);
     event.preventDefault();
     const formData = new FormData(formRef.current);
     const inputInfo = {};
     formData.forEach((value, key) => {
       inputInfo[key] = value === "on" ? true : value;
     });
-    console.log(inputInfo);
-    inputInfo["ReceiverOfficeCode"] = address.office.code;
+
+    if (deliverTo === "Office") {
+      inputInfo["ReceiverOfficeCode"] = address.office.code;
+      inputInfo["DeliveryLocation"] = "Office";
+    }
+
+    if (deliverTo === "Address") {
+      inputInfo["PostCode"] = cityPostCode;
+      inputInfo["DeliveryLocation"] = "Address";
+    }
+
     inputInfo["ReceiverName"] = clientRecieverProfile.Name;
     inputInfo["ReceiverPhoneNumber"] = clientRecieverProfile.Phones[0];
     inputInfo["SmsNotification"] = shippingLabelServices.SmsNotification;
@@ -78,7 +103,6 @@ function RequestDelivery() {
   }
 
   useEffect(() => {
-    debugger;
     window.addEventListener("message", getAddress);
 
     return () => {
@@ -87,16 +111,12 @@ function RequestDelivery() {
   }, []);
 
   function handleChangeShippingLabelServices(event) {
-    debugger;
     const { name, checked } = event.target;
-    console.log(name);
-    console.log(checked);
+
     setShippingLabelServices((prevServices) => ({
       ...prevServices,
       [name]: checked,
     }));
-
-    console.log(shippingLabelServices);
   }
 
   return (
@@ -184,24 +204,29 @@ function RequestDelivery() {
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    City
+                    City / Village
                   </label>
                   <select
                     onChange={(event) => {
                       const selectedOption = event.target.selectedOptions[0];
-                      console.log(selectedOption);
                       const cityId = selectedOption.getAttribute("id");
-                      console.log("Selected City ID:", cityId);
+                      const postCode =
+                        selectedOption.getAttribute("cityPostCode");
+                      setCityPostCode(postCode);
                       setCityId(cityId);
-                      // Now you can use cityId as needed (e.g., setCityId(cityId))
                     }}
-                    name="ShipmentType"
+                    name="CityOrVillage"
                     defaultValue={cities.length > 0 ? cities[0].nameEn : ""}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   >
                     {cities &&
                       cities.map((city) => (
-                        <option key={city.id} value={city.nameEn} id={city.id}>
+                        <option
+                          key={city.id}
+                          value={city.nameEn}
+                          id={city.id}
+                          cityPostCode={city.postCode}
+                        >
                           {`${city.nameEn}, ${city.regionNameEn}`}
                         </option>
                       ))}
@@ -214,7 +239,7 @@ function RequestDelivery() {
                   </label>
                   <select
                     defaultValue={quarters.length > 0 ? quarters[0].nameEn : ""}
-                    name="ShipmentType"
+                    name="Quarter"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   >
                     {cities &&
@@ -231,20 +256,38 @@ function RequestDelivery() {
                     Street
                   </label>
                   <select
-                    name="ShipmentType"
+                    name="Street"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   >
-                    <option value="document">Document</option>
+                    {cities &&
+                      streets.map((street) => (
+                        <option key={street.id} value={street.nameEn}>
+                          {`${street.nameEn}`}
+                        </option>
+                      ))}
                   </select>
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Additional Info
+                    Street Number
                   </label>
                   <input
                     required
                     type="text"
-                    name="AdditionalInfo"
+                    name="StreetNumber"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Additional Info"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Deliver Address Info
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    name="DeliverAddressInfo"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Additional Info"
                   />
@@ -319,7 +362,7 @@ function RequestDelivery() {
               className="w-full h-full"
               title="Econt Office Locator"
               allow="geolocation;"
-              src="https://officelocator.econt.com/?shopUrl=https://example.staging.officelocator.econt.com&officeType=office&lang=en"
+              src="https://staging.officelocator.econt.com?shopUrl=https://example.staging.officelocator.econt.com&officeType=office&lang=en"
             ></ReactIframe>
           </div>
         </div>

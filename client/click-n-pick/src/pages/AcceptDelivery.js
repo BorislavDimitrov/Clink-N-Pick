@@ -1,20 +1,66 @@
 import ReactIframe from "react-iframe";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { acceptShipment } from "../fetch/requests/delivery";
+import {
+  acceptShipment,
+  getCities,
+  getQuarters,
+  getStreets,
+} from "../fetch/requests/delivery";
 
 function AcceptDelivery() {
+  const [sendFrom, setSendFrom] = useState("Office");
   const [address, setAddress] = useState();
+  const [cities, setCities] = useState([]);
+  const [quarters, setQuarters] = useState([]);
+  const [streets, setStreets] = useState([]);
+  const [cityId, setCityId] = useState(1);
+  const [cityPostCode, setCityPostCode] = useState();
   const params = useParams();
   console.log(params.id);
 
-  const [clientRecieverProfile, setClientRecieverProfile] = useState({
+  const [clientSenderProfile, setClientSenderProfile] = useState({
     name: "",
     phones: "",
   });
 
+  useEffect(() => {
+    (async function () {
+      const response = await getCities();
+      var data = await response.json();
+
+      setCities(data.cities);
+      setCityId(data.cities[0].id);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async function () {
+      const params = new URLSearchParams({
+        cityId: cityId,
+      });
+
+      const response = await getQuarters(params);
+      var data = await response.json();
+
+      setQuarters(data.quarters);
+    })();
+  }, [cityId]);
+
+  useEffect(() => {
+    (async function () {
+      const params = new URLSearchParams({
+        cityId: cityId,
+      });
+
+      const response = await getStreets(params);
+      var data = await response.json();
+
+      setStreets(data.streets);
+    })();
+  }, [cityId]);
+
   function getAddress(event) {
-    console.log(event.data);
     setAddress(event.data);
   }
 
@@ -28,10 +74,19 @@ function AcceptDelivery() {
       inputInfo[key] = value;
     });
 
+    if (sendFrom === "Office") {
+      inputInfo["SenderOfficeCode"] = address.office.code;
+      inputInfo["DeliveryLocation"] = "Office";
+    }
+
+    if (sendFrom === "Address") {
+      inputInfo["PostCode"] = cityPostCode;
+      inputInfo["DeliveryLocation"] = "Address";
+    }
+
     inputInfo["RequestShipmentId"] = params.id;
-    inputInfo["SenderOfficeCode"] = address.office.code;
-    inputInfo["ReceiverName"] = clientRecieverProfile.Name;
-    inputInfo["ReceiverPhoneNumber"] = clientRecieverProfile.Phones[0];
+    inputInfo["ReceiverName"] = clientSenderProfile.Name;
+    inputInfo["ReceiverPhoneNumber"] = clientSenderProfile.Phones[0];
 
     var response = await acceptShipment(inputInfo);
   }
@@ -47,7 +102,23 @@ function AcceptDelivery() {
   return (
     <>
       <div className="flex flex-col items-center h-screen">
-        <div className="w-full max-w-5xl p-4">
+        <div className="w-full max-w-5xl p-4 mt-20">
+          <div className="flex justify-center mb-10">
+            <button
+              disabled={sendFrom === "Office"}
+              onClick={() => setSendFrom("Office")}
+              className="mx-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              To Office
+            </button>
+            <button
+              disabled={sendFrom === "Address"}
+              onClick={() => setSendFrom("Address")}
+              className="mx-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            >
+              To Address
+            </button>
+          </div>
           <form
             ref={formRef}
             className="grid grid-cols-1 md:grid-cols-3 gap-4"
@@ -61,7 +132,7 @@ function AcceptDelivery() {
                 type="text"
                 name="SenderName"
                 onChange={(e) => {
-                  setClientRecieverProfile((prevClientProfile) => ({
+                  setClientSenderProfile((prevClientProfile) => ({
                     ...prevClientProfile,
                     ["Name"]: e.target.value,
                   }));
@@ -80,7 +151,7 @@ function AcceptDelivery() {
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder=""
                 onChange={(e) => {
-                  setClientRecieverProfile((prevClientProfile) => ({
+                  setClientSenderProfile((prevClientProfile) => ({
                     ...prevClientProfile,
                     ["Phones"]: [e.target.value],
                   }));
@@ -175,7 +246,100 @@ function AcceptDelivery() {
                 placeholder="Order Number"
               />
             </div>
+            {sendFrom === "Address" && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    City / Village
+                  </label>
+                  <select
+                    onChange={(event) => {
+                      const selectedOption = event.target.selectedOptions[0];
+                      const cityId = selectedOption.getAttribute("id");
+                      const postCode =
+                        selectedOption.getAttribute("cityPostCode");
+                      setCityPostCode(postCode);
+                      setCityId(cityId);
+                    }}
+                    name="CityOrVillage"
+                    defaultValue={cities.length > 0 ? cities[0].nameEn : ""}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    {cities &&
+                      cities.map((city) => (
+                        <option
+                          key={city.id}
+                          value={city.nameEn}
+                          id={city.id}
+                          cityPostCode={city.postCode}
+                        >
+                          {`${city.nameEn}, ${city.regionNameEn}`}
+                        </option>
+                      ))}
+                  </select>
+                </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Quarter
+                  </label>
+                  <select
+                    defaultValue={quarters.length > 0 ? quarters[0].nameEn : ""}
+                    name="Quarter"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    {cities &&
+                      quarters.map((quarter) => (
+                        <option key={quarter.id} value={quarter.nameEn}>
+                          {`${quarter.nameEn}`}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Street
+                  </label>
+                  <select
+                    name="Street"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    {cities &&
+                      streets.map((street) => (
+                        <option key={street.id} value={street.nameEn}>
+                          {`${street.nameEn}`}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Street Number
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    name="StreetNumber"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Additional Info"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Deliver Address Info
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    name="DeliverAddressInfo"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Additional Info"
+                  />
+                </div>
+              </>
+            )}
             <div>
               <button
                 type="submit"
@@ -186,7 +350,11 @@ function AcceptDelivery() {
             </div>
           </form>
         </div>
-        <div className="flex-grow w-full flex items-center justify-center">
+        <div
+          className={`flex-grow w-full flex items-center justify-center ${
+            sendFrom === "Office" ? "block" : "hidden"
+          }`}
+        >
           <div className="w-3/4 h-3/4">
             <ReactIframe
               className="w-full h-full"
