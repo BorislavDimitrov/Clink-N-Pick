@@ -159,16 +159,18 @@ function AcceptDelivery() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Send Date
-              </label>
-              <input
-                type="date"
-                name="SendDate"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
-            </div>
+            {sendFrom === "Office" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Send Date
+                </label>
+                <input
+                  type="date"
+                  name="SendDate"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -326,6 +328,31 @@ function AcceptDelivery() {
                     placeholder="Additional Info"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Request Courier From Date
+                  </label>
+                  <input
+                    type="datetime-local"
+                    min={`${new Date().toISOString().slice(0, 11)}09:00`}
+                    name="RequestTimeFrom"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Request Courier To Date
+                  </label>
+                  <input
+                    type="datetime-local"
+                    min={`${new Date().toISOString().slice(0, 11)}09:00`}
+                    name="RequestTimeTo"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Deliver Address Info
