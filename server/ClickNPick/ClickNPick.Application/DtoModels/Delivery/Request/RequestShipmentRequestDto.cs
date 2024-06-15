@@ -20,7 +20,21 @@ namespace ClickNPick.Application.DtoModels.Delivery.Request
 
         public bool DeliveryReceipt { get; set; }
 
-        public string ReceiverOfficeCode { get; set; }
+        public string? ReceiverOfficeCode { get; set; }
+
+        public string? CityOrVillage { get; set; }
+
+        public string? PostCode { get; set; }
+
+        public string? Quarter { get; set; }
+
+        public string? Street { get; set; }
+
+        public string? StreetNumber { get; set; }
+
+        public string? DeliverAddressInfo { get; set; }
+
+        public string DeliveryLocation { get; set; }
 
         public string ProductId { get; set; }
 
@@ -39,6 +53,13 @@ namespace ClickNPick.Application.DtoModels.Delivery.Request
                 GoodsReceipt = GoodsReceipt,
                 DeliveryReceipt = DeliveryReceipt,
                 ReceiverOfficeCode = ReceiverOfficeCode,
+                CityOrVillage = CityOrVillage,
+                PostCode = PostCode,
+                Quarter = Quarter,
+                Street = Street,
+                StreetNumber = StreetNumber,
+                DeliverAddressInfo = DeliverAddressInfo,
+                DeliveryLocation = Enum.Parse<DeliveryLocation>(DeliveryLocation),
                 ProductId = ProductId,
             };
         }

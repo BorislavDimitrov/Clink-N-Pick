@@ -24,7 +24,22 @@ namespace ClickNPick.Web.Models.Delivery.Request
 
         public string OrderNumber { get; set; }
 
+        public string? CityOrVillage { get; set; }
+
+        public string? PostCode { get; set; }
+
+        public string? Quarter { get; set; }
+
+        public string? Street { get; set; }
+
+        public string? StreetNumber { get; set; }
+
+        public string? DeliverAddressInfo { get; set; }
+
         public string? SenderOfficeCode { get; set; }
+
+        public string DeliveryLocation { get; set; }
+
 
         public AcceptShipmentRequestDto ToAcceptShipmentRequestDto()
         {
@@ -41,6 +56,13 @@ namespace ClickNPick.Web.Models.Delivery.Request
                 ShipmentDescription = this.ShipmentDescription,
                 OrderNumber = this.OrderNumber,
                 SenderOfficeCode = this.SenderOfficeCode,
+                CityOrVillage = this.CityOrVillage,
+                PostCode = this.PostCode,
+                Quarter = this.Quarter,
+                Street = this.Street,
+                StreetNumber = this.StreetNumber,
+                DeliverAddressInfo = this.DeliverAddressInfo,
+                DeliveryLocation = this.DeliveryLocation,
             };
         }
     }

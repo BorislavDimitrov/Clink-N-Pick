@@ -24,6 +24,20 @@
 
         public string? SenderOfficeCode { get; set; }
 
+        public string? CityOrVillage { get; set; }
+
+        public string? PostCode { get; set; }
+
+        public string? Quarter { get; set; }
+
+        public string? Street { get; set; }
+
+        public string? StreetNumber { get; set; }
+
+        public string? DeliverAddressInfo { get; set; }
+
+        public string DeliveryLocation { get; set; }
+
         public string UserId { get; set; }
     }
 }

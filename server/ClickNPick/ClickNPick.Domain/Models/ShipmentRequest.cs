@@ -27,7 +27,21 @@ namespace ClickNPick.Domain.Models
 
         public bool DeliveryReceipt { get; set; }
 
-        public string ReceiverOfficeCode { get; set; }
+        public string? ReceiverOfficeCode { get; set; }
+
+        public string? CityOrVillage { get; set; }
+
+        public string? PostCode { get; set; }
+
+        public string? Quarter { get; set; }
+
+        public string? Street { get; set; }
+
+        public string? StreetNumber { get; set; }
+
+        public string? DeliverAddressInfo { get; set; }
+
+        public DeliveryLocation DeliveryLocation { get; set; }
 
         public ShipmentStatus ShipmentStatus { get; set; } = ShipmentStatus.Requested;
 
@@ -42,6 +56,5 @@ namespace ClickNPick.Domain.Models
         public string SellerId { get; set; }
 
         public User Seller { get; set; }
-
     }
 }

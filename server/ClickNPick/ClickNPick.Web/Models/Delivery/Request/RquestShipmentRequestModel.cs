@@ -20,7 +20,21 @@ namespace ClickNPick.Web.Models.Delivery.Request
 
         public bool DeliveryReceipt { get; set; }
 
-        public string ReceiverOfficeCode { get; set; }
+        public string? ReceiverOfficeCode { get; set; }
+
+        public string? CityOrVillage { get; set; }
+
+        public string? PostCode { get; set; }
+
+        public string? Quarter { get; set; }
+
+        public string? Street { get; set; }
+
+        public string? StreetNumber { get; set; }
+
+        public string? DeliverAddressInfo { get; set; }
+
+        public string DeliveryLocation { get; set; }
 
         public string ProductId { get; set; }
 
@@ -37,6 +51,13 @@ namespace ClickNPick.Web.Models.Delivery.Request
                 GoodsReceipt = this.GoodsReceipt,
                 DeliveryReceipt = this.DeliveryReceipt,
                 ReceiverOfficeCode = this.ReceiverOfficeCode,
+                CityOrVillage = this.CityOrVillage,
+                PostCode = this.PostCode,
+                Quarter = this.Quarter,
+                Street = this.Street,
+                StreetNumber = this.StreetNumber,
+                DeliverAddressInfo = this.DeliverAddressInfo,
+                DeliveryLocation = this.DeliveryLocation,
                 ProductId = this.ProductId
             };
         }
