@@ -15,6 +15,8 @@ namespace ClickNPick.Application.Services.Delivery
 
         Task<QuartersResponseDto?> GetQuartersAsync(int cityId, CancellationToken cancellationToken = default);
 
+        Task<StreetsResponseDto?> GetStreetsAsync(int cityId, CancellationToken cancellationToken = default);
+
         Task<GetShipmentStatusesResponse?> GetShipmentStatusesAsync(GetShipmentStatusesRequest requestModel, CancellationToken cancellationToken = default);
 
         Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model);

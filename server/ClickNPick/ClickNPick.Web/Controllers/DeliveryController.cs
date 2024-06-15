@@ -33,6 +33,14 @@ namespace ClickNPick.Web.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetStreets([FromQuery] int cityId)
+        {
+            var result = await _deliveryService.GetStreetsAsync(cityId);
+            var response = StreetsResponseModel.FromStreetsResponseDto(result);
+            return Ok(response);
+        }
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> RequestShipment(RquestShipmentRequestModel model)

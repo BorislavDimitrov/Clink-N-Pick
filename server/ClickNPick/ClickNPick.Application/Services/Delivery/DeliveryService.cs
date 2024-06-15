@@ -63,7 +63,6 @@ namespace ClickNPick.Application.Services.Delivery
 
         public async Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model)
         {
-
             var product = await _productsService.GetByIdAsync(model.ProductId);
 
             if (product == null)
@@ -142,12 +141,57 @@ namespace ClickNPick.Application.Services.Delivery
                 Phones = new List<string> { model.SenderPhoneNumber }
             };
 
+            var country = new Country();
+            country.Code3 = CountryCode;
+
+            if (shipmentRequest.DeliveryLocation == DeliveryLocation.Office)
+            {
+                shippingLabel.ReceiverOfficeCode = shipmentRequest.ReceiverOfficeCode;
+            }
+            else
+            {
+                var receiverCity = new City();
+                receiverCity.Country = country;
+                receiverCity.Name = shipmentRequest.CityOrVillage;
+                receiverCity.PostCode = shipmentRequest.PostCode;
+
+                var receiverAddress = new Address();
+                receiverAddress.City = receiverCity;
+                receiverAddress.Quarter = shipmentRequest.Quarter;
+                receiverAddress.Street = shipmentRequest.Street;
+                receiverAddress.Num = shipmentRequest.StreetNumber;
+                receiverAddress.Other = shipmentRequest.DeliverAddressInfo;
+
+                shippingLabel.ReceiverAddress = receiverAddress;
+            }
+
+            if (model.DeliveryLocation == DeliveryLocation.Office.ToString())
+            {
+                shippingLabel.SenderOfficeCode = model.SenderOfficeCode;
+            }
+            else
+            {
+                var senderCity = new City();
+                senderCity.Country = country;
+                senderCity.Name = model.CityOrVillage;
+                senderCity.PostCode = model.PostCode;
+
+                var senderAddress = new Address();
+                senderAddress.City = senderCity;
+                senderAddress.Quarter = model.Quarter;
+                senderAddress.Street = model.Street;
+                senderAddress.Num = model.StreetNumber;
+                senderAddress.Other = model.DeliverAddressInfo;
+
+                shippingLabel.SenderAddress = senderAddress;
+            }
+
             shippingLabel.SenderClient = senderProfile;
 
             shippingLabel.EmailOnDelivery = shipmentRequest.EmailOnDelivery;
             shippingLabel.SmsOnDelivery = shipmentRequest.SmsOnDelivery;
-            shippingLabel.ReceiverOfficeCode = shipmentRequest.ReceiverOfficeCode;
-            shippingLabel.SenderOfficeCode = model.SenderOfficeCode;
+            
+
             var shippingServices = new ShippingLabelServices();
             shippingServices.InvoiceBeforePayCd = shipmentRequest.InvoiceBeforePayCD;
             shippingServices.SmsNotification = shipmentRequest.SmsNotification;
@@ -162,12 +206,15 @@ namespace ClickNPick.Application.Services.Delivery
             shippingLabel.ShipmentDescription = model.ShipmentDescription;
             shippingLabel.OrderNumber = model.OrderNumber;
             shippingServices.CdType = CdType;
-
-            shippingLabel.Services = shippingServices;
+           
+            shippingLabel.Services = shippingServices;          
 
             labelRequest.Label = shippingLabel;
 
-            await CreateLabelAsync(labelRequest);
+            var result = await CreateLabelAsync(labelRequest);
+
+            shipmentRequest.ShipmentNumber = result.Label.ShipmentNumber;
+            await _shipmentRequestRepository.SaveChangesAsync();
         }
 
         public async Task<ShipmentListingResponseDto> GetShipmentsToSendAsync(string userId)
@@ -222,9 +269,15 @@ namespace ClickNPick.Application.Services.Delivery
                 TimeSpan.FromMinutes(CacheExpirationMinutes));
 
         public async Task<QuartersResponseDto?> GetQuartersAsync(int cityId, CancellationToken cancellationToken = default)
-    => await _cacheService.GetOrCreateAsync<QuartersResponseDto>(
-        cityId.ToString(),
+        => await _cacheService.GetOrCreateAsync<QuartersResponseDto>(
+        $"{nameof(GetQuartersAsync)}{cityId.ToString()}",
         async () => await PostAsync<QuartersResponseDto>(EcontClientEndpoints.Quarters, new { cityID = cityId }, cancellationToken),
+        TimeSpan.FromMinutes(CacheExpirationMinutes));
+
+        public async Task<StreetsResponseDto?> GetStreetsAsync(int cityId, CancellationToken cancellationToken = default)
+        => await _cacheService.GetOrCreateAsync<StreetsResponseDto>(
+        $"{nameof(GetStreetsAsync)}{cityId.ToString()}",
+        async () => await PostAsync<StreetsResponseDto>(EcontClientEndpoints.Streets, new { cityID = cityId}, cancellationToken),
         TimeSpan.FromMinutes(CacheExpirationMinutes));
 
         public async Task<bool> IsUserSenderOfShipment(string shipmentId, string userId)
