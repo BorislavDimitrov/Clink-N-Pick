@@ -2,7 +2,7 @@
 
 namespace ClickNPick.Application.DeliveryModels.Request;
 
-public class GetShipmentStatusesRequest
+public class GetShipmentStatusesRequestModel
 {
     [JsonProperty(
         PropertyName = "shipmentNumbers",

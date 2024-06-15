@@ -11,13 +11,13 @@ namespace ClickNPick.Application.Services.Delivery
 
         Task<CitiesResponseDto?> GetCitiesAsync(CancellationToken cancellationToken = default);
 
-        //Task<DeleteLabelsResponseDto?> DeleteLabelsAsync(DeleteLabelsRequestDto requestModel, CancellationToken cancellationToken = default);
+        Task CancelShipmentRequestAsync(CancelShipmentRequestDto model);
 
         Task<QuartersResponseDto?> GetQuartersAsync(int cityId, CancellationToken cancellationToken = default);
 
         Task<StreetsResponseDto?> GetStreetsAsync(int cityId, CancellationToken cancellationToken = default);
 
-        Task<GetShipmentStatusesResponse?> GetShipmentStatusesAsync(GetShipmentStatusesRequest requestModel, CancellationToken cancellationToken = default);
+        Task<GetShipmentStatusesResponse?> GetShipmentStatusesAsync(GetShipmentStatusesRequestModel requestModel, CancellationToken cancellationToken = default);
 
         Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model);
 

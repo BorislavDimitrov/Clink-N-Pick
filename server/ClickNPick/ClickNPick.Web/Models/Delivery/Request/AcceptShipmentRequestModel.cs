@@ -10,7 +10,7 @@ namespace ClickNPick.Web.Models.Delivery.Request
 
         public string SenderPhoneNumber { get; set; }
 
-        public DateTime SendDate { get; set; }
+        public DateTime? SendDate { get; set; }
 
         public int PackCount { get; set; }
 
@@ -38,6 +38,10 @@ namespace ClickNPick.Web.Models.Delivery.Request
 
         public string? SenderOfficeCode { get; set; }
 
+        public DateTime RequestTimeFrom { get; set; }
+
+        public DateTime RequestTimeTo { get; set; }
+
         public string DeliveryLocation { get; set; }
 
 
@@ -63,6 +67,8 @@ namespace ClickNPick.Web.Models.Delivery.Request
                 StreetNumber = this.StreetNumber,
                 DeliverAddressInfo = this.DeliverAddressInfo,
                 DeliveryLocation = this.DeliveryLocation,
+                RequestTimeFrom = this.RequestTimeFrom,
+                RequestTimeTo = this.RequestTimeTo,
             };
         }
     }

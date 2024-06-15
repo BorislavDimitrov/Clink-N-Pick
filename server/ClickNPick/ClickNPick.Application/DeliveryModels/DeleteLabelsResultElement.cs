@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using ClickNPick.Application.Common;
+using Newtonsoft.Json;
 
-namespace ClickNPick.Application.Common;
+namespace ClickNPick.Application.DeliveryModels;
 
 public class DeleteLabelsResultElement
 {

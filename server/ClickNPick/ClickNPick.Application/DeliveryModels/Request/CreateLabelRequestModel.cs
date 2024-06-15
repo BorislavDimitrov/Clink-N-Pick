@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace ClickNPick.Application.DeliveryModels.Request;
 
-public class CreateLabelRequest
+public class CreateLabelRequestModel
 {
     [JsonProperty("label")]
     public ShippingLabel? Label { get; set; }

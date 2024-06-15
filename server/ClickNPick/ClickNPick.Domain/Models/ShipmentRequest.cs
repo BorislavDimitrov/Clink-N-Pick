@@ -11,6 +11,8 @@ namespace ClickNPick.Domain.Models
 
         public string? ShipmentNumber { get; set; }
 
+        public string? RequestCourierId { get; set; }
+
         public string EmailOnDelivery { get; set; }
 
         public string ReceiverPhoneNumber { get; set; }

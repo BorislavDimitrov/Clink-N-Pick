@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using Serilog;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using ShipmentStatus = ClickNPick.Domain.Models.ShipmentStatus;
 
 namespace ClickNPick.Application.Services.Delivery
 {
@@ -51,14 +52,9 @@ namespace ClickNPick.Application.Services.Delivery
             _shipmentRequestRepository = shipmentRequestRepository;
             _usersService = usersService;
             _productsService = productsService;
-        }
+        }      
 
-        
-
-        public async Task<DeleteLabelsResponseDto?> DeleteLabelsAsync(DeleteLabelsRequest requestModel, CancellationToken cancellationToken = default)
-            => await PostAsync<DeleteLabelsResponseDto>(EcontClientEndpoints.DeleteLabels, requestModel, cancellationToken);
-
-        public async Task<GetShipmentStatusesResponse?> GetShipmentStatusesAsync(GetShipmentStatusesRequest requestModel, CancellationToken cancellationToken = default)
+        public async Task<GetShipmentStatusesResponse?> GetShipmentStatusesAsync(GetShipmentStatusesRequestModel requestModel, CancellationToken cancellationToken = default)
             => await PostAsync<GetShipmentStatusesResponse>(EcontClientEndpoints.GetShipmentStatuses, requestModel, cancellationToken);
 
         public async Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model)
@@ -122,7 +118,7 @@ namespace ClickNPick.Application.Services.Delivery
                 throw new InvalidOperationException();
             }
 
-            var labelRequest = new CreateLabelRequest();
+            var labelRequest = new CreateLabelRequestModel();
             labelRequest.Mode = Mode;
 
             var shippingLabel = new ShippingLabel();
@@ -165,6 +161,16 @@ namespace ClickNPick.Application.Services.Delivery
                 shippingLabel.ReceiverAddress = receiverAddress;
             }
 
+            var requestCourierModel = new RequestCourierRequestModel
+            {
+                RequestTimeFrom = model.RequestTimeFrom,
+                RequestTimeTo = model.RequestTimeTo,
+                SenderClient = senderProfile,
+                ShipmentPackCount = model.PackCount,
+                ShipmentWeight = model.Weight,
+                ShipmentType = model.ShipmentType,               
+            };
+
             if (model.DeliveryLocation == DeliveryLocation.Office.ToString())
             {
                 shippingLabel.SenderOfficeCode = model.SenderOfficeCode;
@@ -184,6 +190,8 @@ namespace ClickNPick.Application.Services.Delivery
                 senderAddress.Other = model.DeliverAddressInfo;
 
                 shippingLabel.SenderAddress = senderAddress;
+
+                requestCourierModel.SenderAddress = senderAddress;
             }
 
             shippingLabel.SenderClient = senderProfile;
@@ -214,7 +222,47 @@ namespace ClickNPick.Application.Services.Delivery
             var result = await CreateLabelAsync(labelRequest);
 
             shipmentRequest.ShipmentNumber = result.Label.ShipmentNumber;
+            
+            requestCourierModel.AttachShipments = new List<string> { result.Label.ShipmentNumber };
+
+            var requestCourierResponse = await RequestCourierAsync(requestCourierModel);
+
+            shipmentRequest.RequestCourierId = requestCourierResponse.CourierRequestId;
+
             await _shipmentRequestRepository.SaveChangesAsync();
+        }
+
+        public async Task CancelShipmentRequestAsync(CancelShipmentRequestDto model)
+        {
+            var shipmentRequest = await _shipmentRequestRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == model.ShipmentId);
+
+            if (shipmentRequest == null)
+            {
+                throw new ShipmentRequestNotFoundException();
+            }
+
+            if (shipmentRequest.SellerId != model.UserId && shipmentRequest.BuyerId != model.UserId)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var deleteLabelModel = new DeleteLabelsRequestModel
+            {
+                ShipmentNumbers = new List<string> { shipmentRequest.ShipmentNumber }
+            };
+
+            var deleteResponse = await DeleteLabelsAsync(deleteLabelModel);
+
+            if (deleteResponse.Results.Any(x => string.IsNullOrEmpty(x.ShipmentNum)))
+            {
+                throw new InvalidOperationException();
+            }
+
+            shipmentRequest.ShipmentStatus = ShipmentStatus.Canceled;
+
+            await _shipmentRequestRepository .SaveChangesAsync();
         }
 
         public async Task<ShipmentListingResponseDto> GetShipmentsToSendAsync(string userId)
@@ -286,8 +334,14 @@ namespace ClickNPick.Application.Services.Delivery
             .FirstOrDefaultAsync(x => x.Id == shipmentId && x.SellerId == userId) == null ? false : true;
 
 
-        private async Task<CreateLabelResponse?> CreateLabelAsync(CreateLabelRequest requestModel, CancellationToken cancellationToken = default)
+        private async Task<CreateLabelResponse?> CreateLabelAsync(CreateLabelRequestModel requestModel, CancellationToken cancellationToken = default)
             => await PostAsync<CreateLabelResponse>(EcontClientEndpoints.CreateLabel, requestModel, cancellationToken);
+
+        private async Task<RequestCourierResponseModel?> RequestCourierAsync(RequestCourierRequestModel requestModel, CancellationToken cancellationToken = default)
+        => await PostAsync<RequestCourierResponseModel>(EcontClientEndpoints.RequestCourier, requestModel, cancellationToken);
+
+        private async Task<DeleteLabelsResponseDto?> DeleteLabelsAsync(DeleteLabelsRequestModel requestModel, CancellationToken cancellationToken = default)
+            => await PostAsync<DeleteLabelsResponseDto>(EcontClientEndpoints.DeleteLabels, requestModel, cancellationToken);
 
         private async Task<T?> PostAsync<T>(string path, object body, CancellationToken cancellationToken = default)
         {

@@ -8,7 +8,7 @@
 
         public string SenderPhoneNumber { get; set; }
 
-        public DateTime SendDate { get; set; }
+        public DateTime? SendDate { get; set; }
 
         public int PackCount { get; set; }
 
@@ -37,6 +37,10 @@
         public string? DeliverAddressInfo { get; set; }
 
         public string DeliveryLocation { get; set; }
+
+        public DateTime RequestTimeFrom { get; set; }
+
+        public DateTime RequestTimeTo { get; set; }
 
         public string UserId { get; set; }
     }

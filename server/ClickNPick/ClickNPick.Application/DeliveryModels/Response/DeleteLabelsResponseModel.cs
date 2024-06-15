@@ -1,4 +1,4 @@
-﻿using ClickNPick.Application.Common;
+﻿using ClickNPick.Application.DeliveryModels;
 using Newtonsoft.Json;
 
 namespace ClickNPick.Web.Models.Delivery.Response;
