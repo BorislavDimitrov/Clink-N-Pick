@@ -23,5 +23,6 @@ public static class EcontClientEndpoints
     // Shipment Service
     private const string ShipmentService = "Shipments/ShipmentService";
 
+    public const string RequestCourier = $"{ShipmentService}.requestCourier.json";
     public const string GetShipmentStatuses = $"{ShipmentService}.getShipmentStatuses.json";
 }
