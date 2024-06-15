@@ -40,6 +40,7 @@ const paymentsRoutes = {
 const deliveryRoutes = {
   createLabel: "api/Delivery/CreateLabel",
   requestShipment: "api/Delivery/RequestShipment",
+  cancelShipment: "api/Delivery/CancelShipment",
   getShipmentsToReceive: "api/Delivery/ShipmentsToReceive",
   getShipmentsToSend: "api/Delivery/ShipmentsToSend",
   acceptShipment: "api/Delivery/AcceptShipment",

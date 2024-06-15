@@ -1,9 +1,26 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { shipmentsToReceive } from "../fetch/requests/delivery";
+import { shipmentsToReceive, cancelShipment } from "../fetch/requests/delivery";
 
 function ShipmentsToRecieve() {
   const [shipments, setShipments] = useState([]);
+
+  async function handleOnClick(id) {
+    try {
+      const response = await cancelShipment(id);
+      console.log(response);
+
+      if (response.status !== 200) {
+        throw new Error("Network response was not ok");
+      }
+
+      // setResponseResult("ok");
+      // modal.current.open();
+    } catch (error) {
+      // setResponseResult("bad");
+      // modal.current.open();
+    }
+  }
 
   useEffect(() => {
     (async function getShipments() {
@@ -71,6 +88,7 @@ function ShipmentsToRecieve() {
                             </Link>
                           )}
                           <button
+                            onClick={() => handleOnClick(shipment.id)}
                             type="button"
                             class="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 focus:outline-none"
                           >
