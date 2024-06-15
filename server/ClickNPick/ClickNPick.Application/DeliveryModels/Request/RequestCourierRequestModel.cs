@@ -3,12 +3,7 @@ using ClickNPick.Application.Common;
 using ClickNPick.Application.Constants;
 using ClickNPick.Application.Helpers;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClickNPick.Application.DeliveryModels.Request
 {
