@@ -37,6 +37,16 @@ const cancelShipment = async (data) => {
   return await request.send(sendDto);
 };
 
+const declineShipment = async (data) => {
+  const sendDto = new SendDto(
+    httpMethod.post(),
+    `${baseUrl}${deliveryRoutes.declineShipment}`,
+    data
+  );
+
+  return await request.send(sendDto);
+};
+
 const acceptShipment = async (data) => {
   const sendDto = new SendDto(
     httpMethod.post(),
@@ -101,4 +111,5 @@ export {
   getQuarters,
   getStreets,
   cancelShipment,
+  declineShipment,
 };

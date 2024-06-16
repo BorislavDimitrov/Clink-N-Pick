@@ -1,11 +1,32 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { shipmentsToSend, cancelShipment } from "../fetch/requests/delivery";
+import {
+  shipmentsToSend,
+  cancelShipment,
+  declineShipment,
+} from "../fetch/requests/delivery";
 
 function ShipmentsToSend() {
   const [shipments, setShipments] = useState([]);
 
-  async function handleOnClick(id) {
+  async function handleOnClickDecline(id) {
+    try {
+      const response = await declineShipment(id);
+      console.log(response);
+
+      if (response.status !== 200) {
+        throw new Error("Network response was not ok");
+      }
+
+      // setResponseResult("ok");
+      // modal.current.open();
+    } catch (error) {
+      // setResponseResult("bad");
+      // modal.current.open();
+    }
+  }
+
+  async function handleOnClickCancel(id) {
     try {
       const response = await cancelShipment(id);
       console.log(response);
@@ -92,7 +113,7 @@ function ShipmentsToSend() {
                                 </button>
                               </Link>
                               <button
-                                onClick={() => handleOnClick(shipment.id)}
+                                onClick={() => handleOnClickCancel(shipment.id)}
                                 type="button"
                                 class="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 focus:outline-none"
                               >
@@ -111,10 +132,13 @@ function ShipmentsToSend() {
                                 </button>
                               </Link>
                               <button
+                                onClick={() =>
+                                  handleOnClickDecline(shipment.id)
+                                }
                                 type="button"
                                 class="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 focus:outline-none"
                               >
-                                Reject
+                                Decline
                               </button>
                             </>
                           )}
