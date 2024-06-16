@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using ClickNPick.Application.DeliveryModels;
+using Newtonsoft.Json;
 
-namespace ClickNPick.Application.DeliveryModels.Response
+namespace ClickNPick.Application.DtoModels.Delivery.Response
 {
     public class StreetsResponseDto
     {
