@@ -104,14 +104,15 @@ function ShipmentsToSend() {
                         <td class="whitespace-nowrap px-6 py-4">
                           {shipment.status === "Accepted" && (
                             <>
-                              <Link to={`/Shipment/Details/${shipment.id}`}>
+                              <a href={`/delivery/details/${shipment.id}`}>
                                 <button
                                   type="button"
                                   class="text-white bg-blue-700 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 focus:outline-none"
                                 >
                                   View
                                 </button>
-                              </Link>
+                              </a>
+
                               <button
                                 onClick={() => handleOnClickCancel(shipment.id)}
                                 type="button"
