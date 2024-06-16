@@ -55,6 +55,17 @@ namespace ClickNPick.Web.Controllers
 
         [Authorize]
         [HttpPost]
+        public async Task<IActionResult> DeclineShipment([FromBody] string shipmentId)
+        {
+            var userId = HttpContext.User.GetId();
+            var dto = new DeclineShipmentRequestDto { ShipmentId = shipmentId, UserId = userId };
+            await _deliveryService.DeclineShipmentAsync(dto);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> RequestShipment(RquestShipmentRequestModel model)
         {
             var userId = HttpContext.User.GetId();
