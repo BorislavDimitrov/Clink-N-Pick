@@ -8,7 +8,6 @@ namespace ClickNPick.Application.Services.Delivery
 {
     public interface IDeliveryService
     {
-
         Task<CitiesResponseDto?> GetCitiesAsync(CancellationToken cancellationToken = default);
 
         Task CancelShipmentRequestAsync(CancelShipmentRequestDto model);
@@ -22,6 +21,8 @@ namespace ClickNPick.Application.Services.Delivery
         Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model);
 
         Task AcceptShipmentAsync(AcceptShipmentRequestDto model);
+
+        Task DeclineShipmentAsync(DeclineShipmentRequestDto model);
 
         Task<ShipmentListingResponseDto> GetShipmentsToSendAsync(string userId);
 

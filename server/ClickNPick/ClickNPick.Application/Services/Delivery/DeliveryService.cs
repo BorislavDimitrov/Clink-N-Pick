@@ -221,13 +221,18 @@ namespace ClickNPick.Application.Services.Delivery
 
             var result = await CreateLabelAsync(labelRequest);
 
+            shipmentRequest.ShipmentStatus = ShipmentStatus.Accepted;
+
             shipmentRequest.ShipmentNumber = result.Label.ShipmentNumber;
-            
-            requestCourierModel.AttachShipments = new List<string> { result.Label.ShipmentNumber };
 
-            var requestCourierResponse = await RequestCourierAsync(requestCourierModel);
+            if (model.DeliveryLocation == DeliveryLocation.Address.ToString())
+            {
+                requestCourierModel.AttachShipments = new List<string> { result.Label.ShipmentNumber };
 
-            shipmentRequest.RequestCourierId = requestCourierResponse.CourierRequestId;
+                var requestCourierResponse = await RequestCourierAsync(requestCourierModel);
+
+                shipmentRequest.RequestCourierId = requestCourierResponse.CourierRequestId;
+            }
 
             await _shipmentRequestRepository.SaveChangesAsync();
         }
@@ -263,6 +268,32 @@ namespace ClickNPick.Application.Services.Delivery
             shipmentRequest.ShipmentStatus = ShipmentStatus.Canceled;
 
             await _shipmentRequestRepository .SaveChangesAsync();
+        }
+
+        public async Task DeclineShipmentAsync(DeclineShipmentRequestDto model)
+        {
+            var shipmentRequest = await _shipmentRequestRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == model.ShipmentId);
+
+            if (shipmentRequest == null)
+            {
+                throw new ShipmentRequestNotFoundException();
+            }
+
+            if (shipmentRequest.SellerId != model.UserId)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (shipmentRequest.ShipmentStatus != ShipmentStatus.Requested)
+            {
+                throw new InvalidOperationException();
+            }
+
+            shipmentRequest.ShipmentStatus = ShipmentStatus.Declined;
+
+            await _shipmentRequestRepository.SaveChangesAsync();
         }
 
         public async Task<ShipmentListingResponseDto> GetShipmentsToSendAsync(string userId)
@@ -370,6 +401,6 @@ namespace ClickNPick.Application.Services.Delivery
             where T : ICacheable
                 => CacheKeyGenerator<T>.GenerateCacheKey(
                     string.Format(CacheKeyPrefix, typeof(T).Name),
-                    new CacheParameterCollection<T>(requestModel));
+                    new CacheParameterCollection<T>(requestModel));   
     }
 }
