@@ -23,6 +23,7 @@ import RequestDelivery from "./pages/RequestDelivery";
 import ShipmentsToRecieve from "./pages/ShipmentsToReceive";
 import ShipmentsToSend from "./pages/ShipmentsToSend";
 import AcceptDelivery from "./pages/AcceptDelivery";
+import ShipmentDetails from "./pages/ShipmentDetails";
 
 const Router = createBrowserRouter([
   {
@@ -93,6 +94,10 @@ const Router = createBrowserRouter([
       {
         path: "/Delivery/ShipmentsToSend",
         element: <ShipmentsToSend />,
+      },
+      {
+        path: "/Delivery/Details/:id",
+        element: <ShipmentDetails />,
       },
       {
         path: "/Administration/Categories",

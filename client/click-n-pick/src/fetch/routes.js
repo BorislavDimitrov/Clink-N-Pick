@@ -42,6 +42,7 @@ const deliveryRoutes = {
   requestShipment: "api/Delivery/RequestShipment",
   cancelShipment: "api/Delivery/CancelShipment",
   declineShipment: "api/Delivery/DeclineShipment",
+  getShipmentDetails: "api/Delivery/ShipmentDetails",
   getShipmentsToReceive: "api/Delivery/ShipmentsToReceive",
   getShipmentsToSend: "api/Delivery/ShipmentsToSend",
   acceptShipment: "api/Delivery/AcceptShipment",
