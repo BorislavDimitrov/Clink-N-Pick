@@ -1,6 +1,4 @@
-﻿using ClickNPick.Application.DeliveryModels.Request;
-using ClickNPick.Application.DeliveryModels.Response;
-using ClickNPick.Application.DtoModels.Delivery.Request;
+﻿using ClickNPick.Application.DtoModels.Delivery.Request;
 using ClickNPick.Application.DtoModels.Delivery.Response;
 using ClickNPick.Web.Models.Delivery.Response;
 
@@ -16,7 +14,7 @@ namespace ClickNPick.Application.Services.Delivery
 
         Task<StreetsResponseDto?> GetStreetsAsync(int cityId, CancellationToken cancellationToken = default);
 
-        Task<GetShipmentStatusesResponse?> GetShipmentStatusesAsync(GetShipmentStatusesRequestModel requestModel, CancellationToken cancellationToken = default);
+        Task<ShipmentDetailsResponseDto> GetShipmentDetailsAsync(ShipmentDetailsRequestDto model);
 
         Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model);
 

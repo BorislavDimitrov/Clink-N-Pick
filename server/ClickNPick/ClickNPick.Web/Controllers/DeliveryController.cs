@@ -1,4 +1,5 @@
 ﻿using ClickNPick.Application.DtoModels.Delivery.Request;
+using ClickNPick.Application.DtoModels.Delivery.Response;
 using ClickNPick.Application.Services.Delivery;
 using ClickNPick.Web.Extensions;
 using ClickNPick.Web.Models.Delivery.Request;
@@ -39,6 +40,18 @@ namespace ClickNPick.Web.Controllers
         {
             var result = await _deliveryService.GetStreetsAsync(cityId);
             var response = StreetsResponseModel.FromStreetsResponseDto(result);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("{shipmentId}")]
+        public async Task<IActionResult> ShipmentDetails([FromRoute] string shipmentId)
+        {
+            var userId = HttpContext.User.GetId();
+            var dto = new ShipmentDetailsRequestDto { ShipmentId = shipmentId, UserId = userId };
+
+            var result = await _deliveryService.GetShipmentDetailsAsync(dto);
+            var response = ShipmentDetailsResponseModel.FromShipmentDetailsResponseDto(result);
             return Ok(response);
         }
 

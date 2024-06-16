@@ -29,6 +29,7 @@ namespace ClickNPick.Application.Services.Delivery
         private const string CountryCode = "BGR";
         private const string CdType = "get";
         private const string Mode = "create";
+        private const string Currency = "EUR";
         private const double CacheExpirationMinutes = 60;
         private const string CacheKeyPrefix = "CacheKey:{0}";
         private const string JsonMediaType = "application/json";
@@ -54,8 +55,7 @@ namespace ClickNPick.Application.Services.Delivery
             _productsService = productsService;
         }      
 
-        public async Task<GetShipmentStatusesResponse?> GetShipmentStatusesAsync(GetShipmentStatusesRequestModel requestModel, CancellationToken cancellationToken = default)
-            => await PostAsync<GetShipmentStatusesResponse>(EcontClientEndpoints.GetShipmentStatuses, requestModel, cancellationToken);
+        
 
         public async Task<string> CreateShipmentRequestAsync(RequestShipmentRequestDto model)
         {
@@ -198,13 +198,17 @@ namespace ClickNPick.Application.Services.Delivery
 
             shippingLabel.EmailOnDelivery = shipmentRequest.EmailOnDelivery;
             shippingLabel.SmsOnDelivery = shipmentRequest.SmsOnDelivery;
-            
+
+            shippingLabel.CustomsList = new List<CustomsListElement> { new CustomsListElement { Currency = Currency } };
 
             var shippingServices = new ShippingLabelServices();
             shippingServices.InvoiceBeforePayCd = shipmentRequest.InvoiceBeforePayCD;
             shippingServices.SmsNotification = shipmentRequest.SmsNotification;
             shippingServices.GoodsReceipt = shipmentRequest.GoodsReceipt;
-            shippingServices.DeliveryReceipt = shipmentRequest.DeliveryReceipt;     
+            shippingServices.DeliveryReceipt = shipmentRequest.DeliveryReceipt;
+            shippingServices.CdAmount = model.PaymentReceiverAmount;
+            shippingServices.CdType = CdType;
+            shippingServices.CdCurrency = Currency;
 
             shippingLabel.SendDate = model.SendDate;
             shippingLabel.PackCount = model.PackCount;
@@ -213,7 +217,7 @@ namespace ClickNPick.Application.Services.Delivery
             shippingLabel.Weight = model.Weight;
             shippingLabel.ShipmentDescription = model.ShipmentDescription;
             shippingLabel.OrderNumber = model.OrderNumber;
-            shippingServices.CdType = CdType;
+            
            
             shippingLabel.Services = shippingServices;          
 
@@ -296,6 +300,45 @@ namespace ClickNPick.Application.Services.Delivery
             await _shipmentRequestRepository.SaveChangesAsync();
         }
 
+        public async Task<ShipmentDetailsResponseDto> GetShipmentDetailsAsync(ShipmentDetailsRequestDto model)
+        {
+            var shipmentRequest = await _shipmentRequestRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == model.ShipmentId);
+
+            if (shipmentRequest == null)
+            {
+                throw new ShipmentRequestNotFoundException();
+            }
+
+            if (shipmentRequest.SellerId != model.UserId && shipmentRequest.BuyerId != model.UserId)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (shipmentRequest.ShipmentStatus != ShipmentStatus.Accepted)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var shipmentsStatusesRequestModel = new GetShipmentStatusesRequestModel 
+            { 
+                ShipmentNumbers = new List<string> { shipmentRequest.ShipmentNumber } 
+            };
+
+            var shipmentsStatusesResponse = await GetShipmentStatusesAsync(shipmentsStatusesRequestModel);
+
+            var courierStatusesRequestModel = new GetCourierStatusesRequestModel { RequestCourierIds = new List<string> { shipmentRequest.RequestCourierId } };
+
+            var courierStatusesResponseModel = await GetCourierStatusesAsync(courierStatusesRequestModel);
+
+            var result = ShipmentDetailsResponseDto.FromShipmentStatus(shipmentsStatusesResponse.ShipmentStatuses.ToList()[0].Status);
+
+            result.CourierStatus = courierStatusesResponseModel.RequestCourierStatuses.ToList().FirstOrDefault()?.Status;
+
+            return result;
+        }
+
         public async Task<ShipmentListingResponseDto> GetShipmentsToSendAsync(string userId)
         {
             var user = await _usersService.GetByIdAsync(userId);
@@ -364,7 +407,6 @@ namespace ClickNPick.Application.Services.Delivery
             .All()
             .FirstOrDefaultAsync(x => x.Id == shipmentId && x.SellerId == userId) == null ? false : true;
 
-
         private async Task<CreateLabelResponse?> CreateLabelAsync(CreateLabelRequestModel requestModel, CancellationToken cancellationToken = default)
             => await PostAsync<CreateLabelResponse>(EcontClientEndpoints.CreateLabel, requestModel, cancellationToken);
 
@@ -373,6 +415,12 @@ namespace ClickNPick.Application.Services.Delivery
 
         private async Task<DeleteLabelsResponseDto?> DeleteLabelsAsync(DeleteLabelsRequestModel requestModel, CancellationToken cancellationToken = default)
             => await PostAsync<DeleteLabelsResponseDto>(EcontClientEndpoints.DeleteLabels, requestModel, cancellationToken);
+
+        private async Task<GetShipmentStatusesResponse?> GetShipmentStatusesAsync(GetShipmentStatusesRequestModel requestModel, CancellationToken cancellationToken = default)
+            => await PostAsync<GetShipmentStatusesResponse>(EcontClientEndpoints.GetShipmentStatuses, requestModel, cancellationToken);
+
+        private async Task<GetCourierStatusesResponseModel?> GetCourierStatusesAsync(GetCourierStatusesRequestModel requestModel, CancellationToken cancellationToken = default)
+     => await PostAsync<GetCourierStatusesResponseModel>(EcontClientEndpoints.GetCourierStatuses, requestModel, cancellationToken);
 
         private async Task<T?> PostAsync<T>(string path, object body, CancellationToken cancellationToken = default)
         {
@@ -401,6 +449,6 @@ namespace ClickNPick.Application.Services.Delivery
             where T : ICacheable
                 => CacheKeyGenerator<T>.GenerateCacheKey(
                     string.Format(CacheKeyPrefix, typeof(T).Name),
-                    new CacheParameterCollection<T>(requestModel));   
+                    new CacheParameterCollection<T>(requestModel));
     }
 }

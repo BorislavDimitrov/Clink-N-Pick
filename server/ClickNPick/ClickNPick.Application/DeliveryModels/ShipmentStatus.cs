@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ClickNPick.Application.DeliveryModels.Request;
+using Newtonsoft.Json;
 
 namespace ClickNPick.Application.Common;
 
@@ -113,7 +114,7 @@ public class ShipmentStatus
     public string? PreviousShipmentNumber { get; set; }
 
     [JsonProperty("services")]
-    public List<ShippingLabelServices>? Services { get; set; }
+    public List<ShipmentStatusService>? Services { get; set; }
 
     [JsonProperty("lastProcessedInstruction")]
     public string? LastProcessedInstruction { get; set; }
