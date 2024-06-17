@@ -104,7 +104,7 @@ public class ProductsService : IProductsService
             throw new ProductNotFoundException();
         }
 
-        var detailsModel = ProductDetailsResponseDto.FromProductDetailsResponseDto(product);
+        var detailsModel = ProductDetailsResponseDto.FromProduct(product);
 
         return detailsModel;
     }
