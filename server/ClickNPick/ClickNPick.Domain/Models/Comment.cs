@@ -1,7 +1,14 @@
-﻿namespace ClickNPick.Domain.Models;
+﻿using ClickNPick.Domain.Models.Common;
 
-public class Comment
+namespace ClickNPick.Domain.Models;
+
+public class Comment : BaseModel<string>
 {
+    public Comment()
+    {
+        this.Id = Guid.NewGuid().ToString();
+    }
+
     public string ProductId { get; set; }
 
     public virtual Product Product { get; set; }
