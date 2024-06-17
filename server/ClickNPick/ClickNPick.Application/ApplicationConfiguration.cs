@@ -1,5 +1,6 @@
 ﻿using ClickNPick.Application.Abstractions.Services;
 using ClickNPick.Application.Services.Categories;
+using ClickNPick.Application.Services.Comments;
 using ClickNPick.Application.Services.Delivery;
 using ClickNPick.Application.Services.Identity;
 using ClickNPick.Application.Services.Images;
@@ -22,6 +23,7 @@ public static class ApplicationConfiguration
     {
         serviceCollection.AddScoped<IPromotionPricingService, PromotionPricingService>();
         serviceCollection.AddScoped<ICategoriesService, CategoriesService>();
+        serviceCollection.AddScoped<ICommentsService, CommentsService>();
         serviceCollection.AddScoped<IUsersService, UsersService>();
         serviceCollection.AddScoped<IImagesService, ImagesService>();
         serviceCollection.AddScoped<IIdentityService, IdentityService>();
