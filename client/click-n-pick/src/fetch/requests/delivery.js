@@ -7,16 +7,6 @@ import SendDto from "../base/sendDto";
 const request = new Request();
 const httpMethod = new HttpMethod();
 
-// const createLabel = async (data) => {
-//   const sendDto = new SendDto(
-//     httpMethod.post(),
-//     `${baseUrl}${deliveryRoutes.createLabel}`,
-//     data
-//   );
-
-//   return await request.send(sendDto);
-// };
-
 const requestShipment = async (data) => {
   const sendDto = new SendDto(
     httpMethod.post(),

@@ -51,6 +51,10 @@ const deliveryRoutes = {
   getStreets: "api/Delivery/GetStreets",
 };
 
+const commentsRoutes = {
+  createComment: "api/Comments/Create",
+};
+
 const promotionsRoutes = {
   getAll: "api/PromotionPricing/GetAll",
 };
@@ -63,4 +67,5 @@ export {
   promotionsRoutes,
   paymentsRoutes,
   deliveryRoutes,
+  commentsRoutes,
 };

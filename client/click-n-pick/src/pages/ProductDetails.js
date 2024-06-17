@@ -5,6 +5,7 @@ import Carousel from "../components/Carousel";
 import "tippy.js/dist/tippy.css";
 import { useState } from "react";
 import { details } from "../fetch/requests/products";
+import Comments from "../components/Comments";
 
 function ProductDetail() {
   const params = useParams();
@@ -108,9 +109,9 @@ function ProductDetail() {
             </div>
           </div>
           <div className="shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] mt-3">
-            <p>HERE</p>
+            <Comments productId={params.id} />
 
-            <div class="antialiased mx-auto max-w-screen-sm">
+            {/* <div class="antialiased mx-auto max-w-screen-sm">
               <h3 class="mb-4 text-lg font-semibold text-gray-900">Comments</h3>
 
               <div class="space-y-4">
@@ -212,9 +213,7 @@ function ProductDetail() {
                   </div>
                 </div>
               </div>
-            </div>
-
-            <h2>HERE </h2>
+            </div> */}
           </div>
         </div>
       </div>
