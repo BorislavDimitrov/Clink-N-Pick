@@ -12,7 +12,6 @@ public class Comment
 
     public virtual Comment Parent { get; set; }
 
-    [Required]
     public string Content { get; set; }
 
     public string CreatorId { get; set; }
