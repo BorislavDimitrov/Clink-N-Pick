@@ -2,11 +2,11 @@
 
 public class Comment
 {
-    public int ProductId { get; set; }
+    public string ProductId { get; set; }
 
     public virtual Product Product { get; set; }
 
-    public int? ParentId { get; set; }
+    public string? ParentId { get; set; }
 
     public virtual Comment Parent { get; set; }
 
