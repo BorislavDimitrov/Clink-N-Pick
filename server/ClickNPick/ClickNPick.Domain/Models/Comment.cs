@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ClickNPick.Domain.Models;
+﻿namespace ClickNPick.Domain.Models;
 
 public class Comment
 {
