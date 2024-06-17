@@ -30,7 +30,7 @@ public class ProductDetailsResponseDto
 
     public List<string> ImageUrls { get; set; }
 
-    public static ProductDetailsResponseDto FromProductDetailsResponseDto(Product product)
+    public static ProductDetailsResponseDto FromProduct(Product product)
     {
         return new ProductDetailsResponseDto
         {
