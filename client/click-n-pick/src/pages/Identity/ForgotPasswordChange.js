@@ -1,4 +1,4 @@
-import Logo from "../img/logo.jpg";
+import Logo from "../../img/logo.jpg";
 
 import { useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";

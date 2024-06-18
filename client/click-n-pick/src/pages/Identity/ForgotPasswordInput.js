@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import { forgotPasswordInput } from "../../fetch/requests/identity";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
-
-import Logo from "../img/logo.jpg";
+import Logo from "../../img/logo.jpg";
 
 function ForgotPasswordInput() {
   const navigate = useNavigate();
