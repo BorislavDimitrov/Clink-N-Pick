@@ -24,6 +24,7 @@ namespace ClickNPick.Application.DtoModels.Comments.Response
             {
                 Id = comment.Id,
                 CreatorId = comment.CreatorId,
+                ParentId = comment.ParentId,
                 Content = comment.Content,
                 CreatorUsername = comment.Creator.UserName,
                 CreatorImageUrl = comment.Creator.Image.Url,
