@@ -53,6 +53,7 @@ const deliveryRoutes = {
 
 const commentsRoutes = {
   createComment: "api/Comments/Create",
+  getForProduct: "api/Comments/GetForProduct",
 };
 
 const promotionsRoutes = {

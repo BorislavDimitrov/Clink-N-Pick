@@ -17,4 +17,13 @@ const createComment = async (data) => {
   return await request.send(sendDto);
 };
 
-export { createComment };
+const getForProduct = async (data) => {
+  const sendDto = new SendDto(
+    httpMethod.get(),
+    `${baseUrl}${commentsRoutes.getForProduct}/${data}`
+  );
+
+  return await request.send(sendDto);
+};
+
+export { createComment, getForProduct };
