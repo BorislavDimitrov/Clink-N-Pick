@@ -7,6 +7,7 @@ using ClickNPick.Application.Exceptions.Products;
 using ClickNPick.Application.Services.Products;
 using ClickNPick.Application.Services.Users;
 using ClickNPick.Domain.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClickNPick.Application.Services.Comments
@@ -88,6 +89,44 @@ namespace ClickNPick.Application.Services.Comments
 
         public async Task<Comment> GetByIdAsync(string commentId)
             => await _commentsRepository.All()
-            .FirstOrDefaultAsync(x => x.Id == commentId);       
+            .FirstOrDefaultAsync(x => x.Id == commentId);
+
+        public async Task DeleteAsync(DeleteCommentRequestDto model)
+        {
+            var user = await _usersService.GetByIdAsync(model.UserId);
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var comment = await _commentsRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == model.CommentId);
+
+            if (comment == null)
+            {
+                throw new CommentNotFoundException();
+            }
+
+            if (await IsCommentCreatedByUser(model.CommentId, model.UserId) == false)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if ((DateTime.UtcNow - comment.CreatedOn).TotalMinutes > 5)
+            {
+                throw new InvalidOperationException();
+            }
+
+            _commentsRepository.SoftDelete(comment);
+            await _commentsRepository.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsCommentCreatedByUser(string commentId, string userId)
+            => await _commentsRepository
+            .AllAsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == commentId && x.CreatorId == userId) == null ? false : true;
+        
     }
 }

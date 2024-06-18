@@ -1,4 +1,6 @@
-﻿using ClickNPick.Application.Services.Comments;
+﻿using ClickNPick.Application.DtoModels.Comments.Request;
+using ClickNPick.Application.DtoModels.Products.Request;
+using ClickNPick.Application.Services.Comments;
 using ClickNPick.Web.Extensions;
 using ClickNPick.Web.Models.Comments.Request;
 using ClickNPick.Web.Models.Comments.Response;
@@ -28,6 +30,19 @@ namespace ClickNPick.Web.Controllers
             var response = CreateCommentResponseModel.FromCreateCommentResponseDto(result);
 
             return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromBody] string id)
+        {
+            var userId = HttpContext.User.GetId();
+
+            var request = new DeleteCommentRequestDto() { CommentId = id, UserId = userId };
+
+            await _commentsService.DeleteAsync(request);
+
+            return Ok();
         }
 
         [HttpGet("{productId}")]
