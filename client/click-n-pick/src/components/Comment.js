@@ -1,11 +1,24 @@
+import CommentForm from "./CommentForm";
+
 const Comment = ({
+  comments,
   comment,
   replies,
   addComment,
   deleteComment,
   parentId = null,
   currentUserId,
+  activeComment,
+  setActiveComment,
 }) => {
+  const getReplies = (commentId) =>
+    comments
+      .filter((backendComment) => backendComment.parentId === commentId)
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+
   const fiveMinutes = 300000;
   const timePassed = new Date() - new Date(comment.createdOn) > fiveMinutes;
 
@@ -14,6 +27,12 @@ const Comment = ({
   const canDelete =
     currentUserId === comment.creatorId && replies.length === 0 && !timePassed;
   const createdOn = new Date(comment.createdOn).toLocaleDateString();
+  const isReplying =
+    activeComment &&
+    activeComment.id === comment.id &&
+    activeComment.type === "replying";
+  const replyId = parentId ? parentId : comment.id;
+
   return (
     <div key={comment.id} class="flex">
       <div class="flex-shrink-0 mr-3">
@@ -32,7 +51,16 @@ const Comment = ({
         <span class="text-xs text-gray-400">{createdOn}</span>
         <p class="text-lg">{comment.content}</p>
         <div className="flex flex-row gap-2 mt-4">
-          {canReply && <button class="text-sm">Reply</button>}
+          {canReply && (
+            <button
+              onClick={() =>
+                setActiveComment({ id: comment.id, type: "replying" })
+              }
+              class="text-sm"
+            >
+              Reply
+            </button>
+          )}
           {canEdit && <button class="text-sm">Edit</button>}
           {canDelete && (
             <button onClick={() => deleteComment(comment.id)} class="text-sm">
@@ -40,17 +68,27 @@ const Comment = ({
             </button>
           )}
         </div>
+        {isReplying && (
+          <CommentForm
+            submitLabel="Reply"
+            handleSubmit={(text) => addComment(text, replyId)}
+          />
+        )}
         <div className="space-y-4">
           {replies.length > 0 && (
             <div className="replies">
               {replies.map((reply) => (
                 <Comment
+                  comments={comments}
                   comment={reply}
                   key={reply.id}
-                  addComment={addComment}
+                  setActiveComment={setActiveComment}
+                  activeComment={activeComment}
+                  // updateComment={updateComment}
                   deleteComment={deleteComment}
-                  parentId={comment.id}
-                  replies={[]}
+                  addComment={addComment}
+                  parentId={reply.id}
+                  replies={getReplies(reply.id)}
                   currentUserId={currentUserId}
                 />
               ))}
