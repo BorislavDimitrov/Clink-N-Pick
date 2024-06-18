@@ -1,5 +1,6 @@
 ﻿using ClickNPick.Application.DtoModels.Comments.Request;
 using ClickNPick.Application.DtoModels.Comments.Response;
+using ClickNPick.Domain.Models;
 
 namespace ClickNPick.Application.Services.Comments
 {
@@ -11,6 +12,10 @@ namespace ClickNPick.Application.Services.Comments
 
         Task DeleteAsync(DeleteCommentRequestDto model);
 
+        Task EditAsync(EditCommentRequestDto model);
+
         Task<bool> IsCommentCreatedByUser(string commentId, string userId);
+
+        public Task<Comment?> GetByIdAsync(string commentId);
     }
 }

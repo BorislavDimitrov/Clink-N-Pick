@@ -34,6 +34,19 @@ namespace ClickNPick.Web.Controllers
 
         [Authorize]
         [HttpPost]
+        public async Task<IActionResult> Edit([FromBody] EditCommentRequestModel model)
+        {           
+            var userId = HttpContext.User.GetId();
+            var dto = model.ToEditCommentRequestDto();
+            dto.UserId = userId;
+
+            await _commentsService.EditAsync(dto);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Delete([FromBody] string id)
         {
             var userId = HttpContext.User.GetId();
