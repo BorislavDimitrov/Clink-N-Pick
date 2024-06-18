@@ -12,7 +12,11 @@ namespace ClickNPick.Web.Models.Comments.Response
 
         public string ParentId { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public string CreatorUsername { get; set; }
+
+        public string CreatorImageUrl { get; set; }
+
+        public string CreatedOn { get; set; }
 
         public static CreateCommentResponseModel FromCreateCommentResponseDto(CreateCommentResponseDto dto)
         {
@@ -22,6 +26,8 @@ namespace ClickNPick.Web.Models.Comments.Response
                 CreatorId = dto.CreatorId,
                 Content = dto.Content,
                 ParentId = dto.ParentId,
+                CreatorUsername = dto.CreatorUsername,
+                CreatorImageUrl = dto.CreatorImageUrl,
                 CreatedOn = dto.CreatedOn,
             };
         }
