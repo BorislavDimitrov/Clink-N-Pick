@@ -5,11 +5,13 @@ import "tippy.js/dist/tippy.css";
 import { useState } from "react";
 import { details } from "../fetch/requests/products";
 import Comments from "../components/Comments";
+import { GetCurrentUserId } from "../Utility/auth";
 
 function ProductDetail() {
   const params = useParams();
 
   const [product, setProduct] = useState(null);
+  var currentUserId = GetCurrentUserId();
 
   console.log();
   useEffect(() => {
@@ -108,7 +110,7 @@ function ProductDetail() {
             </div>
           </div>
           <div className="shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] mt-3">
-            <Comments productId={params.id} />
+            <Comments productId={params.id} currentUserId={currentUserId} />
 
             <div class="antialiased mx-auto max-w-screen-sm">
               <h3 class="mb-4 text-lg font-semibold text-gray-900">Comments</h3>
