@@ -54,6 +54,7 @@ const deliveryRoutes = {
 const commentsRoutes = {
   createComment: "api/Comments/Create",
   getForProduct: "api/Comments/GetForProduct",
+  deleteComment: "api/Comments/Delete",
 };
 
 const promotionsRoutes = {

@@ -17,6 +17,16 @@ const createComment = async (data) => {
   return await request.send(sendDto);
 };
 
+const deleteComment = async (data) => {
+  const sendDto = new SendDto(
+    httpMethod.post(),
+    `${baseUrl}${commentsRoutes.deleteComment}`,
+    data
+  );
+
+  return await request.send(sendDto);
+};
+
 const getForProduct = async (data) => {
   const sendDto = new SendDto(
     httpMethod.get(),
@@ -26,4 +36,4 @@ const getForProduct = async (data) => {
   return await request.send(sendDto);
 };
 
-export { createComment, getForProduct };
+export { createComment, getForProduct, deleteComment };
