@@ -10,20 +10,44 @@ const CommentForm = ({ handleSubmit, submitLabel, initialText = "" }) => {
     setText("");
   };
   return (
-    <form onSubmit={onSubmit}>
-      <textarea
-        className="border-4"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
+    <form onSubmit={onSubmit} class="mb-6">
+      <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <label for="comment" class="sr-only">
+          Your comment
+        </label>
+        <textarea
+          id="comment"
+          rows="6"
+          class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+          placeholder="Write a comment..."
+          required
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        ></textarea>
+      </div>
       <button
-        type="submit"
-        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
         disabled={isTextareaDisabled}
+        type="submit"
+        className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
       >
         {submitLabel}
       </button>
     </form>
+
+    // <form onSubmit={onSubmit}>
+    //   <textarea
+    //     className="border-4"
+    //     value={text}
+    //     onChange={(e) => setText(e.target.value)}
+    //   />
+    //   <button
+    //     type="submit"
+    //     class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+    //     disabled={isTextareaDisabled}
+    //   >
+    //     {submitLabel}
+    //   </button>
+    // </form>
   );
 };
 
