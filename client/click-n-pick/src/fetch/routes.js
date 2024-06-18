@@ -55,6 +55,7 @@ const commentsRoutes = {
   createComment: "api/Comments/Create",
   getForProduct: "api/Comments/GetForProduct",
   deleteComment: "api/Comments/Delete",
+  editComment: "api/Comments/Edit",
 };
 
 const promotionsRoutes = {

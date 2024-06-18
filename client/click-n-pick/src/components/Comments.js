@@ -5,6 +5,7 @@ import {
   createComment,
   getForProduct,
   deleteComment,
+  editComment as editCommentApi,
 } from "../fetch/requests/comments";
 
 const Comments = ({ currentUserId, productId }) => {
@@ -20,7 +21,32 @@ const Comments = ({ currentUserId, productId }) => {
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
 
-  async function addComment(text, parentId) {
+  const updateComment = async (text, commentId) => {
+    try {
+      var response = await editCommentApi({
+        Content: text,
+        CommentId: commentId,
+      });
+
+      if (response.status !== 200) {
+        throw new Error("Fetching details failed.");
+      }
+
+      const updatedBackendComments = comments.map((comment) => {
+        debugger;
+        if (comment.id === commentId) {
+          return { ...comment, content: text };
+        }
+        return comment;
+      });
+      setComments(updatedBackendComments);
+      setActiveComment(null);
+    } catch (error) {
+      alert("Some problem occurred.");
+    }
+  };
+
+  const addComment = async (text, parentId) => {
     console.log(text);
     var response = await createComment({
       Content: text,
@@ -31,9 +57,9 @@ const Comments = ({ currentUserId, productId }) => {
     console.log(data);
     setComments([data, ...comments]);
     setActiveComment(null);
-  }
+  };
 
-  async function deleteCom(commentId) {
+  const deleteCom = async (commentId) => {
     if (window.confirm("Are you sure you want to remove comment?")) {
       try {
         const response = await deleteComment(commentId);
@@ -50,7 +76,7 @@ const Comments = ({ currentUserId, productId }) => {
         alert("Some problem occurred.");
       }
     }
-  }
+  };
 
   useEffect(() => {
     (async function () {
@@ -79,10 +105,12 @@ const Comments = ({ currentUserId, productId }) => {
         {rootComments.map((rootComment) => (
           <Comment
             key={rootComment.id}
+            comments={comments}
             comment={rootComment}
             replies={getReplies(rootComment.id)}
             activeComment={activeComment}
             setActiveComment={setActiveComment}
+            updateComment={updateComment}
             addComment={addComment}
             deleteComment={deleteCom}
             currentUserId={currentUserId}

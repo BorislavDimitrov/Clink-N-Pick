@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-const CommentForm = ({ handleSubmit, submitLabel, initialText = "" }) => {
+const CommentForm = ({
+  handleSubmit,
+  submitLabel,
+  initialText = "",
+  hasCancelButton = false,
+  handleCancel,
+}) => {
   const [text, setText] = useState(initialText);
   const isTextareaDisabled = text.length === 0;
   const onSubmit = (event) => {
@@ -32,22 +38,17 @@ const CommentForm = ({ handleSubmit, submitLabel, initialText = "" }) => {
       >
         {submitLabel}
       </button>
-    </form>
 
-    // <form onSubmit={onSubmit}>
-    //   <textarea
-    //     className="border-4"
-    //     value={text}
-    //     onChange={(e) => setText(e.target.value)}
-    //   />
-    //   <button
-    //     type="submit"
-    //     class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-    //     disabled={isTextareaDisabled}
-    //   >
-    //     {submitLabel}
-    //   </button>
-    // </form>
+      {hasCancelButton && (
+        <button
+          type="button"
+          className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200  hover:bg-red-800"
+          onClick={handleCancel}
+        >
+          Cancel
+        </button>
+      )}
+    </form>
   );
 };
 

@@ -6,11 +6,17 @@ const Comment = ({
   replies,
   addComment,
   deleteComment,
+  updateComment,
   parentId = null,
   currentUserId,
   activeComment,
   setActiveComment,
 }) => {
+  const isEditing =
+    activeComment &&
+    activeComment.id === comment.id &&
+    activeComment.type === "editing";
+
   const getReplies = (commentId) =>
     comments
       .filter((backendComment) => backendComment.parentId === commentId)
@@ -49,8 +55,19 @@ const Comment = ({
           </a>
         </strong>{" "}
         <span class="text-xs text-gray-400">{createdOn}</span>
-        <p class="text-lg">{comment.content}</p>
+        {!isEditing && <p class="text-lg">{comment.content}</p>}
         <div className="flex flex-row gap-2 mt-4">
+          {isEditing && (
+            <CommentForm
+              submitLabel="Update"
+              hasCancelButton
+              initialText={comment.content}
+              handleSubmit={(text) => updateComment(text, comment.id)}
+              handleCancel={() => {
+                setActiveComment(null);
+              }}
+            />
+          )}
           {canReply && (
             <button
               onClick={() =>
@@ -61,7 +78,16 @@ const Comment = ({
               Reply
             </button>
           )}
-          {canEdit && <button class="text-sm">Edit</button>}
+          {canEdit && (
+            <button
+              onClick={() =>
+                setActiveComment({ id: comment.id, type: "editing" })
+              }
+              class="text-sm"
+            >
+              Edit
+            </button>
+          )}
           {canDelete && (
             <button onClick={() => deleteComment(comment.id)} class="text-sm">
               Delete
@@ -84,7 +110,7 @@ const Comment = ({
                   key={reply.id}
                   setActiveComment={setActiveComment}
                   activeComment={activeComment}
-                  // updateComment={updateComment}
+                  updateComment={updateComment}
                   deleteComment={deleteComment}
                   addComment={addComment}
                   parentId={reply.id}
