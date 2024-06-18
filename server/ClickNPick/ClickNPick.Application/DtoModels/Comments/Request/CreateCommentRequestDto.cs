@@ -4,7 +4,6 @@ namespace ClickNPick.Application.DtoModels.Comments.Request
 {
     public class CreateCommentRequestDto
     {
-
         public string ProductId { get; set; }
 
         public string ParentId { get; set; }
