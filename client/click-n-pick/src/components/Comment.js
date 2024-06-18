@@ -5,6 +5,13 @@ const Comment = ({
   parentId = null,
   currentUserId,
 }) => {
+  const fiveMinutes = 300000;
+  const timePassed = new Date() - new Date(comment.createdAt) > fiveMinutes;
+
+  const canReply = Boolean(currentUserId);
+  const canEdit = currentUserId === comment.creatorId && !timePassed;
+  const canDelete =
+    currentUserId === comment.creatorId && replies.length === 0 && !timePassed;
   const createdAt = new Date(comment.createdOn).toLocaleDateString();
   return (
     <div key={comment.id} class="flex">
@@ -22,7 +29,12 @@ const Comment = ({
           </a>
         </strong>{" "}
         <span class="text-xs text-gray-400">{createdAt}</span>
-        <p class="text-sm">{comment.content}</p>
+        <p class="text-lg">{comment.content}</p>
+        <div className="flex flex-row gap-2 mt-4">
+          {canReply && <div class="text-sm">Reply</div>}
+          {canEdit && <div class="text-sm">Edit</div>}
+          {canDelete && <div class="text-sm">Delete</div>}
+        </div>
         <div className="space-y-4">
           {replies.length > 0 && (
             <div className="replies">
