@@ -3,10 +3,13 @@ import Logo from "../img/logo.jpg";
 import { useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import Modal from "../components/Modal";
-import { forgotPasswordChange } from "../fetch/requests/identity";
+import Modal from "../../components/Modal";
+import { forgotPasswordChange } from "../../fetch/requests/identity";
 
-import { isPasswordValid, isEqualsToOtherValue } from "../Utility/validations";
+import {
+  isPasswordValid,
+  isEqualsToOtherValue,
+} from "../../Utility/validations";
 import { Link } from "react-router-dom";
 
 import Tippy from "@tippyjs/react";

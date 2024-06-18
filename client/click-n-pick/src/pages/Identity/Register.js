@@ -3,15 +3,15 @@ import Logo from "../img/logo.jpg";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Modal from "../components/Modal";
-import { register } from "../fetch/requests/identity";
+import Modal from "../../components/Modal";
+import { register } from "../../fetch/requests/identity";
 
 import {
   isEmailValid,
   isPasswordValid,
   isEqualsToOtherValue,
   hasMinLength,
-} from "../Utility/validations";
+} from "../../Utility/validations";
 import { Link } from "react-router-dom";
 
 import Tippy from "@tippyjs/react";

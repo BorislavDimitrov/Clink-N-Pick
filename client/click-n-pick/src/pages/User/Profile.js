@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { getAll } from "../fetch/requests/categories";
-import { viewProfile } from "../fetch/requests/users";
-import { userProducts } from "../fetch/requests/products";
+import { getAll } from "../../fetch/requests/categories";
+import { viewProfile } from "../../fetch/requests/users";
+import { userProducts } from "../../fetch/requests/products";
 import { useParams } from "react-router-dom";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../../components/ProductCard";
 
 function Profile() {
   function handleOnChange() {}

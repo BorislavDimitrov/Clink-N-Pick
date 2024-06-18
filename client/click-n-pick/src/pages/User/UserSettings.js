@@ -1,5 +1,5 @@
-import ChangePassword from "../components/ChangePassword";
-import EditProfile from "../components/EditProfile";
+import ChangePassword from "../../components/ChangePassword";
+import EditProfile from "../../components/EditProfile";
 
 function UserSettings() {
   return (

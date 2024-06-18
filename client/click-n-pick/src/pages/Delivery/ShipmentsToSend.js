@@ -4,7 +4,7 @@ import {
   shipmentsToSend,
   cancelShipment,
   declineShipment,
-} from "../fetch/requests/delivery";
+} from "../../fetch/requests/delivery";
 
 function ShipmentsToSend() {
   const [shipments, setShipments] = useState([]);

@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import Carousel from "../components/Carousel";
+import Carousel from "../../components/Carousel";
 import "tippy.js/dist/tippy.css";
 import { useState } from "react";
-import { details } from "../fetch/requests/products";
-import Comments from "../components/Comments";
-import { GetCurrentUserId } from "../Utility/auth";
+import { details } from "../../fetch/requests/products";
+import Comments from "../../components/Comments";
+import { GetCurrentUserId } from "../../Utility/auth";
 
 function ProductDetail() {
   const params = useParams();

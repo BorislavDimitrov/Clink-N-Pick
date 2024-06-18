@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Modal from "../components/Modal";
-import { getAll } from "../fetch/requests/categories";
+import Modal from "../../components/Modal";
+import { getAll } from "../../fetch/requests/categories";
 import {
   isTitleValid,
   isPriceValid,
   isDescriptionValid,
   areImagesValid,
   isImageValid,
-} from "../Utility/validations";
-import { create } from "../fetch/requests/products";
+} from "../../Utility/validations";
+import { create } from "../../fetch/requests/products";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 

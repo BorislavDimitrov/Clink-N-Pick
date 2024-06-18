@@ -1,13 +1,13 @@
 import { useState, useRef } from "react";
-import { isEmailValid, isPasswordValid } from "../Utility/validations";
+import { isEmailValid, isPasswordValid } from "../../Utility/validations";
 import { Link, useNavigate } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "react-tippy/dist/tippy.css";
 import Logo from "../img/logo.jpg";
-import { login } from "../fetch/requests/identity";
-import { SetAuthToken } from "../Utility/auth";
-import Modal from "../components/Modal";
-import { SetUserImageUrl } from "../Utility/user";
+import { login } from "../../fetch/requests/identity";
+import { SetAuthToken } from "../../Utility/auth";
+import Modal from "../../components/Modal";
+import { SetUserImageUrl } from "../../Utility/user";
 import ReactIframe from "react-iframe";
 
 function Login() {

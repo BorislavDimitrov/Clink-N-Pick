@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getShipmentDetails } from "../fetch/requests/delivery";
+import { getShipmentDetails } from "../../fetch/requests/delivery";
 
 function ShipmentDetails() {
   const params = useParams();

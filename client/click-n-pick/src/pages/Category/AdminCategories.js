@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { getAll } from "../fetch/requests/categories";
+import { getAll } from "../../fetch/requests/categories";
 import { Link } from "react-router-dom";
-import { deleteCategory } from "../fetch/requests/categories";
-import Modal from "../components/Modal";
+import { deleteCategory } from "../../fetch/requests/categories";
+import Modal from "../../components/Modal";
 
 function AdminCategories() {
   const [categories, setCategories] = useState([]);

@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
-import { isEmailValid } from "../Utility/validations";
+import { isEmailValid } from "../../Utility/validations";
 import { Link } from "react-router-dom";
-import { forgotPasswordInput } from "../fetch/requests/identity";
+import { forgotPasswordInput } from "../../fetch/requests/identity";
 import { useNavigate } from "react-router-dom";
-import Modal from "../components/Modal";
+import Modal from "../../components/Modal";
 
 import Logo from "../img/logo.jpg";
 

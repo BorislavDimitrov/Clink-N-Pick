@@ -6,7 +6,7 @@ import {
   getCities,
   getQuarters,
   getStreets,
-} from "../fetch/requests/delivery";
+} from "../../fetch/requests/delivery";
 
 function RequestDelivery() {
   const [deliverTo, setDeliverTo] = useState("Office");

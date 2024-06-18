@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { confirmEmail } from "../fetch/requests/identity";
+import { confirmEmail } from "../../fetch/requests/identity";
 import { useState, useEffect, useRef } from "react";
-import Modal from "../components/Modal";
+import Modal from "../../components/Modal";
 
 function ConfirmEmail() {
   const params = useParams();

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import ProductCard from "../components/ProductCard";
-import { searchAll } from "../fetch/requests/products";
-import { getAll } from "../fetch/requests/categories";
+import ProductCard from "../../components/ProductCard";
+import { myProducts } from "../../fetch/requests/products";
+import { getAll } from "../../fetch/requests/categories";
 
-function Search() {
+function MyProducts() {
   const PAGE_SIZE = 9;
 
   const [products, setProducts] = useState([]);
@@ -22,6 +22,7 @@ function Search() {
     (async function getCategories() {
       const response = await getAll();
       var data = await response.json();
+      console.log(data.categories);
 
       setCategories(data.categories);
     })();
@@ -36,6 +37,7 @@ function Search() {
       event.preventDefault();
     }
 
+    console.log(categoryIds);
     try {
       const params = new URLSearchParams({
         pageNumber: pageNumber,
@@ -51,14 +53,16 @@ function Search() {
         });
       }
 
-      const response = await searchAll(params);
+      const response = await myProducts(params);
 
       if (response.status !== 200) {
-        throw new Error("Products not fetched.");
+        throw new Error("The email confirmation failed");
       }
 
       var data = await response.json();
+      console.log(data.products);
       var products = data.products;
+      console.log(products);
 
       setLoading(false);
 
@@ -90,7 +94,7 @@ function Search() {
         id="filters"
         class=" max-w-screen-md mx-auto m-20 "
       >
-        <div class="rounded-xl  bg-white p-6 shadow-lg border-t-2 border-blue-500">
+        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg ">
           <h2 class="text-stone-700 text-xl font-bold">Apply filters</h2>
           <p class="mt-1 text-sm"></p>
           <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
@@ -204,7 +208,9 @@ function Search() {
                 isOnDiscount: product.isOnDiscount,
                 creatorName: product.creatorName,
                 discountPrice: product.discountPrice,
+                isPromoted: product.isPromoted,
               }}
+              renderButtons={true}
             />
           ))}
         </section>
@@ -240,4 +246,4 @@ function Search() {
   );
 }
 
-export default Search;
+export default MyProducts;

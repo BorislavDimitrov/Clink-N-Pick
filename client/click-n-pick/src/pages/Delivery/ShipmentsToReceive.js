@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { shipmentsToReceive, cancelShipment } from "../fetch/requests/delivery";
+import {
+  shipmentsToReceive,
+  cancelShipment,
+} from "../../fetch/requests/delivery";
 
 function ShipmentsToRecieve() {
   const [shipments, setShipments] = useState([]);
