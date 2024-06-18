@@ -8,6 +8,14 @@ const Comments = ({ currentUserId, productId }) => {
   const [activeComment, setActiveComment] = useState(null);
   const rootComments = comments.filter((comment) => comment.parentId === null);
 
+  const getReplies = (commentId) =>
+    comments
+      .filter((backendComment) => backendComment.parentId === commentId)
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+
   async function addComment(text, parentId) {
     console.log(text);
     var response = await createComment({
@@ -51,8 +59,7 @@ const Comments = ({ currentUserId, productId }) => {
           <Comment
             key={rootComment.id}
             comment={rootComment}
-            replies={[]}
-            //replies={getReplies(rootComment.id)}
+            replies={getReplies(rootComment.id)}
             activeComment={activeComment}
             setActiveComment={setActiveComment}
             addComment={addComment}
