@@ -27,7 +27,7 @@ namespace ClickNPick.Application.DtoModels.Comments.Response
                 Content = comment.Content,
                 CreatorUsername = comment.Creator.UserName,
                 CreatorImageUrl = comment.Creator.Image.Url,
-                CreatedOn = comment.CreatedOn.ToString(),
+                CreatedOn = comment.CreatedOn.ToString("yyyy-MM-ddTHH:mm:ssZ"),
             };
         }
     }
