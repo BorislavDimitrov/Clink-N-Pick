@@ -29,5 +29,14 @@ namespace ClickNPick.Web.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> GetForProduct([FromRoute] string productId)
+        {
+            var result = await _commentsService.GetForProductAsync(productId);
+            var response = CommentListingResponseModel.FromCommentListingResponseDto(result);
+
+            return Ok(response);
+        }
     }
 }

@@ -57,11 +57,37 @@ namespace ClickNPick.Application.Services.Comments
             await _commentsRepository.AddAsync(newComment);
             await _commentsRepository.SaveChangesAsync();
 
-            return CreateCommentResponseDto.FromComment(newComment);
+            var commentResponse = await _commentsRepository
+                .AllAsNoTracking()
+                .Include(x => x.Creator)
+                .Include(x => x.Creator.Image)
+                .FirstOrDefaultAsync(x => x.Id == newComment.Id);
+
+            return CreateCommentResponseDto.FromComment(commentResponse);
+        }
+
+        public async Task<CommentListingResponseDto> GetForProductAsync(string productId)
+        {
+            var product = await _productsService.GetByIdAsync(productId);
+
+            if (product == null)
+            {
+                throw new ProductNotFoundException();
+            }
+
+            var comments = await _commentsRepository
+                .All()
+                .Where(x => x.ProductId == productId)
+                .OrderByDescending(x => x.CreatedOn)
+                .Include(x => x.Creator)
+                .Include(x => x.Creator.Image)
+                .ToListAsync();
+
+            return CommentListingResponseDto.FromComments(comments);
         }
 
         public async Task<Comment> GetByIdAsync(string commentId)
             => await _commentsRepository.All()
-            .FirstOrDefaultAsync(x => x.Id == commentId);
+            .FirstOrDefaultAsync(x => x.Id == commentId);       
     }
 }

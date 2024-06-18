@@ -6,5 +6,7 @@ namespace ClickNPick.Application.Services.Comments
     public interface ICommentsService
     {
         Task<CreateCommentResponseDto> CreateAsync(CreateCommentRequestDto model);
+
+        Task<CommentListingResponseDto> GetForProductAsync(string productId);
     }
 }
