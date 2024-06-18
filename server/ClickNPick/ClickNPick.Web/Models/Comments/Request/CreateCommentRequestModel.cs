@@ -10,6 +10,7 @@ namespace ClickNPick.Web.Models.Comments.Request
 
         public string Content { get; set; }
 
+
         public CreateCommentRequestDto ToCreateCommentRequestDto()
         {
             return new CreateCommentRequestDto
