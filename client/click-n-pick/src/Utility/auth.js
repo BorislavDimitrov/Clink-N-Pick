@@ -17,6 +17,22 @@ export function RemoveAuthToken() {
   localStorage.removeItem("token");
 }
 
+export function GetCurrentUserId() {
+  var token = GetAuthToken();
+
+  if (token) {
+    const decodedToken = jwtDecode(token);
+    const userId =
+      decodedToken[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+      ];
+
+    return userId;
+  } else {
+    return null;
+  }
+}
+
 export const isAdmin = () => {
   const token = localStorage.getItem("token");
   if (!token) {
