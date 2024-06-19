@@ -55,7 +55,6 @@ function Register() {
     );
 
   async function handleSubmit(event) {
-    console.log("inside handler");
     event.preventDefault();
 
     const anyInvalid =
@@ -65,7 +64,6 @@ function Register() {
       confirmPasswordIsInvalid;
 
     if (anyInvalid === true) {
-      console.log("invalid input");
       return;
     }
 
@@ -73,7 +71,7 @@ function Register() {
       const response = await register(enteredValues);
 
       if (response.status !== 200) {
-        throw new Error("Registration failed");
+        throw new Error("Network response was not ok");
       }
 
       setResponseResult("ok");
@@ -125,7 +123,6 @@ function Register() {
             <h2 className="text-xl font-bold text-green-700 my-4">
               Successful Registration!
             </h2>
-            <p className="text-stone-600 mb-4">Successful Registration!</p>
             <p className="text-stone-600 mb-4">
               Check your email address to confirm it.
             </p>

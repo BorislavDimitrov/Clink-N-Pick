@@ -1,6 +1,7 @@
 import ReactIframe from "react-iframe";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+
 import {
   acceptShipment,
   getCities,
@@ -17,7 +18,6 @@ function AcceptDelivery() {
   const [cityId, setCityId] = useState(1);
   const [cityPostCode, setCityPostCode] = useState();
   const params = useParams();
-  console.log(params.id);
 
   const [clientSenderProfile, setClientSenderProfile] = useState({
     name: "",
@@ -26,24 +26,41 @@ function AcceptDelivery() {
 
   useEffect(() => {
     (async function () {
-      const response = await getCities();
-      var data = await response.json();
+      try {
+        const response = await getCities();
 
-      setCities(data.cities);
-      setCityId(data.cities[0].id);
+        if (response.status !== 200) {
+          throw new Error("Network response was not ok");
+        }
+
+        var data = await response.json();
+
+        setCities(data.cities);
+        setCityId(data.cities[0].id);
+      } catch (error) {
+        alert("Some problem occurred.");
+      }
     })();
   }, []);
 
   useEffect(() => {
     (async function () {
-      const params = new URLSearchParams({
-        cityId: cityId,
-      });
+      try {
+        const params = new URLSearchParams({
+          cityId: cityId,
+        });
 
-      const response = await getQuarters(params);
-      var data = await response.json();
+        const response = await getQuarters(params);
 
-      setQuarters(data.quarters);
+        if (response.status !== 200) {
+          throw new Error("Network response was not ok");
+        }
+
+        var data = await response.json();
+        setQuarters(data.quarters);
+      } catch (error) {
+        alert("Some problem occurred.");
+      }
     })();
   }, [cityId]);
 
@@ -88,7 +105,15 @@ function AcceptDelivery() {
     inputInfo["ReceiverName"] = clientSenderProfile.Name;
     inputInfo["ReceiverPhoneNumber"] = clientSenderProfile.Phones[0];
 
-    var response = await acceptShipment(inputInfo);
+    try {
+      var response = await acceptShipment(inputInfo);
+
+      if (response.status !== 200) {
+        throw new Error("Network response was not ok");
+      }
+    } catch (error) {
+      alert("Some problem occurred.");
+    }
   }
 
   useEffect(() => {

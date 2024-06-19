@@ -11,20 +11,20 @@ const CommentForm = ({
   const isTextareaDisabled = text.length === 0;
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(text);
     handleSubmit(text);
     setText("");
   };
+
   return (
-    <form onSubmit={onSubmit} class="mb-6">
-      <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-        <label for="comment" class="sr-only">
+    <form onSubmit={onSubmit} className="mb-6">
+      <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <label for="comment" className="sr-only">
           Your comment
         </label>
         <textarea
           id="comment"
           rows="6"
-          class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+          className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
           placeholder="Write a comment..."
           required
           value={text}

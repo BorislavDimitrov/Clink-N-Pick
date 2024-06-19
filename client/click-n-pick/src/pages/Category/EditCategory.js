@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+
 import Modal from "../../components/Modal";
 import { getById } from "../../fetch/requests/categories";
 import { useParams } from "react-router-dom";
@@ -11,10 +12,19 @@ function EditCategory() {
 
   useEffect(() => {
     (async function getCategory() {
-      const response = await getById(params.id);
-      var data = await response.json();
-      console.log(data);
-      setCategory(data.name);
+      try {
+        const response = await getById(params.id);
+
+        if (response.status !== 200) {
+          throw new Error("Network response was not ok");
+        }
+
+        var data = await response.json();
+
+        setCategory(data.name);
+      } catch (error) {
+        alert("Some problem occurred.");
+      }
     })();
   }, []);
 
@@ -25,7 +35,6 @@ function EditCategory() {
 
     try {
       const response = await edit({ CategoryId: params.id, Name: category });
-      console.log(response);
 
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
@@ -55,7 +64,6 @@ function EditCategory() {
             <h2 className="text-xl font-bold text-green-700 my-4">
               Successful editing!
             </h2>
-            <p className="text-stone-600 mb-4">Successful Registration!</p>
           </>
         )}
         {responseResult === "bad" && (

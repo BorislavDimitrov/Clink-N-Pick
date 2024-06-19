@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 import Modal from "../../components/Modal";
 import { getEditDetails } from "../../fetch/requests/products";
 import { getAll } from "../../fetch/requests/categories";
@@ -15,11 +16,9 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 function EditProduct() {
-  const navigate = useNavigate();
   const modal = useRef();
 
   var params = useParams();
-  console.log(params);
 
   const [enteredValues, setEnteredValues] = useState({
     title: "",
@@ -44,30 +43,47 @@ function EditProduct() {
 
   useEffect(() => {
     (async function getProductInfo() {
-      const response = await getEditDetails(params.id);
-      var data = await response.json();
+      try {
+        const response = await getEditDetails(params.id);
 
-      setEnteredValues({
-        title: data.title,
-        price: data.price,
-        categoryId: data.categoryId,
-        description: data.description,
-        discountPrice: data.discountPrice,
-      });
+        if (response.status !== 200) {
+          throw new Error("Network response was not ok");
+        }
 
-      setEnteredValues((prevValues) => ({
-        ...prevValues,
-        ["categoryId"]: data.categoryId,
-      }));
+        var data = await response.json();
+
+        setEnteredValues({
+          title: data.title,
+          price: data.price,
+          categoryId: data.categoryId,
+          description: data.description,
+          discountPrice: data.discountPrice,
+        });
+
+        setEnteredValues((prevValues) => ({
+          ...prevValues,
+          ["categoryId"]: data.categoryId,
+        }));
+      } catch (error) {
+        alert("Some problem occurred.");
+      }
     })();
   }, []);
 
   useEffect(() => {
     (async function getCategories() {
-      const response = await getAll();
-      var data = await response.json();
+      try {
+        const response = await getAll();
 
-      setCategories(data.categories);
+        if (response.status !== 200) {
+          throw new Error("Network response was not ok");
+        }
+
+        var data = await response.json();
+        setCategories(data.categories);
+      } catch (error) {
+        alert("Some problem occurred.");
+      }
     })();
   }, []);
 
@@ -79,9 +95,7 @@ function EditProduct() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    debugger;
-    console.log(enteredValues);
-    console.log(imagesIsValid);
+
     let anyInvalid =
       titleIsInvalid ||
       priceIsInvalid ||
@@ -92,8 +106,6 @@ function EditProduct() {
     if (anyInvalid === true) {
       return;
     }
-
-    console.log(enteredValues);
 
     const formData = new FormData();
     formData.append("Title", enteredValues.title);
@@ -116,7 +128,7 @@ function EditProduct() {
       var response = await edit(formData, true);
 
       if (response.status !== 200) {
-        throw new Error("Creating failed.");
+        throw new Error("Network response was not ok");
       }
 
       setResponseResult("ok");
@@ -128,7 +140,6 @@ function EditProduct() {
   }
 
   function handleThumbnailImageChange(event) {
-    debugger;
     var thumbnailImage = event.target.files[0];
 
     if (!thumbnailImage) {
@@ -143,7 +154,6 @@ function EditProduct() {
   }
 
   function handleImagesChange(event) {
-    debugger;
     var images = event.target.files;
 
     if (!images) {
@@ -170,29 +180,20 @@ function EditProduct() {
   }
 
   function handleInputBlur(identifier) {
-    console.log(identifier);
-    console.log(enteredValues);
     if (
       identifier === "discountPrice" &&
       enteredValues.discountPrice >= enteredValues.price
     ) {
-      console.log("discount price:");
-      console.log(enteredValues.discountPrice);
-      console.log(enteredValues.price);
-
       var newValue = enteredValues.price - 1;
 
       if (newValue < 0) {
-        console.log(newValue);
         newValue = 0;
       }
-      console.log("set");
+
       setEnteredValues((prevValues) => ({
         ...prevValues,
         [identifier]: newValue,
       }));
-
-      console.log(enteredValues);
     }
 
     setDidEdit((prevEdit) => ({
@@ -202,7 +203,7 @@ function EditProduct() {
   }
 
   function redirectTo() {
-    navigate("/");
+    window.location.href = "/products/myProducts";
   }
 
   return (
@@ -350,13 +351,13 @@ function EditProduct() {
                 </div>
               </div>
 
-              <label class="block mt-4">
-                <span class="text-gray-700">Category</span>
+              <label className="block mt-4">
+                <span className="text-gray-700">Category</span>
                 <select
                   onChange={(event) =>
                     handleInputChange("categoryId", event.target.value)
                   }
-                  class="form-select  mt-1 block w-full rounded-lg border py-2 px-3"
+                  className="form-select  mt-1 block w-full rounded-lg border py-2 px-3"
                 >
                   {categories &&
                     categories.map((category) => (
@@ -418,13 +419,13 @@ function EditProduct() {
                   >
                     <div className="flex flex-col space-y-2  w-full">
                       <label
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         for="user_avatar"
                       >
                         Thumbnail Image
                       </label>
                       <input
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         aria-describedby="user_avatar_help"
                         id="user_avatar"
                         type="file"
@@ -453,13 +454,13 @@ function EditProduct() {
                   >
                     <div className="flex flex-col space-y-2  w-full">
                       <label
-                        class="block text-sm font-medium text-gray-900 dark:text-white"
+                        className="block text-sm font-medium text-gray-900 dark:text-white"
                         for="user_avatar"
                       >
                         Images
                       </label>
                       <input
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         aria-describedby="user_avatar_help"
                         id="user_avatar"
                         type="file"

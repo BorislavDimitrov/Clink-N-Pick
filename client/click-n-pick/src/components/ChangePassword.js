@@ -1,14 +1,12 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 
 import Modal from "../components/Modal";
 import { passwordChange } from "../fetch/requests/identity";
-
 import { isPasswordValid } from "../Utility/validations";
 import { RemoveAuthToken } from "../Utility/auth";
-
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
 
 function ChangePassword() {
   const navigate = useNavigate();
@@ -52,7 +50,7 @@ function ChangePassword() {
       });
 
       if (response.status !== 200) {
-        throw new Error("The email confirmation failed");
+        throw new Error("Network response was not ok");
       }
 
       RemoveAuthToken();
@@ -123,15 +121,17 @@ function ChangePassword() {
 
       <div
         id="changePassword"
-        class="md:p-4 mt-20 border-t-4 border-blue-400 rounded-xl mx-auto"
+        className="md:p-4 mt-20 border-t-4 border-blue-400 rounded-xl mx-auto"
       >
-        <div class="w-full px-6 pb-8  sm:max-w-xl sm:rounded-lg">
-          <h2 class="pl-6 text-2xl font-bold sm:text-xl">Change Password</h2>
+        <div className="w-full px-6 pb-8  sm:max-w-xl sm:rounded-lg">
+          <h2 className="pl-6 text-2xl font-bold sm:text-xl">
+            Change Password
+          </h2>
 
-          <div class="grid max-w-2xl mx-auto mt-2">
+          <div className="grid max-w-2xl mx-auto mt-2">
             <form onSubmit={handleSubmit}>
-              <div class="items-center mt-8 sm:mt-14 text-[#202142]">
-                <div class="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
+              <div className="items-center mt-8 sm:mt-14 text-[#202142]">
+                <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
                   <div className="mb-6 w-full">
                     <div className="grid grid-cols-2 gap-4 mt-4">
                       <div>
@@ -251,10 +251,10 @@ function ChangePassword() {
                   </div>
                 </div>
 
-                <div class="flex justify-end">
+                <div className="flex justify-end">
                   <button
                     type="submit"
-                    class="text-white bg-indigo-700  hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
+                    className="text-white bg-indigo-700  hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
                   >
                     Save
                   </button>

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import Modal from "../../components/Modal";
 import { getAll } from "../../fetch/requests/categories";
 import {
@@ -14,7 +14,6 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 function CreateProduct() {
-  const navigate = useNavigate();
   const modal = useRef();
 
   const [enteredValues, setEnteredValues] = useState({
@@ -59,8 +58,6 @@ function CreateProduct() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    console.log(enteredValues);
-    console.log(imagesIsValid);
     let anyInvalid =
       titleIsInvalid ||
       priceIsInvalid ||
@@ -82,8 +79,6 @@ function CreateProduct() {
       return;
     }
 
-    console.log(enteredValues);
-
     const formData = new FormData();
     formData.append("Title", enteredValues.title);
     formData.append("Price", enteredValues.price);
@@ -101,7 +96,7 @@ function CreateProduct() {
       var response = await create(formData, true);
 
       if (response.status !== 200) {
-        throw new Error("Creating failed.");
+        throw new Error("Network response was not ok");
       }
 
       setResponseResult("ok");
@@ -113,7 +108,6 @@ function CreateProduct() {
   }
 
   function handleThumbnailImageChange(event) {
-    debugger;
     var thumbnailImage = event.target.files[0];
 
     if (!thumbnailImage) {
@@ -128,7 +122,6 @@ function CreateProduct() {
   }
 
   function handleImagesChange(event) {
-    debugger;
     var images = event.target.files;
 
     if (!images) {
@@ -162,7 +155,7 @@ function CreateProduct() {
   }
 
   function redirectTo() {
-    navigate("/");
+    window.location.href = "/products/myProducts";
   }
 
   return (
@@ -276,13 +269,13 @@ function CreateProduct() {
                 </div>
               </div>
 
-              <label class="block mt-4">
-                <span class="text-gray-700">Category</span>
+              <label className="block mt-4">
+                <span className="text-gray-700">Category</span>
                 <select
                   onChange={(event) =>
                     handleInputChange("categoryId", event.target.value)
                   }
-                  class="form-select  mt-1 block w-full rounded-lg border py-2 px-3"
+                  className="form-select  mt-1 block w-full rounded-lg border py-2 px-3"
                 >
                   {categories &&
                     categories.map((category) => (
@@ -336,13 +329,13 @@ function CreateProduct() {
                   >
                     <div className="flex flex-col space-y-2  w-full">
                       <label
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         for="user_avatar"
                       >
                         Thumbnail Image
                       </label>
                       <input
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         aria-describedby="user_avatar_help"
                         id="user_avatar"
                         type="file"
@@ -350,7 +343,7 @@ function CreateProduct() {
                         onChange={handleThumbnailImageChange}
                       />
                       {/* <div
-                        class="mt-1 text-sm text-gray-500 dark:text-gray-300"
+                        className="mt-1 text-sm text-gray-500 dark:text-gray-300"
                         id="user_avatar_help"
                       >
                         A profile picture is useful to confirm your are logged
@@ -393,13 +386,13 @@ function CreateProduct() {
                   >
                     <div className="flex flex-col space-y-2  w-full">
                       <label
-                        class="block text-sm font-medium text-gray-900 dark:text-white"
+                        className="block text-sm font-medium text-gray-900 dark:text-white"
                         for="user_avatar"
                       >
                         Images
                       </label>
                       <input
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         aria-describedby="user_avatar_help"
                         id="user_avatar"
                         type="file"

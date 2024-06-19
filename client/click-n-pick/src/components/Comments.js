@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import {
@@ -29,16 +30,16 @@ const Comments = ({ currentUserId, productId }) => {
       });
 
       if (response.status !== 200) {
-        throw new Error("Fetching details failed.");
+        throw new Error("Network response was not ok");
       }
 
       const updatedBackendComments = comments.map((comment) => {
-        debugger;
         if (comment.id === commentId) {
           return { ...comment, content: text };
         }
         return comment;
       });
+
       setComments(updatedBackendComments);
       setActiveComment(null);
     } catch (error) {
@@ -47,25 +48,32 @@ const Comments = ({ currentUserId, productId }) => {
   };
 
   const addComment = async (text, parentId) => {
-    console.log(text);
-    var response = await createComment({
-      Content: text,
-      ParentId: parentId,
-      ProductId: productId,
-    });
-    var data = await response.json();
-    console.log(data);
-    setComments([data, ...comments]);
-    setActiveComment(null);
+    try {
+      var response = await createComment({
+        Content: text,
+        ParentId: parentId,
+        ProductId: productId,
+      });
+
+      if (response.status !== 200) {
+        throw new Error("Network response was not ok");
+      }
+
+      var data = await response.json();
+      setComments([data, ...comments]);
+      setActiveComment(null);
+    } catch (error) {
+      alert("Some problem occurred.");
+    }
   };
 
-  const deleteCom = async (commentId) => {
+  const removeComment = async (commentId) => {
     if (window.confirm("Are you sure you want to remove comment?")) {
       try {
         const response = await deleteComment(commentId);
 
         if (response.status !== 200) {
-          throw new Error("Fetching details failed.");
+          throw new Error("Network response was not ok");
         }
 
         const updatedComments = comments.filter(
@@ -82,13 +90,13 @@ const Comments = ({ currentUserId, productId }) => {
     (async function () {
       try {
         const response = await getForProduct(productId);
+
         if (response.status !== 200) {
-          throw new Error("Fetching details failed.");
+          throw new Error("Network response was not ok");
         }
 
         const data = await response.json();
 
-        console.log(data);
         setComments(data.comments);
       } catch (error) {
         alert("Some problem occurred.");
@@ -97,8 +105,8 @@ const Comments = ({ currentUserId, productId }) => {
   }, []);
 
   return (
-    <div class="antialiased mx-auto max-w-screen-sm">
-      <h3 class="mb-4 text-lg font-semibold text-gray-900">Comments</h3>
+    <div className="antialiased mx-auto max-w-screen-sm">
+      <h3 className="mb-4 text-lg font-semibold text-gray-900">Comments</h3>
 
       <CommentForm submitLabel="Write" handleSubmit={addComment} />
       <div className="comments-container">
@@ -112,7 +120,7 @@ const Comments = ({ currentUserId, productId }) => {
             setActiveComment={setActiveComment}
             updateComment={updateComment}
             addComment={addComment}
-            deleteComment={deleteCom}
+            removeComment={removeComment}
             currentUserId={currentUserId}
           />
         ))}

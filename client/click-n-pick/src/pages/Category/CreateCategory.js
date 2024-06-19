@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
+
 import Modal from "../../components/Modal";
 import { createCategory } from "../../fetch/requests/categories";
 
@@ -9,10 +10,9 @@ function CreateCategory() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    debugger;
+
     try {
       const response = await createCategory({ Name: name });
-      console.log(response);
 
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
@@ -42,7 +42,6 @@ function CreateCategory() {
             <h2 className="text-xl font-bold text-green-700 my-4">
               Successful creating!
             </h2>
-            <p className="text-stone-600 mb-4">Successful Registration!</p>
           </>
         )}
         {responseResult === "bad" && (

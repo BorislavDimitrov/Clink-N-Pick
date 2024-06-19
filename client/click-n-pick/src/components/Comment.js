@@ -5,7 +5,7 @@ const Comment = ({
   comment,
   replies,
   addComment,
-  deleteComment,
+  removeComment,
   updateComment,
   parentId = null,
   currentUserId,
@@ -32,7 +32,9 @@ const Comment = ({
   const canEdit = currentUserId === comment.creatorId && !timePassed;
   const canDelete =
     currentUserId === comment.creatorId && replies.length === 0 && !timePassed;
+
   const createdOn = new Date(comment.createdOn).toLocaleDateString();
+
   const isReplying =
     activeComment &&
     activeComment.id === comment.id &&
@@ -40,22 +42,22 @@ const Comment = ({
   const replyId = parentId ? parentId : comment.id;
 
   return (
-    <div key={comment.id} class="flex">
-      <div class="flex-shrink-0 mr-3">
+    <div key={comment.id} className="flex">
+      <div className="flex-shrink-0 mr-3">
         <img
-          class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
+          className="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
           src={comment.creatorImageUrl}
           alt="user profile"
         />
       </div>
-      <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+      <div className="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
         <strong>
           <a href={`/Users/Profile/${comment.creatorId}`}>
             {comment.creatorUsername}
           </a>
         </strong>{" "}
-        <span class="text-xs text-gray-400">{createdOn}</span>
-        {!isEditing && <p class="text-lg">{comment.content}</p>}
+        <span className="text-xs text-gray-400">{createdOn}</span>
+        {!isEditing && <p className="text-lg">{comment.content}</p>}
         <div className="flex flex-row gap-2 mt-4">
           {isEditing && (
             <CommentForm
@@ -73,7 +75,7 @@ const Comment = ({
               onClick={() =>
                 setActiveComment({ id: comment.id, type: "replying" })
               }
-              class="text-sm"
+              className="text-sm"
             >
               Reply
             </button>
@@ -83,13 +85,16 @@ const Comment = ({
               onClick={() =>
                 setActiveComment({ id: comment.id, type: "editing" })
               }
-              class="text-sm"
+              className="text-sm"
             >
               Edit
             </button>
           )}
           {canDelete && (
-            <button onClick={() => deleteComment(comment.id)} class="text-sm">
+            <button
+              onClick={() => removeComment(comment.id)}
+              className="text-sm"
+            >
               Delete
             </button>
           )}
@@ -111,7 +116,7 @@ const Comment = ({
                   setActiveComment={setActiveComment}
                   activeComment={activeComment}
                   updateComment={updateComment}
-                  deleteComment={deleteComment}
+                  removeComment={removeComment}
                   addComment={addComment}
                   parentId={reply.id}
                   replies={getReplies(reply.id)}

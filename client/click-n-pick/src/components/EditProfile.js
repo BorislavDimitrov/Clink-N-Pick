@@ -1,5 +1,8 @@
-import { getEditProfileInfo } from "../fetch/requests/users";
 import { useState, useEffect, useRef } from "react";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+
+import { getEditProfileInfo } from "../fetch/requests/users";
 import Modal from "./Modal";
 import {
   hasMaxLength,
@@ -9,8 +12,6 @@ import {
 } from "../Utility/validations";
 import { editProfile } from "../fetch/requests/users";
 import { SetUserImageUrl } from "../Utility/user";
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
 
 function EditProfile() {
   const modal = useRef();
@@ -33,25 +34,19 @@ function EditProfile() {
     bio: false,
   });
 
-  console.log(enteredValues);
-
   useEffect(() => {
     (async function GetProfileInfo() {
       try {
         const response = await getEditProfileInfo();
-        console.log(response);
 
         if (response.status !== 200) {
-          throw new Error("The email confirmation failed");
+          throw new Error("Network response was not ok");
         }
 
-        console.log("Fetch info");
         var data = await response.json();
-        console.log(data);
 
         setUserImageUrl(data.profileImageUrl);
         const { profileImageUrl, ...neededData } = data;
-        console.log(neededData);
         setEnteredValues(neededData);
       } catch (error) {
         setResponseResult("bad");
@@ -104,8 +99,6 @@ function EditProfile() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log(imageIsValid);
-    console.log(enteredValues);
 
     try {
       const formData = new FormData();
@@ -189,34 +182,23 @@ function EditProfile() {
                   content={
                     <p className="text-red-400 text-base font-medium">
                       Maximum Image Size: 2MB
-                      <span className="text-white pl-2">
-                        Recommended Image Dimensions: 160x160 pixels or 2:1
-                        aspect ratio for the best display quality."
-                      </span>
                     </p>
                   }
                 >
                   <div className="flex flex-col space-y-5 sm:ml-8">
                     <label
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       for="user_avatar"
                     >
                       Upload file
                     </label>
                     <input
-                      class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                      className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                       aria-describedby="user_avatar_help"
                       id="user_avatar"
                       type="file"
                       onChange={handleImageChange}
                     />
-                    <div
-                      class="mt-1 text-sm text-gray-500 dark:text-gray-300"
-                      id="user_avatar_help"
-                    >
-                      A profile picture is useful to confirm your are logged
-                      into your account
-                    </div>
                   </div>
                 </Tippy>
               </div>
@@ -275,6 +257,7 @@ function EditProfile() {
                   </label>
                   <input
                     pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
+                    placeholder="+359 88 456 7890"
                     type="text"
                     className="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
                     name="phoneNumber"
@@ -299,8 +282,9 @@ function EditProfile() {
                     Address
                   </label>
                   <input
+                    placeholder="Your address"
                     className="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
-                    name="username"
+                    name="address"
                     maxlength="100"
                     onBlur={() => handleInputBlur("address")}
                     onChange={(event) =>

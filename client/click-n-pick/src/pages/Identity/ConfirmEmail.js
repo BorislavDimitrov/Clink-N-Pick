@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { confirmEmail } from "../../fetch/requests/identity";
 import { useState, useEffect, useRef } from "react";
+
+import { confirmEmail } from "../../fetch/requests/identity";
 import Modal from "../../components/Modal";
 
 function ConfirmEmail() {
@@ -16,7 +17,7 @@ function ConfirmEmail() {
         const response = await confirmEmail(params);
 
         if (response.status !== 200) {
-          throw new Error("The email confirmation failed");
+          throw new Error("Network response was not ok");
         }
 
         setResponseResult("ok");

@@ -1,16 +1,13 @@
-import Logo from "../../img/logo.jpg";
-
 import { useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import Modal from "../../components/Modal";
 import { forgotPasswordChange } from "../../fetch/requests/identity";
-
+import Logo from "../../img/logo.jpg";
 import {
   isPasswordValid,
   isEqualsToOtherValue,
 } from "../../Utility/validations";
-import { Link } from "react-router-dom";
 
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
@@ -21,13 +18,9 @@ function ForgotPasswordChange() {
   const email = searchParams.get("email");
   const resetPasswordToken = searchParams.get("token");
 
-  console.log(email);
-  console.log(resetPasswordToken);
-
   const navigate = useNavigate();
 
   const modal = useRef();
-  console.log(modal.current);
 
   const [enteredValues, setEnteredValues] = useState({
     password: "",
@@ -58,11 +51,9 @@ function ForgotPasswordChange() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    console.log(enteredValues);
     const anyInvalid = passwordIsInvalid || confirmPasswordIsInvalid;
 
     if (anyInvalid === true) {
-      console.log("invalid input");
       return;
     }
 
@@ -73,10 +64,8 @@ function ForgotPasswordChange() {
         ...enteredValues,
       });
 
-      console.log(response.status);
-
       if (response.status !== 200) {
-        throw new Error("The email confirmation failed");
+        throw new Error("Network response was not ok");
       }
 
       setResponseResult("ok");
@@ -128,7 +117,6 @@ function ForgotPasswordChange() {
             <h2 className="text-xl font-bold text-green-700 my-4">
               Successful Change of your Password!
             </h2>
-            {/* <p className="text-stone-600 mb-4">Successful Registration!</p> */}
             <p className="text-stone-600 mb-4">
               You can now Sign Up with your new password.
             </p>
@@ -283,12 +271,12 @@ function ForgotPasswordChange() {
               </div>
               <p className="mt-10 text-center text-sm text-gray-500 ">
                 Already registered?
-                <Link
-                  to="/login"
+                <a
+                  href="/login"
                   className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 px-2"
                 >
                   Login here
-                </Link>
+                </a>
               </p>
             </div>
           </div>

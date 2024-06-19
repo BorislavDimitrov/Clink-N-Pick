@@ -1,14 +1,14 @@
 import { useState, useRef } from "react";
-import { isEmailValid, isPasswordValid } from "../../Utility/validations";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "react-tippy/dist/tippy.css";
+
+import { isEmailValid, isPasswordValid } from "../../Utility/validations";
 import Logo from "../../img/logo.jpg";
 import { login } from "../../fetch/requests/identity";
 import { SetAuthToken } from "../../Utility/auth";
 import Modal from "../../components/Modal";
 import { SetUserImageUrl } from "../../Utility/user";
-import ReactIframe from "react-iframe";
 
 function Login() {
   const navigate = useNavigate();
@@ -38,7 +38,6 @@ function Login() {
 
     try {
       const response = await login(enteredValues);
-      console.log(response);
 
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
@@ -140,12 +139,12 @@ function Login() {
                 </label>
 
                 <div className="text-sm">
-                  <Link
-                    to="/Identity/ForgotPassword"
+                  <a
+                    href="/Identity/ForgotPassword"
                     className="font-semibold text-indigo-600 hover:text-indigo-500"
                   >
                     Forgot password?
-                  </Link>
+                  </a>
                 </div>
               </div>
               <div className="relative w-full">
@@ -197,12 +196,12 @@ function Login() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?
-            <Link
-              to="/register"
+            <a
+              href="/register"
               className="font-semibold leading-6  hover:text-indigo-500 px-2"
             >
               Register here
-            </Link>
+            </a>
           </p>
         </div>
       </div>

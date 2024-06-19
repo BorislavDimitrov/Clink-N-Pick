@@ -10,7 +10,6 @@ class SendDto {
 
   #validate(method, path) {
     if (!method || !path) {
-      console.error("Request must have method and path");
       throw new Error("Request must have method and path");
     }
   }

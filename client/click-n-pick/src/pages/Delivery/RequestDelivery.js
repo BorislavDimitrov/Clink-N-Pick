@@ -67,7 +67,6 @@ function RequestDelivery() {
   }, [cityId]);
 
   function getAddress(event) {
-    console.log(event.data);
     setAddress(event.data);
   }
 
@@ -99,7 +98,15 @@ function RequestDelivery() {
     inputInfo["DeliveryReceipt"] = shippingLabelServices.DeliveryReceipt;
     inputInfo["ProductId"] = params.id;
 
-    var response = await requestShipment(inputInfo);
+    try {
+      var response = await requestShipment(inputInfo);
+
+      if (response.status !== 200) {
+        throw new Error("Network response was not ok");
+      }
+    } catch (error) {
+      alert("Some problem occurred.");
+    }
   }
 
   useEffect(() => {

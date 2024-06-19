@@ -2,9 +2,9 @@ import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState, useRef } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { useParams } from "react-router-dom";
+
 import { promote } from "../fetch/requests/products";
 import Modal from "../components/Modal";
-import { useNavigate } from "react-router-dom";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -14,8 +14,6 @@ export default function CheckoutForm() {
 
   const [responseResult, setResponseResult] = useState(null);
   const params = useParams();
-
-  const navigate = useNavigate();
 
   const [message, setMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -40,14 +38,13 @@ export default function CheckoutForm() {
     if (paymentIntent.status === "succeeded") {
       (async function promoteProduct() {
         try {
-          console.log(params);
           var response = await promote({
             productId: params.productId,
             promotionPricingId: params.promotionId,
           });
 
           if (response.status !== 200) {
-            throw new Error("Promotion failed");
+            throw new Error("Network response was not ok");
           }
 
           setResponseResult("ok");
@@ -71,7 +68,7 @@ export default function CheckoutForm() {
   };
 
   function redirectTo() {
-    navigate("/products/myProducts");
+    window.location.href = "/products/myProducts";
   }
 
   return (

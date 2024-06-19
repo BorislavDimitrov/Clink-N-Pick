@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import Carousel from "../../components/Carousel";
 import "tippy.js/dist/tippy.css";
 import { useState } from "react";
+
+import Carousel from "../../components/Carousel";
 import { details } from "../../fetch/requests/products";
 import Comments from "../../components/Comments";
 import { GetCurrentUserId } from "../../Utility/auth";
@@ -13,19 +14,16 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
   var currentUserId = GetCurrentUserId();
 
-  console.log();
   useEffect(() => {
     (async function getProductDetails() {
       try {
         const response = await details(params.id);
-        console.log();
+
         if (response.status !== 200) {
-          throw new Error("Fetching details failed.");
+          throw new Error("Network response was not ok");
         }
 
         const data = await response.json();
-
-        console.log(data);
         setProduct(data);
       } catch (error) {
         alert("Some problem occurred.");
@@ -81,30 +79,30 @@ function ProductDetail() {
                 </div>
               </a>
 
-              <div class="mt-10 mx-auto">
-                <div class="p-5 border rounded text-center text-gray-500 max-w-sm">
+              <div className="mt-10 mx-auto">
+                <div className="p-5 border rounded text-center text-gray-500 max-w-sm">
                   <img
-                    class="w-32 h-32 rounded-full mx-auto"
+                    className="w-32 h-32 rounded-full mx-auto"
                     src={product && product.creatorImageUrl}
                     alt="profile"
                   />
-                  <div class="text-sm mt-5">
+                  <div className="text-sm mt-5">
                     <a
                       href={`/users/profile/${product && product.creatorId}`}
-                      class="font-medium leading-none text-gray-900 hover:text-indigo-600 transition duration-500 ease-in-out"
+                      className="font-medium leading-none text-gray-900 hover:text-indigo-600 transition duration-500 ease-in-out"
                     >
                       {product && product.creatorUsername}
                     </a>
                   </div>
 
-                  <p class="mt-2 text-sm text-gray-900">
+                  <p className="mt-2 text-sm text-gray-900">
                     {product && product.creatorEmail}
                   </p>
-                  <p class="mt-2 text-sm text-gray-900">
+                  <p className="mt-2 text-sm text-gray-900">
                     {product && product.creatorPhoneNumber}
                   </p>
 
-                  <div class="flex mt-4 justify-center"></div>
+                  <div className="flex mt-4 justify-center"></div>
                 </div>
               </div>
             </div>
@@ -112,42 +110,44 @@ function ProductDetail() {
           <div className="shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] mt-3">
             <Comments productId={params.id} currentUserId={currentUserId} />
 
-            <div class="antialiased mx-auto max-w-screen-sm">
-              <h3 class="mb-4 text-lg font-semibold text-gray-900">Comments</h3>
+            <div className="antialiased mx-auto max-w-screen-sm">
+              <h3 className="mb-4 text-lg font-semibold text-gray-900">
+                Comments
+              </h3>
 
-              <div class="space-y-4">
-                <div class="flex">
-                  <div class="flex-shrink-0 mr-3">
+              <div className="space-y-4">
+                <div className="flex">
+                  <div className="flex-shrink-0 mr-3">
                     <img
-                      class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
+                      className="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
                       src="https://images.unsplash.com/photo-1604426633861-11b2faead63c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
                       alt=""
                     />
                   </div>
-                  <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+                  <div className="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
                     <strong>Sarah</strong>{" "}
-                    <span class="text-xs text-gray-400">3:34 PM</span>
-                    <p class="text-sm">
+                    <span className="text-xs text-gray-400">3:34 PM</span>
+                    <p className="text-sm">
                       Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                       sed diam nonumy eirmod tempor invidunt ut labore et dolore
                       magna aliquyam erat, sed diam voluptua.
                     </p>
-                    <h4 class="my-5 uppercase tracking-wide text-gray-400 font-bold text-xs">
+                    <h4 className="my-5 uppercase tracking-wide text-gray-400 font-bold text-xs">
                       Replies
                     </h4>
-                    <div class="space-y-4">
-                      <div class="flex">
-                        <div class="flex-shrink-0 mr-3">
+                    <div className="space-y-4">
+                      <div className="flex">
+                        <div className="flex-shrink-0 mr-3">
                           <img
-                            class="mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8"
+                            className="mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8"
                             src="https://images.unsplash.com/photo-1604426633861-11b2faead63c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
                             alt=""
                           />
                         </div>
-                        <div class="flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+                        <div className="flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
                           <strong>Sarah</strong>{" "}
-                          <span class="text-xs text-gray-400">3:34 PM</span>
-                          <p class="text-xs sm:text-sm">
+                          <span className="text-xs text-gray-400">3:34 PM</span>
+                          <p className="text-xs sm:text-sm">
                             Lorem ipsum dolor sit amet, consetetur sadipscing
                             elitr, sed diam nonumy eirmod tempor invidunt ut
                             labore et dolore magna aliquyam erat, sed diam
@@ -155,18 +155,18 @@ function ProductDetail() {
                           </p>
                         </div>
                       </div>
-                      <div class="flex">
-                        <div class="flex-shrink-0 mr-3">
+                      <div className="flex">
+                        <div className="flex-shrink-0 mr-3">
                           <img
-                            class="mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8"
+                            className="mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8"
                             src="https://images.unsplash.com/photo-1604426633861-11b2faead63c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
                             alt=""
                           />
                         </div>
-                        <div class="flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+                        <div className="flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
                           <strong>Sarah</strong>{" "}
-                          <span class="text-xs text-gray-400">3:34 PM</span>
-                          <p class="text-xs sm:text-sm">
+                          <span className="text-xs text-gray-400">3:34 PM</span>
+                          <p className="text-xs sm:text-sm">
                             Lorem ipsum dolor sit amet, consetetur sadipscing
                             elitr, sed diam nonumy eirmod tempor invidunt ut
                             labore et dolore magna aliquyam erat, sed diam

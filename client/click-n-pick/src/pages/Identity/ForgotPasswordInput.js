@@ -1,15 +1,14 @@
 import { useState, useRef } from "react";
-import { isEmailValid } from "../../Utility/validations";
-import { Link } from "react-router-dom";
-import { forgotPasswordInput } from "../../fetch/requests/identity";
 import { useNavigate } from "react-router-dom";
+
+import { isEmailValid } from "../../Utility/validations";
+import { forgotPasswordInput } from "../../fetch/requests/identity";
 import Modal from "../../components/Modal";
 import Logo from "../../img/logo.jpg";
 
 function ForgotPasswordInput() {
   const navigate = useNavigate();
   const modal = useRef();
-  console.log(modal.current);
 
   const [enteredValues, setEnteredValues] = useState({
     email: "",
@@ -27,7 +26,6 @@ function ForgotPasswordInput() {
     event.preventDefault();
 
     if (emailIsInvalid === true) {
-      console.log("invalid input");
       return;
     }
 
@@ -35,14 +33,14 @@ function ForgotPasswordInput() {
       const response = await forgotPasswordInput(enteredValues);
 
       if (response.status !== 200) {
-        throw new Error("The email confirmation failed");
+        throw new Error("Network response was not ok");
       }
 
       setResponseResult("ok");
-
       modal.current.open();
     } catch (error) {
       setResponseResult("bad");
+      modal.current.open();
     }
   }
 
@@ -80,7 +78,6 @@ function ForgotPasswordInput() {
             <h2 className="text-xl font-bold text-green-700 my-4">
               Successfully sent reset password link!
             </h2>
-            <p className="text-stone-600 mb-4">Successful Registration!</p>
             <p className="text-stone-600 mb-4">
               Check your email address to move forward.
             </p>
@@ -148,12 +145,12 @@ function ForgotPasswordInput() {
 
               <p className="mt-10 text-center text-sm text-gray-500">
                 Remember your password?
-                <Link
-                  to="/login"
+                <a
+                  href="/login"
                   className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 px-2"
                 >
                   Login here
-                </Link>
+                </a>
               </p>
             </div>
           </form>

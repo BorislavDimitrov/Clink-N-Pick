@@ -1,8 +1,9 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import NavbarLogo from "../img/navbarLogo.png";
 import { GetUserImageUrl, RemoveUserImageUrl } from "../Utility/user";
 import { isAdmin } from "../Utility/auth";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { GetAuthToken, RemoveAuthToken } from "../Utility/auth";
 
@@ -23,10 +24,10 @@ function MainNavigation() {
     <div className="shadow-md w-full">
       <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-11">
         <div className="font-bold cursor-pointer flex items-center">
-          <Link className="font-bold text-xl  flex items-center " to="/">
+          <a className="font-bold text-xl  flex items-center " href="/">
             <img src={NavbarLogo} alt="navbar logo" />
             <span className="text-sm">Click N`Pick</span>
-          </Link>
+          </a>
         </div>
         <div
           onClick={() => setOpen(!open)}
@@ -40,76 +41,52 @@ function MainNavigation() {
           }`}
         >
           <li className="md:ml-8 md:my-0 my-7 font-semibold">
-            <Link
-              to="/"
+            <a
+              href="/"
               className="text-gray-800 hover:text-blue-400 duration-500"
             >
               Home
-            </Link>
+            </a>
           </li>
 
           <li className="md:ml-8 md:my-0 my-7 font-semibold">
-            <Link
-              to="/Products/Search"
+            <a
+              href="/Products/Search"
               className="text-gray-800 hover:text-blue-400 duration-500"
             >
               Search
-            </Link>
-          </li>
-
-          <li className="group relative dropdown md:ml-8 md:my-0 my-7 font-semibold cursor-pointer">
-            <img src={NavbarLogo} alt="icon" />
-            <div className="group-hover:block absolute hidden h-auto z-50">
-              <ul className=" w-32 bg-white shadow px-3 py-3">
-                <li className=" py-2">
-                  <Link
-                    to="/products"
-                    className={"text-gray-800 hover:text-blue-400 duration-500"}
-                  >
-                    Products
-                  </Link>
-                </li>
-                <li className="py-2">
-                  <Link
-                    to="/products"
-                    className={"text-gray-800 hover:text-blue-400 duration-500"}
-                  >
-                    Products
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            </a>
           </li>
 
           {token && (
             <li className="md:ml-8 md:my-0 my-7 font-semibold">
-              <Link
-                to="/products/create"
+              <a
+                href="/products/create"
                 className="text-gray-800 hover:text-blue-400 duration-500"
               >
                 Publish
-              </Link>
+              </a>
             </li>
           )}
 
           {!token && (
             <li className="md:ml-8 md:my-0 my-7 font-semibold">
-              <Link
-                to="/register"
+              <a
+                href="/register"
                 className="text-gray-800 hover:text-blue-400 duration-500"
               >
                 Register
-              </Link>
+              </a>
             </li>
           )}
           {!token && (
             <li className="md:ml-8 md:my-0 my-7 font-semibold">
-              <Link
-                to="/login"
+              <a
+                href="/login"
                 className="text-gray-800 hover:text-blue-400 duration-500"
               >
                 Login
-              </Link>
+              </a>
             </li>
           )}
 
@@ -119,14 +96,14 @@ function MainNavigation() {
               <div className="group-hover:block absolute hidden h-auto z-50">
                 <ul className=" w-28 bg-white shadow px-3 py-3">
                   <li className=" py-2">
-                    <Link
-                      to="/Administration/Categories"
+                    <a
+                      href="/Administration/Categories"
                       className={
                         "text-gray-800 hover:text-blue-400 duration-500"
                       }
                     >
                       Categories
-                    </Link>
+                    </a>
                   </li>
                   <li className="py-2">
                     <a
@@ -156,50 +133,50 @@ function MainNavigation() {
               <div className="group-hover:block absolute hidden h-auto z-50">
                 <ul className=" w-32 bg-white shadow-xl px-3 py-3">
                   <li className=" py-2">
-                    <Link
-                      to="/Identity/UserSettings"
+                    <a
+                      href="/Identity/UserSettings"
                       className={
                         "text-gray-800 hover:text-blue-400 duration-500"
                       }
                     >
                       Settings
-                    </Link>
+                    </a>
                   </li>
                   <li className="py-2 border-t-2">
-                    <Link
-                      to="/products/myProducts"
+                    <a
+                      href="/products/myProducts"
                       className={
                         "text-gray-800 hover:text-blue-400 duration-500"
                       }
                     >
                       My Products
-                    </Link>
+                    </a>
                   </li>
                   <li className="py-2 border-t-2">
-                    <Link
-                      to="/delivery/ShipmentsToReceive"
+                    <a
+                      href="/delivery/ShipmentsToReceive"
                       className={
                         "text-gray-800 hover:text-blue-400 duration-500"
                       }
                     >
                       Shipments to receive
-                    </Link>
+                    </a>
                   </li>
 
                   <li className="py-2 border-t-2">
-                    <Link
-                      to="/delivery/ShipmentsToSend"
+                    <a
+                      href="/delivery/ShipmentsToSend"
                       className={
                         "text-gray-800 hover:text-blue-400 duration-500"
                       }
                     >
                       Shipments to send
-                    </Link>
+                    </a>
                   </li>
                   <li className="py-2">
                     <button
                       type="button"
-                      class="text-white bg-indigo-700 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      className="text-white bg-indigo-700 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                       onClick={handleOnClick}
                     >
                       Logout

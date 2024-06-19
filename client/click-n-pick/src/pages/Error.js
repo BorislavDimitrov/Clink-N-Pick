@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import Robot from "../img/Robot.jpg";
 
 function Error() {
@@ -17,12 +16,12 @@ function Error() {
             The page you're looking for seems to have gone on a little
             adventure. Don't worry, we'll help you find your way back home.
           </p>
-          <Link
+          <a
             className="inline-block bg-indigo-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors duration-300"
-            to="/"
+            href="/"
           >
             Go Back Home
-          </Link>
+          </a>
         </div>
       </div>
     </>

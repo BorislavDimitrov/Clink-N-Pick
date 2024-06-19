@@ -9,22 +9,32 @@ function ShipmentDetails() {
 
   useEffect(() => {
     (async function getShipments() {
-      const response = await getShipmentDetails(params.id);
-      var data = await response.json();
-      console.log(data);
-      setShipment(data);
+      try {
+        const response = await getShipmentDetails(params.id);
+
+        if (response.status !== 200) {
+          throw new Error("Network response was not ok");
+        }
+
+        var data = await response.json();
+        setShipment(data);
+      } catch (error) {
+        alert("Some problem occurred.");
+      }
     })();
   }, []);
 
   return (
     <>
       {shipment && (
-        <div class="container mx-auto p-6">
-          <div class="bg-white rounded-lg shadow-lg p-6">
-            <h1 class="text-2xl font-bold mb-4">Shipment Details</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="container mx-auto p-6">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h1 className="text-2xl font-bold mb-4">Shipment Details</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <h2 class="text-xl font-semibold mb-2">Shipment Information</h2>
+                <h2 className="text-xl font-semibold mb-2">
+                  Shipment Information
+                </h2>
                 <p>
                   <strong>Shipment Type:</strong> {shipment.shipmentType}
                 </p>
@@ -42,7 +52,9 @@ function ShipmentDetails() {
                 </p>
               </div>
               <div>
-                <h2 class="text-xl font-semibold mb-2">Sender Information</h2>
+                <h2 className="text-xl font-semibold mb-2">
+                  Sender Information
+                </h2>
                 <p>
                   <strong>Delivery Type:</strong> {shipment.senderDeliveryType}
                 </p>
@@ -51,7 +63,9 @@ function ShipmentDetails() {
                 </p>
               </div>
               <div>
-                <h2 class="text-xl font-semibold mb-2">Receiver Information</h2>
+                <h2 className="text-xl font-semibold mb-2">
+                  Receiver Information
+                </h2>
                 <p>
                   <strong>Delivery Type:</strong>{" "}
                   {shipment.receiverDeliveryType}
@@ -61,7 +75,7 @@ function ShipmentDetails() {
                 </p>
               </div>
               <div>
-                <h2 class="text-xl font-semibold mb-2">
+                <h2 className="text-xl font-semibold mb-2">
                   Financial Information
                 </h2>
                 <p>
@@ -72,7 +86,9 @@ function ShipmentDetails() {
                 </p>
               </div>
               <div>
-                <h2 class="text-xl font-semibold mb-2">Services Information</h2>
+                <h2 className="text-xl font-semibold mb-2">
+                  Services Information
+                </h2>
                 {shipment.services.map((service) => (
                   <>
                     <p>
@@ -86,7 +102,9 @@ function ShipmentDetails() {
                 ))}
               </div>
               <div>
-                <h2 class="text-xl font-semibold mb-2">Destination Details</h2>
+                <h2 className="text-xl font-semibold mb-2">
+                  Destination Details
+                </h2>
                 <p>
                   <strong>Destination Type:</strong>{" "}
                   {shipment.trackingEvents[0].destinationType}

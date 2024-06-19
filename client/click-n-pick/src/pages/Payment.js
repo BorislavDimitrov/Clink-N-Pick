@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "./CheckoutForm";
 import { useParams } from "react-router-dom";
+
 import { createPaymentIntent } from "../fetch/requests/payments";
+import CheckoutForm from "./CheckoutForm";
 
 function Payment() {
   const params = useParams();
@@ -18,11 +19,10 @@ function Payment() {
   useEffect(() => {
     (async function createPayment() {
       try {
-        console.log(params);
         const response = await createPaymentIntent(params.promotionId);
 
         if (response.status !== 200) {
-          throw new Error("Payment failed");
+          throw new Error("Network response was not ok");
         }
 
         var data = await response.json();
@@ -35,7 +35,6 @@ function Payment() {
 
   return (
     <div className=" w-1/4 mx-auto my-auto">
-      <h1>React Stripe and the Payment Element</h1>
       {clientSecret && stripePromise && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <CheckoutForm />

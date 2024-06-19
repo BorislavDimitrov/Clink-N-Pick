@@ -146,7 +146,7 @@ function Home() {
                 <div className="aspect-w-12 aspect-h-7 sm:aspect-none rounded-xl overflow-hidden">
                   <img
                     className="group-hover:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover"
-                    src="https://images.pexels.com/photos/4158/apple-iphone-smartphone-desk.jpg?auto=compress&cs=tinysrgb&w=600"
+                    src="https://res.cloudinary.com/dtaqyp4b6/image/upload/v1718744583/apple-iphone-smartphone-desk_slmein.jpg"
                     alt="Electronics"
                   />
                 </div>
@@ -166,7 +166,7 @@ function Home() {
                 <div className="aspect-w-12 aspect-h-7 sm:aspect-none rounded-xl overflow-hidden">
                   <img
                     className="group-hover:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover"
-                    src="https://airtasker-seo-assets-prod.s3.amazonaws.com/en_AU/1647924773686_shutterstock_1512869501.jpg"
+                    src="https://res.cloudinary.com/dtaqyp4b6/image/upload/v1718744618/1647924773686_shutterstock_1512869501_qacuol.jpg"
                     alt="For the car"
                   />
                 </div>
@@ -183,7 +183,7 @@ function Home() {
                 <div className="aspect-w-12 aspect-h-7 sm:aspect-none rounded-xl overflow-hidden">
                   <img
                     className="group-hover:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover"
-                    src="https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    src="https://res.cloudinary.com/dtaqyp4b6/image/upload/v1718744645/pexels-photo-3621104_hffwvp.jpg"
                     alt="Sports equipment"
                   />
                 </div>
@@ -200,7 +200,7 @@ function Home() {
                 <div className="aspect-w-12 aspect-h-7 sm:aspect-none rounded-xl overflow-hidden">
                   <img
                     className="group-hover:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover"
-                    src="https://images.pexels.com/photos/2079293/pexels-photo-2079293.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    src="https://res.cloudinary.com/dtaqyp4b6/image/upload/v1718744660/pexels-photo-2079293_c8kkhu.jpg"
                     alt="Furniture"
                   />
                 </div>
@@ -217,7 +217,7 @@ function Home() {
                 <div className="aspect-w-12 aspect-h-7 sm:aspect-none rounded-xl overflow-hidden">
                   <img
                     className="group-hover:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover"
-                    src="https://images.pexels.com/photos/7718841/pexels-photo-7718841.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    src="https://res.cloudinary.com/dtaqyp4b6/image/upload/v1718744676/pexels-photo-7718841_orbbr5.jpg"
                     alt="office supplies"
                   />
                 </div>
