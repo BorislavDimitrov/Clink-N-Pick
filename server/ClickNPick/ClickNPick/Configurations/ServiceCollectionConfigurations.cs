@@ -50,6 +50,7 @@ public static class ServiceCollectionConfigurations
         serviceCollection.AddControllersConfiguration();
         serviceCollection.AddCorsConfiguration();
 
+        serviceCollection.AddExceptionHandler<GlobalExceptionHandler>();
 
         serviceCollection.AddEndpointsApiExplorer();
         serviceCollection.AddSwaggerGen();
@@ -165,7 +166,6 @@ public static class ServiceCollectionConfigurations
                   ValidateAudience = true,
                   ValidAudience = configuration["Jwt:Audience"],
                   ValidateLifetime = true,
-                  //RequireExpirationTime = false
               };
           });
 
@@ -236,40 +236,6 @@ public static class ServiceCollectionConfigurations
 
                                var credentialsByteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
                                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentialsByteArray));
-
-                               break;
-
-                           case "apikey":
-                               var apiKey = clientConfiguration["ApiKey"];
-                               var apiSecret = clientConfiguration["ApiSecret"];
-                               var apiKeyHeader = clientConfiguration["ApiKeyHeader"];
-                               var apiSecretHeader = clientConfiguration["ApiSecretHeader"];
-
-                               if (string.IsNullOrEmpty(apiKey) ||
-                                   string.IsNullOrEmpty(apiKeyHeader))
-                               {
-                                   throw new InvalidOperationException($"API key or API key header for {configurationSectionName} is missing.");
-                               }
-
-                               httpClient.DefaultRequestHeaders.Add(apiKeyHeader, apiKey);
-
-                               if (!string.IsNullOrEmpty(apiSecret) &&
-                                   !string.IsNullOrEmpty(apiSecretHeader))
-                               {
-                                   httpClient.DefaultRequestHeaders.Add(apiSecretHeader, apiSecret);
-                               }
-
-                               break;
-
-                           case "bearer":
-                               var token = clientConfiguration["Token"];
-
-                               if (string.IsNullOrEmpty(token))
-                               {
-                                   throw new InvalidOperationException($"Token for {configurationSectionName} is missing.");
-                               }
-
-                               httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                                break;
 

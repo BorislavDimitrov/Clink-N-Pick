@@ -1,9 +1,8 @@
-﻿namespace ClickNPick.Application.DtoModels.Comments.Request
-{
-    public class DeleteCommentRequestDto
-    {
-        public string UserId { get; set; }
+﻿namespace ClickNPick.Application.DtoModels.Comments.Request;
 
-        public string CommentId { get; set; }
-    }
+public class DeleteCommentRequestDto
+{
+    public string UserId { get; set; }
+
+    public string CommentId { get; set; }
 }

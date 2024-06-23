@@ -58,7 +58,7 @@ public class ShippingLabelServices
     [JsonProperty("expressMoneyTransfer")]
     public bool? ExpressMoneyTransfer { get; set; }
 
-    [JsonProperty("CdAmount")]
+    [JsonProperty("cdAmount")]
     public double CdAmount { get; set; }
 
     [JsonProperty("cdType")]
@@ -69,9 +69,6 @@ public class ShippingLabelServices
 
     [JsonProperty("cdPayOptionsTemplate")]
     public string? CdPayOptionsTemplate { get; set; }
-
-    [JsonProperty("cdPayOptions")]
-    public CdPayOptions? CdPayOptions { get; set; }
 
     [JsonProperty("invoiceBeforePayCd")]
     public bool InvoiceBeforePayCd { get; set; }

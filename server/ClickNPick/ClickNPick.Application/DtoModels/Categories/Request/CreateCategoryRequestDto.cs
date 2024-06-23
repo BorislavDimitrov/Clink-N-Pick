@@ -8,6 +8,9 @@ public class CreateCategoryRequestDto
 
     public Category ToCategory()
     {
-        return new Category { Name = this.Name };
+        var category = new Category();
+        category.Name = Name;
+
+        return category;
     }      
 }

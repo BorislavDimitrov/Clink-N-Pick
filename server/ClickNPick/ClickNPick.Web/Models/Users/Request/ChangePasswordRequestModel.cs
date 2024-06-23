@@ -10,10 +10,11 @@ public class ChangePasswordRequestModel
 
     public ChangePasswordRequestDto ToChangePasswordRequestDto()
     {
-        return new ChangePasswordRequestDto
-        {
-            OldPassword = this.OldPassword,
-            NewPassword = this.NewPassword
-        };
+        var dto = new ChangePasswordRequestDto();
+
+        dto.OldPassword = this.OldPassword;
+        dto.NewPassword = this.NewPassword;
+        
+        return dto;
     }
 }

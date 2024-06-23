@@ -14,12 +14,13 @@ public class RegisterRequestModel
 
     public RegisterRequestDto ToRegisterRequestDto()
     {
-        return new RegisterRequestDto
-        {
-            Email = this.Email,
-            Username = this.Username,
-            Password = this.Password,
-            ConfirmPassword = this.ConfirmPassword
-        };
+        var dto = new RegisterRequestDto();
+
+        dto.Email = this.Email;
+        dto.Username = this.Username;
+        dto.Password = this.Password;
+        dto.ConfirmPassword = this.ConfirmPassword;
+
+        return dto;
     }
 }

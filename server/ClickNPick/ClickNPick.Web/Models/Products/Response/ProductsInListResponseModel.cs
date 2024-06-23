@@ -18,20 +18,24 @@ public class ProductsInListResponseModel
 
     public string CreatorName { get; set; }
 
+    public string CategoryName { get; set; }
+
     public bool IsPromoted { get; set; }
 
     public static ProductsInListResponseModel FromProductInListResponseDto(ProductInListResponseDto dto)
     {
-        return new ProductsInListResponseModel
-        {
-            Id = dto.Id,
-            Title = dto.Title,
-            ImageUrl = dto.ImageUrl,
-            Price = dto.Price,
-            DiscountPrice = dto.DiscountPrice,
-            IsOnDiscount = dto.IsOnDiscount,
-            CreatorName = dto.CreatorName,
-            IsPromoted = dto.IsPromoted
-        };
+        var model = new ProductsInListResponseModel();
+
+        model.Id = dto.Id;
+        model.Title = dto.Title;
+        model.ImageUrl = dto.ImageUrl;
+        model.Price = dto.Price;
+        model.DiscountPrice = dto.DiscountPrice;
+        model.IsOnDiscount = dto.IsOnDiscount;
+        model.CreatorName = dto.CreatorName;
+        model.IsPromoted = dto.IsPromoted;
+        model.CategoryName = dto.CategoryName;
+
+        return model;
     }
 }

@@ -16,13 +16,14 @@ public class PromotionInListResponseDto
 
     public static PromotionInListResponseDto FromPromotionPricing(PromotionPricing promotion)
     {
-        return new PromotionInListResponseDto
-        {
-            Price = promotion.Price, 
-            DurationDays = promotion.DurationDays,
-            Name = promotion.Name,
-            Id = promotion.Id,
-            PricePerDay = Math.Round(promotion.PricePerDay, 2)
-        };
+        var dto = new PromotionInListResponseDto();
+
+        dto.Price = promotion.Price;
+        dto.DurationDays = promotion.DurationDays;
+        dto.Name = promotion.Name;
+        dto.Id = promotion.Id;
+        dto.PricePerDay = Math.Round(promotion.PricePerDay, 2);
+        
+        return dto;
     }
 }

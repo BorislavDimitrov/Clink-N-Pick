@@ -36,7 +36,7 @@ const getById = async (data) => {
   return await request.send(sendDto);
 };
 
-const edit = async (data) => {
+const editCategory = async (data) => {
   const sendDto = new SendDto(
     httpMethod.post(),
     `${baseUrl}${categoriesRoutes.edit}`,
@@ -70,7 +70,7 @@ export {
   getAll,
   getAllForAdmin,
   getById,
-  edit,
+  editCategory,
   deleteCategory,
   createCategory,
 };

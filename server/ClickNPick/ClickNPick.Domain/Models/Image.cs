@@ -13,13 +13,13 @@ public class Image : BaseModel<string>
 
     public string PublicId { get; set; }
 
-    public string? UserId { get; set; }
+    public string UserId { get; set; }
 
     public virtual User User { get; set; }      
 
-    public string? ProductId { get; set; }
+    public string ProductId { get; set; }
 
-    public Product Product { get; set; }
+    public virtual Product Product { get; set; }
 
     public bool IsThumbnail { get; set; } 
 }

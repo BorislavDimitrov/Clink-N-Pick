@@ -24,6 +24,7 @@ import ShipmentsToRecieve from "./pages/Delivery/ShipmentsToReceive";
 import ShipmentsToSend from "./pages/Delivery/ShipmentsToSend";
 import AcceptDelivery from "./pages/Delivery/AcceptDelivery";
 import ShipmentDetails from "./pages/Delivery/ShipmentDetails";
+import { authGuard, authAdminGuard } from "./Utility/guards";
 
 const Router = createBrowserRouter([
   {
@@ -49,23 +50,28 @@ const Router = createBrowserRouter([
       {
         path: "/Identity/UserSettings",
         element: <UserSettings />,
+        loader: authGuard,
       },
       {
         path: "/Products/Create",
         element: <CreateProduct />,
+        loader: authGuard,
       },
       { path: "/Products/Details/:id", element: <ProductDetail /> },
       {
         path: "/Products/MyProducts",
         element: <MyProducts />,
+        loader: authGuard,
       },
       {
         path: "/Products/Edit/:id",
         element: <EditProduct />,
+        loader: authGuard,
       },
       {
         path: "/Products/Promotion/:id",
         element: <Promotion />,
+        loader: authGuard,
       },
       {
         path: "/Products/Search",
@@ -74,6 +80,7 @@ const Router = createBrowserRouter([
       {
         path: "/Payment/:productId/:promotionId",
         element: <Payment />,
+        loader: authGuard,
       },
       {
         path: "/Users/Profile/:id",
@@ -82,34 +89,42 @@ const Router = createBrowserRouter([
       {
         path: "/Delivery/Request/:id",
         element: <RequestDelivery />,
+        loader: authGuard,
       },
       {
         path: "/Delivery/Accept/:id",
         element: <AcceptDelivery />,
+        loader: authGuard,
       },
       {
         path: "/Delivery/ShipmentsToReceive",
         element: <ShipmentsToRecieve />,
+        loader: authGuard,
       },
       {
         path: "/Delivery/ShipmentsToSend",
         element: <ShipmentsToSend />,
+        loader: authGuard,
       },
       {
         path: "/Delivery/Details/:id",
         element: <ShipmentDetails />,
+        loader: authGuard,
       },
       {
         path: "/Administration/Categories",
         element: <AdminCategories />,
+        loader: authAdminGuard,
       },
       {
         path: "/Administration/Categories/Edit/:id",
         element: <EditCategory />,
+        loader: authAdminGuard,
       },
       {
         path: "/Administration/Categories/Create",
         element: <CreateCategory />,
+        loader: authAdminGuard,
       },
     ],
   },

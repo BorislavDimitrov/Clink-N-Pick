@@ -16,7 +16,7 @@ const getProduct = async (data) => {
   return await request.send(sendDto);
 };
 
-const create = async (data, isSendDataForm) => {
+const createProduct = async (data, isSendDataForm) => {
   const sendDto = new SendDto(
     httpMethod.post(),
     `${baseUrl}${productsRoutes.create}`,
@@ -56,7 +56,7 @@ const getEditDetails = async (data) => {
   return await request.send(sendDto);
 };
 
-const edit = async (data, isSendDataForm) => {
+const editProduct = async (data, isSendDataForm) => {
   const sendDto = new SendDto(
     httpMethod.post(),
     `${baseUrl}${productsRoutes.edit}`,
@@ -68,7 +68,7 @@ const edit = async (data, isSendDataForm) => {
   return await request.send(sendDto);
 };
 
-const promote = async (data) => {
+const promoteProduct = async (data) => {
   const sendDto = new SendDto(
     httpMethod.post(),
     `${baseUrl}${productsRoutes.promote}`,
@@ -87,7 +87,7 @@ const searchAll = async (data) => {
   return await request.send(sendDto);
 };
 
-const details = async (data) => {
+const productDetails = async (data) => {
   const sendDto = new SendDto(
     httpMethod.get(),
     `${baseUrl}${productsRoutes.details}/${data}`
@@ -107,13 +107,13 @@ const userProducts = async (data) => {
 
 export {
   getProduct,
-  create,
+  createProduct,
   myProducts,
   deleteProduct,
   getEditDetails,
-  edit,
-  promote,
+  editProduct,
+  promoteProduct,
   searchAll,
-  details,
+  productDetails,
   userProducts,
 };

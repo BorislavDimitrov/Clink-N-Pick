@@ -10,7 +10,6 @@ public class CategoriesResponseModel
     {
         var categories = dto.Categories.Select(x => CategoryResponseModel.FromCategoryDto(x)).ToList();
 
-        return new CategoriesResponseModel { Categories = categories };
-        
+        return new CategoriesResponseModel { Categories = categories };      
     }
 }

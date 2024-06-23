@@ -1,7 +1,6 @@
-﻿namespace ClickNPick.Application.DeliveryModels.Response
+﻿namespace ClickNPick.Application.DeliveryModels.Response;
+
+public class RequestCourierResponseModel
 {
-    public class RequestCourierResponseModel
-    {
-        public string CourierRequestId { get; set; }
-    }
+    public string CourierRequestId { get; set; }
 }

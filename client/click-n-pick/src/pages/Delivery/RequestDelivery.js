@@ -1,6 +1,8 @@
 import ReactIframe from "react-iframe";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+
+import Modal from "../../components/Modal";
 import {
   requestShipment,
   getCities,
@@ -16,7 +18,11 @@ function RequestDelivery() {
   const [streets, setStreets] = useState([]);
   const [cityId, setCityId] = useState(1);
   const [cityPostCode, setCityPostCode] = useState();
+  const [agree, setAgree] = useState(false);
+  const [responseResult, setResponseResult] = useState();
   const params = useParams();
+
+  var modal = useRef();
 
   const [shippingLabelServices, setShippingLabelServices] = useState({
     SmsNotification: false,
@@ -70,6 +76,10 @@ function RequestDelivery() {
     setAddress(event.data);
   }
 
+  const handleCheckboxChange = (event) => {
+    setAgree(event.target.checked);
+  };
+
   const formRef = useRef(null);
 
   async function handleSubmit(event) {
@@ -104,8 +114,12 @@ function RequestDelivery() {
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
       }
+
+      setResponseResult("ok");
+      modal.current.open();
     } catch (error) {
-      alert("Some problem occurred.");
+      setResponseResult("bad");
+      modal.current.open();
     }
   }
 
@@ -126,8 +140,35 @@ function RequestDelivery() {
     }));
   }
 
+  function redirectTo() {
+    window.location.href = "/Delivery/ShipmentsToReceive";
+  }
+
   return (
     <>
+      <Modal
+        ref={modal}
+        performAction={responseResult === "ok" ? redirectTo : ""}
+        buttonCaption="Okay"
+      >
+        {responseResult === "ok" && (
+          <>
+            <h2 className="text-xl font-bold text-green-700 my-4">
+              Successfully Requested Delivery!
+            </h2>
+          </>
+        )}
+        {responseResult === "bad" && (
+          <>
+            <h2 className="text-xl font-bold text-red-700 my-4">
+              Requesting Delivery Failed!
+            </h2>
+            <p className="text-stone-600 mb-4">
+              Please check the information you provide and try again.
+            </p>
+          </>
+        )}
+      </Modal>
       <div className="flex flex-col items-center h-screen">
         <div className="w-full max-w-5xl p-4 mt-20">
           <div className="flex justify-center mb-10">
@@ -151,34 +192,13 @@ function RequestDelivery() {
             className="grid grid-cols-1 md:grid-cols-3 gap-4"
             onSubmit={handleSubmit}
           >
-            <div>
+            <div className="col-span-1">
               <label className="block text-sm font-medium text-gray-700">
-                Email on Delivery
-              </label>
-              <input
-                type="email"
-                name="EmailOnDelivery"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Email on Delivery"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                SMS on Delivery
+                Receiver Name
               </label>
               <input
                 type="text"
-                name="SmsOnDelivery"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="SMS on Delivery"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Receiver Client Name
-              </label>
-              <input
-                type="text"
+                required
                 name="ReceiverName"
                 onChange={(e) => {
                   setClientReceiverProfile((prevClientProfile) => ({
@@ -190,11 +210,12 @@ function RequestDelivery() {
                 placeholder="Receiver Client Name"
               />
             </div>
-            <div>
+            <div className="col-span-1">
               <label className="block text-sm font-medium text-gray-700">
-                Receiver Phone
+                Receiver Phone Number
               </label>
               <input
+                required
                 type="text"
                 name="ReceiverPhoneNumber"
                 onChange={(e) => {
@@ -204,12 +225,25 @@ function RequestDelivery() {
                   }));
                 }}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Receiver Phone"
+                placeholder="+359 88 456 7890"
               />
             </div>
+            <div className="col-span-1">
+              <label className="block text-sm font-medium text-gray-700">
+                Receiver Email
+              </label>
+              <input
+                type="email"
+                required
+                name="EmailOnDelivery"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="your@email.com"
+              />
+            </div>
+
             {deliverTo === "Address" && (
               <>
-                <div>
+                <div className="col-span-1">
                   <label className="block text-sm font-medium text-gray-700">
                     City / Village
                   </label>
@@ -240,7 +274,7 @@ function RequestDelivery() {
                   </select>
                 </div>
 
-                <div>
+                <div className="col-span-1">
                   <label className="block text-sm font-medium text-gray-700">
                     Quarter
                   </label>
@@ -258,7 +292,7 @@ function RequestDelivery() {
                   </select>
                 </div>
 
-                <div>
+                <div className="col-span-1">
                   <label className="block text-sm font-medium text-gray-700">
                     Street
                   </label>
@@ -275,7 +309,7 @@ function RequestDelivery() {
                   </select>
                 </div>
 
-                <div>
+                <div className="col-span-1">
                   <label className="block text-sm font-medium text-gray-700">
                     Street Number
                   </label>
@@ -284,24 +318,24 @@ function RequestDelivery() {
                     type="text"
                     name="StreetNumber"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Additional Info"
+                    placeholder="Street Number"
                   />
                 </div>
-                <div>
+                <div className="col-span-1">
                   <label className="block text-sm font-medium text-gray-700">
-                    Deliver Address Info
+                    Delivery Address Details Info
                   </label>
                   <input
                     required
                     type="text"
                     name="DeliverAddressInfo"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Additional Info"
+                    placeholder="[Flat Number]/[Level/Floor Number]/[Block Number]/[Building/Complex Name]"
                   />
                 </div>
               </>
             )}
-            <div>
+            <div className="col-span-1">
               <label className="block text-sm font-medium text-gray-700">
                 SMS Notification
               </label>
@@ -313,9 +347,9 @@ function RequestDelivery() {
                 className="mt-1 block"
               />
             </div>
-            <div>
+            <div className="col-span-1">
               <label className="block text-sm font-medium text-gray-700">
-                Goods Receipt
+                Incoming Product Receipt
               </label>
               <input
                 type="checkbox"
@@ -325,7 +359,7 @@ function RequestDelivery() {
                 className="mt-1 block"
               />
             </div>
-            <div>
+            <div className="col-span-1">
               <label className="block text-sm font-medium text-gray-700">
                 Delivery Receipt
               </label>
@@ -337,28 +371,40 @@ function RequestDelivery() {
                 className="mt-1 block"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Invoice Before Pay CD
-              </label>
-              <input
-                type="checkbox"
-                value={"false"}
-                name="InvoiceBeforePayCD"
-                onChange={handleChangeShippingLabelServices}
-                className="mt-1 block"
-              />
-            </div>
-            <div className="flex justify-center mt-4">
-              <button
-                type="submit"
-                className="w-full md:w-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Submit
-              </button>
+
+            <div className="col-span-3">
+              <div className="flex justify-center mt-4">
+                <button
+                  disabled={!agree}
+                  type="submit"
+                  className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Submit
+                </button>
+              </div>
+              <div className="flex justify-center mt-4">
+                <label className="flex items-center text-sm font-medium text-gray-700">
+                  <input
+                    onChange={handleCheckboxChange}
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                  />
+                  I agree my personal information to be stored and processed by
+                  you. For more details why we need your permision click
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    className="pl-1 text-blue-700"
+                    href="https://gdpr-info.eu/"
+                  >
+                    here.
+                  </a>
+                </label>
+              </div>
             </div>
           </form>
         </div>
+
         <div
           className={`flex-grow w-full flex items-center justify-center ${
             deliverTo === "Office" ? "block" : "hidden"

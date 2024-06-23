@@ -100,8 +100,7 @@ function Search() {
         id="filters"
         className=" max-w-screen-md mx-auto m-20 "
       >
-        <div className="rounded-xl  bg-white p-6 shadow-lg border-t-2 border-blue-500">
-          <h2 className="text-stone-700 text-xl font-bold">Apply filters</h2>
+        <div className="rounded-xl  bg-white p-6 shadow-lg border-t-2 ">
           <p className="mt-1 text-sm"></p>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
             <div className="flex flex-col">
@@ -125,7 +124,7 @@ function Search() {
                 onChange={(event) => setMinPrice(event.target.value)}
                 name="minPrice"
                 min="1"
-                max="100000"
+                max="50000"
                 placeholder="1"
                 type="number"
                 className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
@@ -139,9 +138,9 @@ function Search() {
               <input
                 onChange={(event) => setMaxPrice(event.target.value)}
                 name="maxPrice"
-                placeholder="100 000"
+                placeholder="50 000"
                 min="1"
-                max="100000"
+                max="50000"
                 type="number"
                 className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
               />
@@ -202,7 +201,7 @@ function Search() {
       {products.length !== 0 && (
         <section
           id=""
-          className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5"
+          className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-28"
         >
           {products.map((product) => (
             <ProductCard
@@ -214,13 +213,15 @@ function Search() {
                 isOnDiscount: product.isOnDiscount,
                 creatorName: product.creatorName,
                 discountPrice: product.discountPrice,
+                isPromoted: product.isPromoted,
+                categoryName: product.categoryName,
               }}
             />
           ))}
         </section>
       )}
       {products && totalPages > 1 && (
-        <div className=" mx-auto my-10">
+        <div className="mx-auto my-10">
           <div className="flex items-center gap-4">
             <a href="#filters">
               <button

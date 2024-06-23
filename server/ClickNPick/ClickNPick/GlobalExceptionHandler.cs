@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using ClickNPick.Application.Exceptions.General;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Net;
 
 namespace ClickNPick.StartUp;
@@ -10,7 +12,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        //logger.LogError(exception, exception is Exception ? exception.Message : ExceptionMessage);
+        Log.Error(exception, exception is Exception ? exception.Message : ExceptionMessage);
         var problemDetails = CreateProblemDetails(httpContext, exception);
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
         return true;
@@ -23,9 +25,14 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         switch (exception)
         {
-            case NotImplementedException notImplementedException:
-
+            case InvalidOperationException:
                 httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                break;
+            case OperationFailedException:
+                httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                break;
+            case NotFoundException _:
+                httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 break;
             default:
 

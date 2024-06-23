@@ -10,6 +10,7 @@ public class User : IdentityUser, IAuditInfo, ISoftDeletableModel
         Products = new List<Product>();
         ShipmentsAsSeller = new List<ShipmentRequest>();
         ShipmentsAsBuyer = new List<ShipmentRequest>();
+        Comments = new List<Comment>();
         Roles = new HashSet<IdentityUserRole<string>>();
         Claims = new HashSet<IdentityUserClaim<string>>();
         Logins = new HashSet<IdentityUserLogin<string>>();
@@ -31,11 +32,13 @@ public class User : IdentityUser, IAuditInfo, ISoftDeletableModel
 
     public DateTime? ModifiedOn { get; set; }
 
-    public ICollection<Product> Products { get; set; }
+    public virtual ICollection<Product> Products { get; set; }
 
-    public ICollection<ShipmentRequest> ShipmentsAsBuyer { get; set; }
+    public virtual ICollection<ShipmentRequest> ShipmentsAsBuyer { get; set; }
 
-    public ICollection<ShipmentRequest> ShipmentsAsSeller { get; set; }
+    public virtual ICollection<ShipmentRequest> ShipmentsAsSeller { get; set; }
+
+    public virtual List<Comment> Comments { get; set; }
 
     public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

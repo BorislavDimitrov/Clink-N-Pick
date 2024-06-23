@@ -18,20 +18,24 @@ public class ProductInListResponseDto
 
     public string CreatorName { get; set; }
 
+    public string CategoryName { get; set; }
+
     public bool IsPromoted { get; set; }
 
     public static ProductInListResponseDto FromProduct(Product product)
     {
-        return new ProductInListResponseDto
-        {
-            Id = product.Id,
-            Title = product.Title,
-            ImageUrl = product.Images.Where(x => x.IsThumbnail && x.IsDeleted == false)?.FirstOrDefault()?.Url,
-            Price = product.Price,
-            DiscountPrice = product.DiscountPrice,
-            IsOnDiscount = product.IsOnDiscount,
-            CreatorName = product.Creator.UserName,
-            IsPromoted = product.IsPromoted,
-        };
+        var dto = new ProductInListResponseDto();
+
+        dto.Id = product.Id;
+        dto.Title = product.Title;
+        dto.ImageUrl = product.Images.Where(x => x.IsThumbnail && x.IsDeleted == false)?.FirstOrDefault()?.Url;
+        dto.Price = product.Price;
+        dto.DiscountPrice = product.DiscountPrice;
+        dto.IsOnDiscount = product.IsOnDiscount;
+        dto.CreatorName = product.Creator.UserName;
+        dto.CategoryName = product.Category.Name;
+        dto.IsPromoted = product.IsPromoted;
+
+        return dto;
     }
 }

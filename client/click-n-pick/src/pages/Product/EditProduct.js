@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Modal from "../../components/Modal";
 import { getEditDetails } from "../../fetch/requests/products";
 import { getAll } from "../../fetch/requests/categories";
-import { edit } from "../../fetch/requests/products";
+import { editProduct } from "../../fetch/requests/products";
 import {
   isTitleValid,
   isPriceValid,
@@ -125,7 +125,7 @@ function EditProduct() {
     }
 
     try {
-      var response = await edit(formData, true);
+      var response = await editProduct(formData, true);
 
       if (response.status !== 200) {
         throw new Error("Network response was not ok");

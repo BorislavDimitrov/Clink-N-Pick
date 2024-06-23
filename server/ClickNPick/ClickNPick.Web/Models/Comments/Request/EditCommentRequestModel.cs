@@ -1,19 +1,20 @@
 ﻿using ClickNPick.Application.DtoModels.Comments.Request;
 
-namespace ClickNPick.Web.Models.Comments.Request
+namespace ClickNPick.Web.Models.Comments.Request;
+
+public class EditCommentRequestModel
 {
-    public class EditCommentRequestModel
+    public string CommentId { get; set; }
+
+    public string Content { get; set; }
+
+    public EditCommentRequestDto ToEditCommentRequestDto()
     {
-        public string CommentId { get; set; }
+        var dto = new EditCommentRequestDto();
 
-        public string Content { get; set; }
+        dto.CommentId = this.CommentId;
+        dto.Content = this.Content;
 
-        public EditCommentRequestDto ToEditCommentRequestDto()
-        {
-            var dto = new EditCommentRequestDto();
-            dto.CommentId = this.CommentId;
-            dto.Content = this.Content;
-            return dto;
-        }
+        return dto;
     }
 }

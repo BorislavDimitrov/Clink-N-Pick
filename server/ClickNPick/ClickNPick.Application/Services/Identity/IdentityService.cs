@@ -49,7 +49,7 @@ public class IdentityService : IIdentityService
     {          
         if(await IsEmailUsedAsync(model.Email) == true)
         {
-            throw new EmailAlreadyUsedException();
+            throw new EmailAlreadyUsedException($"Email {model.Email} is already used by other user.");
         }
 
         var byteArray = await this.GenerateDefaultAvatarImage(model.Username, AvatarImageWidth, AvatarImageHeight, "Arial", 40, FontStyle.Bold);
@@ -71,7 +71,7 @@ public class IdentityService : IIdentityService
         if (result.Succeeded == false)
         {
             await _imagesService.DeleteImageAsync(imageId);
-            throw new OperationFailedException("The creating of user failed.");
+            throw new OperationFailedException("The creation of user failed.");
         }
 
         var userId = await _userManager.GetUserIdAsync(newUser);
@@ -99,7 +99,7 @@ public class IdentityService : IIdentityService
 
         if (user == null)
         {
-           throw new UserNotFoundException();
+           throw new UserNotFoundException($"User with id {decodedUserId} doesnt exist.");
         }
 
         if (user.EmailConfirmed == true)
@@ -111,7 +111,7 @@ public class IdentityService : IIdentityService
 
         if (result.Succeeded == false)
         {
-            throw new OperationFailedException($"The confirmation of email {user.Email} failed");
+            throw new OperationFailedException($"The confirmation of email {user.Email} failed.");
         }
     }
 
@@ -126,7 +126,7 @@ public class IdentityService : IIdentityService
 
         if (await _userManager.IsEmailConfirmedAsync(user) == false)
         {
-            throw new InvalidOperationException("The email is not confirmed yet.");
+            throw new InvalidOperationException($"The email {model.Email} is not confirmed yet.");
         }
 
           var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -152,7 +152,7 @@ public class IdentityService : IIdentityService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($"User with email {decodedEmail} doesnt exist.");
         }        
 
         var result = await _userManager.ResetPasswordAsync(user, decodedToken, model.Password);
@@ -174,7 +174,7 @@ public class IdentityService : IIdentityService
 
         if (user.EmailConfirmed == false)
         {
-            throw new InvalidOperationException("The email not confirmed");
+            throw new InvalidOperationException($"The email {model.Email} is not confirmed.");
         }
 
 

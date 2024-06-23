@@ -8,6 +8,8 @@ public class Product : BaseModel<string>
     {
         Id = Guid.NewGuid().ToString();
         Images = new List<Image>();
+        ShipmentRequests = new List<ShipmentRequest>();
+        Comments = new List<Comment>();
     }
 
     public string Title { get; set; }
@@ -26,13 +28,15 @@ public class Product : BaseModel<string>
 
     public DateTime? PromotedUntil { get; set; }
 
-    public User Creator { get; set; }
+    public virtual User Creator { get; set; }
 
     public string CategoryId { get; set; }
 
-    public Category Category { get; set; }
+    public virtual Category Category { get; set; }
 
-    public List<Image> Images { get; set; }
+    public virtual List<Image> Images { get; set; }
 
-    public List<ShipmentRequest> ShipmentRequests { get; set; }
+    public virtual List<ShipmentRequest> ShipmentRequests { get; set; }
+
+    public virtual List<Comment> Comments { get; set; }
 }

@@ -1,8 +1,11 @@
 import { isAdmin } from "./auth";
+import { GetAuthToken } from "./auth";
 
-export function authenticationGuard(token) {
+export function authGuard() {
+  const token = GetAuthToken();
+
   if (token === null) {
-    window.location.href = "/login";
+    window.location.href = "/";
   }
 
   return null;
@@ -10,7 +13,7 @@ export function authenticationGuard(token) {
 
 export function authAdminGuard() {
   if (isAdmin() === false) {
-    window.location.href = "/login";
+    window.location.href = "/";
   }
 
   return null;

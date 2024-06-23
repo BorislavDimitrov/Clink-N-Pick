@@ -1,6 +1,8 @@
-﻿namespace ClickNPick.Application.Exceptions.Categories;
+﻿using ClickNPick.Application.Exceptions.General;
 
-public class CategoryNotFoundException : Exception
+namespace ClickNPick.Application.Exceptions.Categories;
+
+public class CategoryNotFoundException : NotFoundException
 {
     private const string DefaultMessage = "Category not found.";
 

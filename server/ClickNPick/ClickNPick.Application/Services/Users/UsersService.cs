@@ -31,7 +31,7 @@ public class UsersService : IUsersService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($"User with id {model.UserId} doesnt exist.");
         }
 
          user.UserName = model.Username;
@@ -62,14 +62,11 @@ public class UsersService : IUsersService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($"User with id {userId} doesnt exist.");
         }
         
         return EditProfileInfoResponseDto.FromUser(user);
     }
-
-    public async Task<User> GetByIdAsync(string userId)
-        => await _usersRepository.All().FirstOrDefaultAsync(x => x.Id == userId);
 
     public async Task<ViewProfileResponseDto> GetProfileInfoAsync(string userId)
     {
@@ -80,9 +77,12 @@ public class UsersService : IUsersService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($"User with id {userId} doesnt exist.");
         }
 
         return ViewProfileResponseDto.FromUser(user);
     }
+
+    public async Task<User> GetByIdAsync(string userId)
+    => await _usersRepository.All().FirstOrDefaultAsync(x => x.Id == userId);
 }

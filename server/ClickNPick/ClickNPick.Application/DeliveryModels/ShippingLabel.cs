@@ -111,9 +111,6 @@ public class ShippingLabel
     [JsonProperty("packingListType")]
     public string? PackingListType { get; set; }
 
-    [JsonProperty("packingList")]
-    public List<PackingListElement>? PackingList { get; set; }
-
     [JsonProperty("partialDelivery")]
     public bool? PartialDelivery { get; set; }
 
@@ -143,9 +140,6 @@ public class ShippingLabel
 
     [JsonProperty("paymentToken")]
     public string? PaymentToken { get; set; }
-
-    [JsonProperty("customsList")]
-    public List<CustomsListElement>? CustomsList { get; set; }
 
     [JsonProperty("customsInvoice")]
     public string? CustomsInvoice { get; set; }

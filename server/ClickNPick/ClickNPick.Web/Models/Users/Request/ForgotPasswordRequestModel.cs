@@ -8,9 +8,10 @@ public class ForgotPasswordRequestModel
 
     public ForgotPasswordRequestDto ToForgotPasswordRequestDto()
     {
-        return new ForgotPasswordRequestDto
-        {
-            Email = this.Email,
-        };
+        var dto = new ForgotPasswordRequestDto();
+
+        dto.Email = this.Email;
+
+        return dto;
     }
 }

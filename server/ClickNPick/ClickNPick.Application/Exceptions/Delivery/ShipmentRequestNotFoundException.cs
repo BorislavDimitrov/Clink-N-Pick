@@ -1,11 +1,12 @@
-﻿namespace ClickNPick.Application.Exceptions.Delivery
+﻿using ClickNPick.Application.Exceptions.General;
+
+namespace ClickNPick.Application.Exceptions.Delivery;
+
+public class ShipmentRequestNotFoundException : NotFoundException
 {
-    public class ShipmentRequestNotFoundException : Exception
-    {
-        private const string DefaultMessage = "Shipment not found.";
+    private const string DefaultMessage = "Shipment not found.";
 
-        public ShipmentRequestNotFoundException() : base(DefaultMessage) { }
+    public ShipmentRequestNotFoundException() : base(DefaultMessage) { }
 
-        public ShipmentRequestNotFoundException(string message) : base(message) { }
-    }
+    public ShipmentRequestNotFoundException(string message) : base(message) { }
 }

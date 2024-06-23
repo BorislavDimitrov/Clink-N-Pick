@@ -7,7 +7,6 @@ import { userProducts } from "../../fetch/requests/products";
 import ProductCard from "../../components/ProductCard";
 
 function Profile() {
-  function handleOnChange() {}
   const PAGE_SIZE = 9;
   const params = useParams();
   const userId = params.id;
@@ -121,85 +120,85 @@ function Profile() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto my-5 p-5">
-        <div className="md:flex no-wrap md:-mx-2">
-          <div className="w-full md:w-3/12 md:mx-2">
-            <div className="bg-white p-3 border-t-4 border-blue-500 rounded-3xl shadow-lg">
-              <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0 justify-center">
-                {user == null ? (
-                  <img alt="User" />
-                ) : (
-                  <img
-                    className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
-                    src={user && user.profileImageUrl}
-                    alt="Bordered avatar"
-                  />
-                )}
-              </div>
-              <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">
-                {user && user.username}
-              </h1>
-
-              <ul className="bg--100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
-                <li className="flex items-center py-3">
-                  <span className="font-bold">Email</span>
-                  <span className="ml-auto">
-                    <span className=" py-2 px-3 mt-3 divide-y font-semibold">
-                      {user && user.email}
-                    </span>
-                  </span>
-                </li>
-                <li className="flex items-center py-3">
-                  <span className="font-bold">Phone number</span>
-                  <span className="ml-auto">
-                    <span className=" py-2 px-3 mt-3 divide-y font-semibold">
-                      {user && user.phoneNumber}
-                    </span>
-                  </span>
-                </li>
-                <li className="flex items-center py-3">
-                  <span className="font-bold">Address</span>
-                  <span className="ml-auto">
-                    <span className=" py-2 px-3 mt-3 divide-y font-semibold">
-                      {user && user.address}
-                    </span>
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="w-full md:w-9/12 mx-2 border-t-4 border shadow-lg border-t-blue-500 rounded-2xl bg-blue-50 h-full">
-            <div className=" p-3 shadow-sm rounded-sm ">
-              <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                <span className="text-blue-700">
-                  <svg
-                    className="h-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+    <>
+      <div className="bg-gray-50 min-h-screen">
+        <div className="container mx-auto my-5 p-5">
+          <div className="md:flex no-wrap md:-mx-2">
+            <div className="w-full md:w-3/12 md:mx-2">
+              <div className="bg-white p-3 border-t-4 border-blue-500 rounded-3xl shadow-lg">
+                <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0 justify-center">
+                  {user == null ? (
+                    <img alt="User" />
+                  ) : (
+                    <img
+                      className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
+                      src={user && user.profileImageUrl}
+                      alt="Bordered avatar"
                     />
-                  </svg>
-                </span>
-                <span className="tracking-wide">Bio</span>
-              </div>
-              <div className="">
-                <p className="font-semibold p-6">{user && user.bio}</p>
+                  )}
+                </div>
+                <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">
+                  {user && user.username}
+                </h1>
+
+                <ul className="bg--100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
+                  <li className="flex items-center py-3">
+                    <span className="font-bold">Email</span>
+                    <span className="ml-auto">
+                      <span className=" py-2 px-3 mt-3 divide-y font-semibold">
+                        {user && user.email}
+                      </span>
+                    </span>
+                  </li>
+                  <li className="flex items-center py-3">
+                    <span className="font-bold">Phone number</span>
+                    <span className="ml-auto">
+                      <span className=" py-2 px-3 mt-3 divide-y font-semibold">
+                        {user && user.phoneNumber}
+                      </span>
+                    </span>
+                  </li>
+                  <li className="flex items-center py-3">
+                    <span className="font-bold">Address</span>
+                    <span className="ml-auto">
+                      <span className=" py-2 px-3 mt-3 divide-y font-semibold">
+                        {user && user.address}
+                      </span>
+                    </span>
+                  </li>
+                </ul>
               </div>
             </div>
-            {/* here render */}
+
+            <div className="w-full md:w-9/12 mx-2 border-t-4 border shadow-lg border-t-blue-500 rounded-2xl bg-blue-50 h-full">
+              <div className=" p-3 shadow-sm rounded-sm ">
+                <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
+                  <span className="text-blue-700">
+                    <svg
+                      className="h-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                  </span>
+                  <span className="tracking-wide">Bio</span>
+                </div>
+                <div className="">
+                  <p className="font-semibold p-6">{user && user.bio}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <>
+
         <form
           onSubmit={fetchProducts}
           id="filters"
@@ -312,7 +311,7 @@ function Profile() {
         {products.length !== 0 && (
           <section
             id=""
-            className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5"
+            className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-28"
           >
             {products.map((product) => (
               <ProductCard
@@ -325,41 +324,42 @@ function Profile() {
                   creatorName: product.creatorName,
                   discountPrice: product.discountPrice,
                   isPromoted: product.isPromoted,
+                  categoryName: product.categoryName,
                 }}
                 renderButtons={false}
               />
             ))}
           </section>
         )}
-        {products && totalPages > 1 && (
-          <div className=" mx-auto my-10">
-            <div className="flex items-center gap-4">
-              <a href="#filters">
-                <button
-                  onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
-                  disabled={pageNumber === 1}
-                  className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  type="button"
-                >
-                  Previous
-                </button>
-              </a>
+      </div>
+      {products && totalPages > 1 && (
+        <div className="mx-auto my-10">
+          <div className="flex items-center gap-4">
+            <a href="#filters">
+              <button
+                onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
+                disabled={pageNumber === 1}
+                className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+              >
+                Previous
+              </button>
+            </a>
 
-              <a href="#filters">
-                <button
-                  onClick={() => setPageNumber((prev) => prev + 1)}
-                  disabled={pageNumber >= totalPages}
-                  className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  type="button"
-                >
-                  Next
-                </button>
-              </a>
-            </div>
+            <a href="#filters">
+              <button
+                onClick={() => setPageNumber((prev) => prev + 1)}
+                disabled={pageNumber >= totalPages}
+                className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+              >
+                Next
+              </button>
+            </a>
           </div>
-        )}
-      </>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 

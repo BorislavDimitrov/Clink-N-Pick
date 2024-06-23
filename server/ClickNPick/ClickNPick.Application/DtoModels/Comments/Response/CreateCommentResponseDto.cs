@@ -1,35 +1,36 @@
 ﻿using ClickNPick.Domain.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace ClickNPick.Application.DtoModels.Comments.Response
+namespace ClickNPick.Application.DtoModels.Comments.Response;
+
+public class CreateCommentResponseDto
 {
-    public class CreateCommentResponseDto
+    public string Id { get; set; }
+
+    public string CreatorId { get; set; }
+
+    public string Content { get; set; }
+
+    public string ParentId { get; set; }
+
+    public string CreatorUsername { get; set; }
+
+    public string CreatorImageUrl { get; set; }
+
+    public string CreatedOn { get; set; }
+
+    public static CreateCommentResponseDto FromComment(Comment comment)
     {
-        public string Id { get; set; }
+        var dto = new CreateCommentResponseDto();
 
-        public string CreatorId { get; set; }
-
-        public string Content { get; set; }
-
-        public string ParentId { get; set; }
-
-        public string CreatorUsername { get; set; }
-
-        public string CreatorImageUrl { get; set; }
-
-        public string CreatedOn { get; set; }
-
-        public static CreateCommentResponseDto FromComment(Comment comment)
-        {
-            return new CreateCommentResponseDto
-            {
-                Id = comment.Id,
-                CreatorId = comment.CreatorId,
-                ParentId = comment.ParentId,
-                Content = comment.Content,
-                CreatorUsername = comment.Creator.UserName,
-                CreatorImageUrl = comment.Creator.Image.Url,
-                CreatedOn = comment.CreatedOn.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-            };
-        }
+        dto.Id = comment.Id;
+        dto.CreatorId = comment.CreatorId;
+        dto.ParentId = comment.ParentId;
+        dto.Content = comment.Content;
+        dto.CreatorUsername = comment.Creator.UserName;
+        dto.CreatorImageUrl = comment.Creator.Image.Url;
+        dto.CreatedOn = comment.CreatedOn.ToString("yyyy-MM-ddTHH:mm:ssZ");
+        
+        return dto;
     }
 }

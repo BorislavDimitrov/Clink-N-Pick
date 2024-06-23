@@ -53,14 +53,14 @@ public class ProductsService : IProductsService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($"User with id {model.CreatorId} doesnt exist.");
         }
 
         var category = await _categoriesService.GetByIdAsync(model.CategoryId);
 
         if (category == null)
         {
-            throw new CategoryNotFoundException("Category with id not found.");
+            throw new CategoryNotFoundException($"Category with id {model.CategoryId} doesnt exist.");
         }
 
         if (model.Images.Any() == false)
@@ -94,14 +94,14 @@ public class ProductsService : IProductsService
         var product = await _productsRepository
             .AllAsNoTracking()
             .Include(x => x.Creator)
-            .Include(x => x.Images)
+            .Include(x => x.Images.Where(x => x.IsDeleted == false))
             .Include(x => x.Category)
             .Include(x => x.Creator.Image)
             .FirstOrDefaultAsync(x => x.Id == productId);
 
         if (product == null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException($"Product with id {productId} doesnt exist.");
         }
 
         var detailsModel = ProductDetailsResponseDto.FromProduct(product);
@@ -118,12 +118,12 @@ public class ProductsService : IProductsService
 
         if (product == null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException($"Product with id {model.ProductId} doesnt exist.");
         }
 
         if (await IsProductMadeByUserAsync(model.ProductId, model.UserId) == false)
         {
-            throw new InvalidOperationException("User cant edit a product not created by him.");
+            throw new InvalidOperationException($"User with id {model.UserId} cannot edit product with id {model.ProductId}.");
         }
 
         product.Title = model.Title;
@@ -175,7 +175,7 @@ public class ProductsService : IProductsService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($"User with id {model.UserId} doesnt exist.");
         }
 
         var product = await _productsRepository
@@ -184,12 +184,12 @@ public class ProductsService : IProductsService
 
         if (product == null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException($"Product with id {model.ProductId} doesnt exist.");
         }
 
         if (await IsProductMadeByUserAsync(model.ProductId, user.Id) == false)
         {
-            throw new InvalidOperationException("User cannot delete product that is not made by him");
+            throw new InvalidOperationException($"User with id {model.UserId} cannot edit product with id {model.ProductId}.");
         }
 
         return ProductEditDetailsResponseDto.FromProdcut(product);
@@ -201,7 +201,7 @@ public class ProductsService : IProductsService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($"User with id {model.UserId} doesnt exist.");
         }
 
         var product = await _productsRepository
@@ -211,12 +211,12 @@ public class ProductsService : IProductsService
 
         if (product == null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException($"Product with id {model.ProductId} doesnt exist.");
         }
 
         if (await IsProductMadeByUserAsync(model.ProductId, user.Id) == false)
         {
-            throw new InvalidOperationException("User cannot delete product that is not made by him");
+            throw new InvalidOperationException($"User with id {model.UserId} cannot delete product with id {model.ProductId}.");
         }
 
         _productsRepository.SoftDelete(product);
@@ -236,6 +236,7 @@ public class ProductsService : IProductsService
             .AllAsNoTracking()
             .Include(x => x.Creator)
             .Include(x => x.Images)
+            .Include(x => x.Category)
             .Where(x => x.CreatorId == model.UserId)               
             .AsQueryable();
 
@@ -261,7 +262,7 @@ public class ProductsService : IProductsService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($"User with id {model.UserId} doesnt exist.");
         }
 
         var product = await _productsRepository
@@ -270,12 +271,12 @@ public class ProductsService : IProductsService
 
         if (product == null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException($"Product with id {model.ProductId} doesnt exist.");
         }
 
         if (product.IsPromoted == true)
         {
-            throw new InvalidOperationException("Product is already promoted.");
+            throw new InvalidOperationException($"Product with id {product.Id} is already promoted.");
         }
 
         if (await IsProductMadeByUserAsync(model.ProductId, model.UserId) == false)
@@ -287,7 +288,7 @@ public class ProductsService : IProductsService
 
         if (promotionPricing == null)
         {
-            throw new PromotionPricingNotFoundException();
+            throw new PromotionPricingNotFoundException($"Promotion pricing with id {model.PromotionPricingId} doesnt exist.");
         }
 
         product.IsPromoted = true;
@@ -360,6 +361,7 @@ public class ProductsService : IProductsService
             .AllAsNoTracking()
             .Include(x => x.Creator)
             .Include(x => x.Images)
+            .Include(x => x.Category)
             .AsQueryable();
 
 
@@ -384,13 +386,14 @@ public class ProductsService : IProductsService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($"User with id {model.UserId} doesnt exist.");
         }
 
         var products = _productsRepository
             .AllAsNoTracking()
             .Include(x => x.Creator)
             .Include(x => x.Images)
+            .Include(x => x.Category)
             .Where(x => x.CreatorId == model.UserId)
             .AsQueryable();
 

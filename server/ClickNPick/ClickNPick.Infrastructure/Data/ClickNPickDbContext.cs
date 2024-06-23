@@ -52,9 +52,9 @@ public class ClickNPickDbContext : IdentityDbContext<User, IdentityRole, string>
 
         base.OnModelCreating(builder);
 
-        ImageSeedData.Seed(builder);
         CategorySeedData.Seed(builder);
         PromotionPricingSeedData.Seed(builder);
+        ImageSeedData.Seed(builder);
         UserSeedData.Seed(builder);
         RoleSeedData.Seed(builder);
         UserRolesSeedData.Seed(builder);

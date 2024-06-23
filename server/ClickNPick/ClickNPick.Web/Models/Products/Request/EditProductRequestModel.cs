@@ -21,19 +21,19 @@ public class EditProductRequestModel
 
     public List<IFormFile> Images { get; set; }
 
-
     public EditProductRequestDto ToEditProductRequestDto()
     {
-        return new EditProductRequestDto
-        {
-            Title = this.Title,
-            Description = this.Description,
-            Price = this.Price,
-            CategoryId = this.CategoryId,
-            DiscountPrice = this.DiscountPrice,
-            ThumbnailImage = this.ThumbnailImage,
-            Images = this.Images,
-            ProductId = this.ProductId,
-        };          
+        var dto = new EditProductRequestDto();
+
+        dto.Title = this.Title;
+        dto.Description = this.Description;
+        dto.Price = this.Price;
+        dto.CategoryId = this.CategoryId;
+        dto.DiscountPrice = this.DiscountPrice;
+        dto.ThumbnailImage = this.ThumbnailImage;
+        dto.Images = this.Images;
+        dto.ProductId = this.ProductId;
+
+        return dto;
     }
 }

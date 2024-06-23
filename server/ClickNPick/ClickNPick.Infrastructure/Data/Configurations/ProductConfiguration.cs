@@ -34,7 +34,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         product
              .Property(x => x.Title)
              .IsRequired(true)
-             .HasMaxLength(50);
+             .HasMaxLength(30);
 
         product
             .Property(x => x.Description)
@@ -53,5 +53,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         product
             .HasIndex(x => x.Title);
+
+        product
+            .HasIndex(x => x.CreatedOn);
     }
 }

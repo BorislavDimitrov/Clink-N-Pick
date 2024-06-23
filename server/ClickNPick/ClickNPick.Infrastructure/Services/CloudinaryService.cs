@@ -1,5 +1,4 @@
 ﻿using ClickNPick.Application.Abstractions.Services;
-using ClickNPick.Application.Common;
 using ClickNPick.Application.Exceptions.General;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
@@ -16,7 +15,7 @@ public class CloudinaryService : ICloudinaryService
         _cloudinaryUtility = cloudinaryUtility;
     }
 
-    public async Task<CloudinaryUploadResult> UploadPictureAsync(byte[] data, string fileName, string folderName, int width, int height)
+    public async Task<(string, string)> UploadPictureAsync(byte[] data, string fileName, string folderName, int width, int height)
     {
         UploadResult uploadResult = null;
 
@@ -37,7 +36,7 @@ public class CloudinaryService : ICloudinaryService
             throw new OperationFailedException("The uploading of image failed.");
         }
 
-        return new CloudinaryUploadResult() { Url = uploadResult?.SecureUrl.AbsoluteUri, PublicId = uploadResult.PublicId };
+        return ( uploadResult?.SecureUrl.AbsoluteUri, uploadResult.PublicId );
     }
 
     public async Task DeleteImageAsync(string publicId)

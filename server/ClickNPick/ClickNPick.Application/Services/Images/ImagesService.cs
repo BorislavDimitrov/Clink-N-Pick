@@ -31,8 +31,8 @@ public class ImagesService : IImagesService
 
         var uploadResult = await _cloudinaryService.UploadPictureAsync(byteArray, Guid.NewGuid().ToString(), "ApplicationImages", resizeWidth, resizeHeight);
 
-        newImage.Url = uploadResult.Url;
-        newImage.PublicId = uploadResult.PublicId;
+        newImage.Url = uploadResult.Item1;
+        newImage.PublicId = uploadResult.Item2;
 
         await _imagesRepository.AddAsync(newImage);
         await _imagesRepository.SaveChangesAsync();
@@ -48,7 +48,7 @@ public class ImagesService : IImagesService
 
         if (imageToDelete == null)
         {
-            throw new NotFoundException("The image was not found.");
+            throw new NotFoundException($"Image with id {imageId} doesnt exist.");
         }
 
         await _cloudinaryService.DeleteImageAsync(imageToDelete.PublicId);
@@ -65,7 +65,7 @@ public class ImagesService : IImagesService
 
     public async Task<List<Domain.Models.Image>> GetProductNonThumbnailImages(string productId)
             => await _imagesRepository.All()
-            .Where(x => x.IsThumbnail == false && x.Id == productId)
+            .Where(x => x.IsThumbnail == false && x.ProductId == productId)
             .ToListAsync();
 
     public async Task<Domain.Models.Image> GetProductThumbnail(string productId)
@@ -74,27 +74,6 @@ public class ImagesService : IImagesService
 
     private async Task<byte[]> ProcessImageAsync(Image image, int resizeWidth, int resizeHeight)
     {
-        //int newWidth, newHeight;
-        //if (image.Width > resizeWidth || image.Height > resizeHeight)
-        //{
-        //    double aspectRatio = (double)image.Width / image.Height;
-        //    newWidth = resizeWidth;
-        //    newHeight = (int)(newWidth / aspectRatio);
-
-        //    if (newHeight > resizeHeight)
-        //    {
-        //        newHeight = resizeHeight;
-        //        newWidth = (int)(newHeight * aspectRatio);
-        //    }
-        //}
-        //else
-        //{
-        //    newWidth = image.Width;
-        //    newHeight = image.Height;
-        //}
-
-        //image.Mutate(x => x.Resize(newWidth, newHeight));
-
         image.Mutate(x => x.Resize(resizeWidth, resizeHeight));
 
         await using var ms = new MemoryStream();

@@ -9,11 +9,6 @@ public static class EcontClientEndpoints
     public const string Quarters = $"{NomenclaturesService}.getQuarters.json";
     public const string Streets = $"{NomenclaturesService}.getStreets.json";
 
-    // Address Service
-    private const string AddressService = "Nomenclatures/AddressService";
-
-    public const string ValidateAddress = $"{AddressService}.validateAddress.json";
-
     // Label Service
     private const string LabelService = "Shipments/LabelService";
 

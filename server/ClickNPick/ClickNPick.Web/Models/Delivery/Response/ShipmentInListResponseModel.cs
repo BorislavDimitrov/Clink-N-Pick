@@ -1,39 +1,39 @@
 ﻿using ClickNPick.Application.DtoModels.Delivery.Response;
 
-namespace ClickNPick.Web.Models.Delivery.Response
+namespace ClickNPick.Web.Models.Delivery.Response;
+
+public class ShipmentInListResponseModel
 {
-    public class ShipmentInListResponseModel
+    public string Id { get; set; }
+
+    public string SellerId { get; set; }
+
+    public string SellerUsername { get; set; }
+
+    public string BuyerId { get; set; }
+
+    public string BuyerUsername { get; set; }
+
+    public string ProductId { get; set; }
+
+    public string ProductTitle { get; set; }
+
+    public string Status { get; set; }
+
+    public static ShipmentInListResponseModel FromShipmentInListResponseDto(ShipmentInListResponseDto dto)
     {
-        public string Id { get; set; }
+        var model =  new ShipmentInListResponseModel();
 
-        public string SellerId { get; set; }
-
-        public string SellerUsername { get; set; }
-
-        public string BuyerId { get; set; }
-
-        public string BuyerUsername { get; set; }
-
-        public string ProductId { get; set; }
-
-        public string ProductTitle { get; set; }
-
-        public string Status { get; set; }
-
-        public static ShipmentInListResponseModel FromShipmentInListResponseDto(ShipmentInListResponseDto dto)
-        {
-            return new ShipmentInListResponseModel
-            {
-                Id = dto.Id,
-                SellerId = dto.SellerId,
-                SellerUsername = dto.SellerUsername,
-                BuyerId = dto.BuyerId,
-                BuyerUsername = dto.BuyerUsername,
-                ProductId = dto.ProductId,
-                ProductTitle = dto.ProductTitle,
-                Status = dto.Status.ToString()
-            };
-        }
+        model.Id = dto.Id;
+        model.SellerId = dto.SellerId;
+        model.SellerUsername = dto.SellerUsername;
+        model.BuyerId = dto.BuyerId;
+        model.BuyerUsername = dto.BuyerUsername;
+        model.ProductId = dto.ProductId;
+        model.ProductTitle = dto.ProductTitle;
+        model.Status = dto.Status.ToString();
+        
+        return model;
     }
 }
 

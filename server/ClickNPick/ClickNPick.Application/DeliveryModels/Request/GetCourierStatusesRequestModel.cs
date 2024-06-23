@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace ClickNPick.Application.DeliveryModels.Request
+namespace ClickNPick.Application.DeliveryModels.Request;
+
+public class GetCourierStatusesRequestModel
 {
-    public class GetCourierStatusesRequestModel
-    {
-        [JsonProperty(
-       PropertyName = "requestCourierIds",
-       Required = Required.Always)]
-        public IEnumerable<string> RequestCourierIds { get; set; }
-    }
+    [JsonProperty(
+   PropertyName = "requestCourierIds",
+   Required = Required.Always)]
+    public IEnumerable<string> RequestCourierIds { get; set; }
 }

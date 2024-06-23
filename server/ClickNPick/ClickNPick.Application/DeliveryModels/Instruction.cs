@@ -1,4 +1,4 @@
-﻿using ClickNPick.Application.Enumerations;
+﻿using ClickNPick.Application.DeliveryModels.Enumerations;
 using Newtonsoft.Json;
 
 namespace ClickNPick.Application.Common;

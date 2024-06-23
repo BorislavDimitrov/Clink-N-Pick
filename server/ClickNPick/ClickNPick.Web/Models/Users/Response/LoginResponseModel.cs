@@ -10,10 +10,11 @@ public class LoginResponseModel
 
     public static LoginResponseModel FromLoginResponseDto(LoginResponseDto dto)
     {
-        return new LoginResponseModel
-        {
-            Token = dto.Token,
-            UserImageUrl = dto.UserImageUrl
-        };
+        var model = new LoginResponseModel();
+
+        model.Token = dto.Token;
+        model.UserImageUrl = dto.UserImageUrl;
+
+        return model;
     }
 }

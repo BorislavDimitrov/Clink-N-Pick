@@ -28,6 +28,7 @@ const CommentForm = ({
           placeholder="Write a comment..."
           required
           value={text}
+          maxLength={2000}
           onChange={(e) => setText(e.target.value)}
         ></textarea>
       </div>

@@ -32,7 +32,7 @@ namespace ClickNPick.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(35)", maxLength: 35, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -190,7 +190,7 @@ namespace ClickNPick.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsOnDiscount = table.Column<bool>(type: "bit", nullable: false),
@@ -217,6 +217,42 @@ namespace ClickNPick.Infrastructure.Migrations
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ParentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_Comments_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Comments",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Comments_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -253,15 +289,22 @@ namespace ClickNPick.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ShipmentNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RequestCourierId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmailOnDelivery = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReceiverPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReceiverName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InvoiceBeforePayCD = table.Column<bool>(type: "bit", nullable: false),
                     SmsOnDelivery = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SmsNotification = table.Column<bool>(type: "bit", nullable: false),
                     GoodsReceipt = table.Column<bool>(type: "bit", nullable: false),
                     DeliveryReceipt = table.Column<bool>(type: "bit", nullable: false),
-                    ReceiverOfficeCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReceiverOfficeCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CityOrVillage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Quarter = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StreetNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeliverAddressInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeliveryLocation = table.Column<int>(type: "int", nullable: false),
                     ShipmentStatus = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BuyerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -297,68 +340,50 @@ namespace ClickNPick.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "d1bc12b0-15b8-4492-91bf-e9ea9da685c8", null, "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "8fc9f072-a1df-4f7d-a054-e85d2f99fe59", null, "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "CreatedOn", "DeletedOn", "IsDeleted", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { "2129a9c5-eb21-4736-86ee-c9e22af90615", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Clothing" },
-                    { "2a94004b-cd79-461a-8fc4-5a646c424f89", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Beauty Products" },
-                    { "44717001-ad72-490d-9e44-b1d45d563c5d", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Office Supplies" },
-                    { "5281c664-6138-4720-9c45-0640d10fa4eb", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Sports Equipment" },
-                    { "66c84e08-8867-418e-b325-e482f2d4c715", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "For The Car" },
-                    { "6a38b47c-f5c5-4421-9daa-a8601510b953", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Food & Beverages" },
-                    { "78d56e22-9484-48e1-baa2-0bbe1ae8a9db", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Furniture" },
-                    { "7a8d04f2-44e7-41b8-abc3-0d5b7c36abc3", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Toys" },
-                    { "9dfb4e76-04f4-42b8-b293-04c544646494", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Books" },
-                    { "caec59e1-f6c8-44df-a7ba-26f2e1b462c1", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Electronics" },
-                    { "db4b2141-fdc3-44e7-a183-6f301e96a779", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Home Appliances" }
+                    { "1a0f55a1-7fc5-404a-979a-690e642fdb66", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Sports Equipment" },
+                    { "364c3142-d45f-421a-8aef-4e0bbb3805e0", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Office Supplies" },
+                    { "5bb8080e-bb72-484e-b13a-1d2fdb64488f", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Furniture" },
+                    { "5bbf1967-36bd-489e-932f-08f48914296f", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "For The Car" },
+                    { "63d57b32-f194-475b-8e34-b2b07316aafb", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Beauty Products" },
+                    { "b11ea93f-97f0-465f-b3d6-4decc7a0a4e4", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Electronics" },
+                    { "b234afa4-c5ea-4a54-85f4-83dded5a8cea", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Home Appliances" },
+                    { "bf67f588-1378-45d0-81b4-2d73f71e0be3", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Food & Beverages" },
+                    { "da1a8ab3-1812-483c-af19-83bfa4eb05be", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Clothing" },
+                    { "ed066b79-6415-4b60-bbf4-c0b5c6b58f97", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Books" },
+                    { "f340ec58-55fb-4f69-b642-9242956b3ab3", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Toys" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Images",
                 columns: new[] { "Id", "CreatedOn", "DeletedOn", "IsDeleted", "IsThumbnail", "ModifiedOn", "ProductId", "PublicId", "Url", "UserId" },
-                values: new object[,]
-                {
-                    { "007ab344-bbf9-4836-97b5-9bc5674fa8eb", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "zy5h_x1t2n", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716620767/images_ylu4di.jpg", null },
-                    { "4efdd35d-1077-49c0-8f14-472bea5b0656", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "cht3_123jkl", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716621051/SupremeHomepageImageRight_ihrnvm.jpg", null },
-                    { "4f5ff3ef-9544-43ee-be7a-9a1546420efa", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "12e_x7tc123", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716620567/Number-of-Books-Published-Per-Year_icpoaj.jpg", null },
-                    { "4fc0b4d2-42a0-4011-b94d-86e4c3af0edd", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "pht6781_xyz456", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716620636/San-Diego-Plus-Size-Clothing-Stores_adgwqo.jpg", null },
-                    { "63d0564c-ac7a-416f-bef4-60e51ea87423", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "ge32_gre_4", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716829465/5e32f2a324306a19834af322_uhj3uq.jpg", "5557a45d-c13c-4328-94ca-bd482ae4f11c" },
-                    { "98571cd2-c3a0-4465-9945-09cdd9ba11ff", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "pic_789abc", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716620686/istock-1196974664_cbcqpa.jpg", null },
-                    { "99ebfcf5-de58-4826-aaba-cf403c0f5aa9", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "get634", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716827378/cool-profile-picture-87h46gcobjl5e4xu_mt6mhi.jpg", "881a8ad3-3d37-464b-857b-4ae5d4e88898" },
-                    { "c89552be-4c92-4363-8ebd-c7aaf9f98941", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "p23c_123jkl", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716620928/Heinens-Health-And-Beauty-products-800x550-1_lmvte5.jpg", null },
-                    { "cbbbfb3b-19e8-4cc0-ad42-1607a5c74b62", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "7845e_dbc123", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716620881/shutterstock_383521510-002-scaled_wqcefn.jpg", null },
-                    { "d03d7013-d67f-4a06-9565-09b4ca17555c", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "p3x4hge_456def", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716620828/alimentare-arredamento-2_rlgxvn.jpg", null },
-                    { "d3b340fc-9eda-4d4a-a1b0-7744665cf5e7", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "ixr4e_abc123", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716620405/Electronic_sonoa1.jpg", null },
-                    { "dee622aa-5d79-4f54-aa12-000b59261115", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "53gfa_abc123", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1716621012/Food_sqrw11.webp", null }
-                });
+                values: new object[] { "a3417f15-27b3-4f81-9092-5be095c9d69b", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, false, null, null, "ge32_gre_4", "https://res.cloudinary.com/dtaqyp4b6/image/upload/v1718898254/ApplicationImages/nudbusyqqrn7ciq5gaha.jpg", "67eb1c09-e412-4abe-8f4b-7cf3947a8b9e" });
 
             migrationBuilder.InsertData(
                 table: "PromotionPricings",
                 columns: new[] { "Id", "CreatedOn", "DeletedOn", "DurationDays", "IsDeleted", "ModifiedOn", "Name", "Price" },
                 values: new object[,]
                 {
-                    { "17d0b5ae-605a-4077-92d9-4593e4577e0c", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 14, false, null, "Standart", 20m },
-                    { "3142bb82-7f07-4b48-881e-c6de849dc588", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 7, false, null, "Basic", 12m },
-                    { "dbc24826-47d1-46b9-9dc5-656839fec2bc", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 30, false, null, "Premium", 30m }
+                    { "a2b100ff-7ae2-40cc-a9ce-007502137f01", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 14, false, null, "Standart", 20m },
+                    { "e070bd1d-e0d6-4a94-a9fa-57b613a0413a", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 30, false, null, "Premium", 30m },
+                    { "ea865faa-602a-45e9-a716-7dbcd057619c", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 7, false, null, "Basic", 12m }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Address", "Bio", "ConcurrencyStamp", "CreatedOn", "DeletedOn", "Email", "EmailConfirmed", "ImageId", "IsDeleted", "LockoutEnabled", "LockoutEnd", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[,]
-                {
-                    { "5557a45d-c13c-4328-94ca-bd482ae4f11c", 0, null, null, "cf0cabdc-573d-4ff0-8bd3-744bbd419aa8", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "admin@yopmail.com", true, "63d0564c-ac7a-416f-bef4-60e51ea87423", false, false, null, null, "ADMIN@YOPMAIL.COM", "ADMINOVICH", "AQAAAAIAAYagAAAAEEpecEwgSLuLnOJiQkl/yYDJFSjykvAxsCUZeQOiABzECDU5MTZ+J19W0TdBz8QN7Q==", null, false, "76c94a90-b636-471d-8d5f-5a7cdeff5afb", false, "Adminovich" },
-                    { "881a8ad3-3d37-464b-857b-4ae5d4e88898", 0, null, null, "463268d1-a30e-4580-80ad-c3d113e98d77", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "user@yopmail.com", true, "99ebfcf5-de58-4826-aaba-cf403c0f5aa9", false, false, null, null, "USER@YOPMAIL.COM", "USEROVICH", "AQAAAAIAAYagAAAAEMGH3XnJ+wfNscAkYhg7yqjLErmejsX+shldoDnIoaYVvXb/Ad3XMOWz1vVyuUnsLA==", null, false, "e6b7d1bb-46a1-4e0a-92e7-840d94c61bac", false, "Userovich" }
-                });
+                values: new object[] { "67eb1c09-e412-4abe-8f4b-7cf3947a8b9e", 0, null, null, "72ff42a0-e6b7-4c68-98ce-07e2835717b7", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "admin@yopmail.com", true, "a3417f15-27b3-4f81-9092-5be095c9d69b", false, false, null, null, "ADMIN@YOPMAIL.COM", "ADMINISTRATOR", "AQAAAAIAAYagAAAAEJf1LROZsN8+1Q/ZykdZfrdYaFvDIUt1SeH4ImW9sb62hy2O/Dzub3o3m+DZF7IPCA==", null, false, "e7b46476-5ead-469f-8f8a-89cfe87e65e2", false, "Administrator" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId", "UserId1" },
-                values: new object[] { "d1bc12b0-15b8-4492-91bf-e9ea9da685c8", "5557a45d-c13c-4328-94ca-bd482ae4f11c", null });
+                values: new object[] { "8fc9f072-a1df-4f7d-a054-e85d2f99fe59", "67eb1c09-e412-4abe-8f4b-7cf3947a8b9e", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -427,6 +452,21 @@ namespace ClickNPick.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_CreatorId",
+                table: "Comments",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ParentId",
+                table: "Comments",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ProductId",
+                table: "Comments",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Images_ProductId",
                 table: "Images",
                 column: "ProductId");
@@ -435,6 +475,11 @@ namespace ClickNPick.Infrastructure.Migrations
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CreatedOn",
+                table: "Products",
+                column: "CreatedOn");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CreatorId",
@@ -541,6 +586,9 @@ namespace ClickNPick.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "PromotionPricings");

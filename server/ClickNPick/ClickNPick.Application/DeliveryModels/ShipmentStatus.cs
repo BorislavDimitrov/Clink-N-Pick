@@ -119,9 +119,6 @@ public class ShipmentStatus
     [JsonProperty("lastProcessedInstruction")]
     public string? LastProcessedInstruction { get; set; }
 
-    [JsonProperty("nextShipments")]
-    public List<NextShipmentElement>? NextShipments { get; set; }
-
     [JsonProperty("trackingEvents")]
     public List<ShipmentTrackingEvent>? TrackingEvents { get; set; }
 

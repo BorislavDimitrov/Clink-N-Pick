@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { GetAuthToken } from "../Utility/auth";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import {
@@ -13,6 +14,7 @@ const Comments = ({ currentUserId, productId }) => {
   const [comments, setComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   const rootComments = comments.filter((comment) => comment.parentId === null);
+  const token = GetAuthToken();
 
   const getReplies = (commentId) =>
     comments
@@ -105,10 +107,10 @@ const Comments = ({ currentUserId, productId }) => {
   }, []);
 
   return (
-    <div className="antialiased mx-auto max-w-screen-sm">
+    <div className="antialiased mx-auto max-w-screen-sm mt-10">
       <h3 className="mb-4 text-lg font-semibold text-gray-900">Comments</h3>
 
-      <CommentForm submitLabel="Write" handleSubmit={addComment} />
+      {token && <CommentForm submitLabel="Post" handleSubmit={addComment} />}
       <div className="comments-container">
         {rootComments.map((rootComment) => (
           <Comment

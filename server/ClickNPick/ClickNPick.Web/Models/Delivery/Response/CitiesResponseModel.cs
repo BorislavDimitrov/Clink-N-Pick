@@ -10,9 +10,10 @@ public class CitiesResponseModel
 
     public static CitiesResponseModel FromCitiesResponseDto(CitiesResponseDto dto)
     {
-        return new CitiesResponseModel
-        {
-            Cities = dto.Cities,
-        };
+        var model = new CitiesResponseModel();
+
+        model.Cities = dto.Cities;
+        
+        return model; 
     }
 }

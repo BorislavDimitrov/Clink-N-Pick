@@ -19,14 +19,15 @@ public class CreateProductRequestModel
 
     public CreateProductRequestDto ToCreateProductRequestDto()
     {
-        return new CreateProductRequestDto
-        {
-            Title = this.Title,
-            Description = this.Description,
-            Price = this.Price,
-            CategoryId = this.CategoryId,
-            ThumbnailImage = this.ThumbnailImage,
-            Images = this.Images
-        };
+        var dto = new CreateProductRequestDto();
+
+        dto.Title = this.Title;
+        dto.Description = this.Description;
+        dto.Price = this.Price;
+        dto.CategoryId = this.CategoryId;
+        dto.ThumbnailImage = this.ThumbnailImage;
+        dto.Images = this.Images;
+
+        return dto;
     }
 }

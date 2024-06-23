@@ -16,13 +16,14 @@ public class ProductEditDetailsResponseDto
 
     public static ProductEditDetailsResponseDto FromProdcut(Product product)
     {
-        return new ProductEditDetailsResponseDto
-        {
-            Title = product.Title,
-            Price = product.Price,
-            CategoryId = product.CategoryId,
-            Description = product.Description,
-            DiscountPrice = product.DiscountPrice
-        };
+        var dto = new ProductEditDetailsResponseDto();
+
+        dto.Title = product.Title;
+        dto.Price = product.Price;
+        dto.CategoryId = product.CategoryId;
+        dto.Description = product.Description;
+        dto.DiscountPrice = product.DiscountPrice;
+
+        return dto;
     }
 }

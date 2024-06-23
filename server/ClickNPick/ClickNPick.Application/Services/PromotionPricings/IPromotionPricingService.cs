@@ -7,5 +7,5 @@ public interface IPromotionPricingService
 {
     Task<PromotionPricing> GetByIdAsync(string promotionPricingId);
 
-    Task<PromotionListingResponseDto> GetAll();
+    Task<PromotionListingResponseDto> GetAllAsync();
 }

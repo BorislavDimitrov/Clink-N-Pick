@@ -7,21 +7,20 @@ namespace ClickNPick.Infrastructure.Services;
 
 public class CacheService : ICacheService
 {
-    private readonly bool cacheEnabled;
-
-    private readonly IMemoryCache memoryCache;
+    private readonly bool _cacheEnabled;
+    private readonly IMemoryCache _memoryCache;
 
     public CacheService(
         IMemoryCache memoryCache,
         IConfiguration configuration)
     {
-        this.memoryCache = memoryCache;
-        this.cacheEnabled = configuration.GetValue<bool>("CacheSettings:Enabled");
+        _memoryCache = memoryCache;
+        _cacheEnabled = configuration.GetValue<bool>("CacheSettings:Enabled");
     }
 
     public T GetOrCreate<T>(string cacheKey, Func<T> cacheItem, TimeSpan expirationTime)
     {
-        if (cacheEnabled)
+        if (_cacheEnabled)
         {
             if (string.IsNullOrEmpty(cacheKey))
             {
@@ -35,7 +34,7 @@ public class CacheService : ICacheService
                 throw new ArgumentNullException(nameof(cacheItem), "Value cannot be null.");
             }
 
-            var cacheResult = this.memoryCache.GetOrCreate(cacheKey, entry =>
+            var cacheResult = _memoryCache.GetOrCreate(cacheKey, entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = expirationTime;
                 Log.Information("Item created and added to cache with key: {0}", cacheKey);
@@ -50,7 +49,7 @@ public class CacheService : ICacheService
 
     public async Task<T> GetOrCreateAsync<T>(string cacheKey, Func<Task<T>> cacheItem, TimeSpan expirationTime)
     {
-        if (cacheEnabled)
+        if (_cacheEnabled)
         {
             if (string.IsNullOrEmpty(cacheKey))
             {
@@ -64,7 +63,7 @@ public class CacheService : ICacheService
                 throw new ArgumentNullException(nameof(cacheItem), "Value cannot be null.");
             }
 
-            var cacheResult = await this.memoryCache.GetOrCreateAsync(cacheKey, entry =>
+            var cacheResult = await _memoryCache.GetOrCreateAsync(cacheKey, entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = expirationTime;
                 Log.Information("Item created and added to cache with key: {0}", cacheKey);
@@ -79,7 +78,7 @@ public class CacheService : ICacheService
 
     public void Remove(string cacheKey)
     {
-        if (cacheEnabled)
+        if (_cacheEnabled)
         {
             if (string.IsNullOrEmpty(cacheKey))
             {
@@ -87,7 +86,7 @@ public class CacheService : ICacheService
                 throw new ArgumentException("Key cannot be null or empty.", nameof(cacheKey));
             }
 
-            this.memoryCache.Remove(cacheKey);
+            _memoryCache.Remove(cacheKey);
 
             Log.Information("Item removed from cache with key: {0}", cacheKey);
         }
@@ -95,20 +94,20 @@ public class CacheService : ICacheService
 
     public void RemoveMany(IEnumerable<string> cacheKeys)
     {
-        if (cacheEnabled)
+        if (_cacheEnabled)
         {
             foreach (var cacheKey in cacheKeys)
             {
-                this.memoryCache.Remove(cacheKey);
+                _memoryCache.Remove(cacheKey);
             }
         }
     }
 
     public void ClearEntireCache()
     {
-        if (cacheEnabled)
+        if (_cacheEnabled)
         {
-            this.memoryCache.Dispose();
+            _memoryCache.Dispose();
             Log.Information("Cache cleared.");
         }
     }

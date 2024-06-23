@@ -28,9 +28,6 @@ public class Address
     [JsonProperty("other")]
     public string? Other { get; set; }
 
-    [JsonProperty("location")]
-    public GeoLocation? Location { get; set; }
-
     [JsonProperty("zip")]
     public string? Zip { get; set; }
 

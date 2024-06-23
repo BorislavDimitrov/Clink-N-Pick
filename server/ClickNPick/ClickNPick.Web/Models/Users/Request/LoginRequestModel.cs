@@ -10,10 +10,11 @@ public class LoginRequestModel
 
     public LoginRequestDto ToLoginRequestDto()
     {
-        return new LoginRequestDto
-        {
-            Email = this.Email,
-            Password = this.Password
-        };
+        var dto = new LoginRequestDto();
+
+        dto.Email = this.Email;
+        dto.Password = this.Password;
+
+        return dto;
     }
 }

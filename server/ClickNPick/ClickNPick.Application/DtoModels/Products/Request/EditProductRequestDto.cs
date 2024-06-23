@@ -21,5 +21,4 @@ public class EditProductRequestDto
     public List<IFormFile> Images { get; set; }
 
     public string UserId { get; set; }
-
 }

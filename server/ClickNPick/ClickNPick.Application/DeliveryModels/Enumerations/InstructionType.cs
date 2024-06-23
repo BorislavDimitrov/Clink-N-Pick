@@ -1,4 +1,4 @@
-﻿namespace ClickNPick.Application.Enumerations;
+﻿namespace ClickNPick.Application.DeliveryModels.Enumerations;
 
 public enum InstructionType
 {

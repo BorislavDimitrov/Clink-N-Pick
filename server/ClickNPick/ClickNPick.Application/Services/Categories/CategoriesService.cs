@@ -21,7 +21,7 @@ public class CategoriesService : ICategoriesService
     {
         if (_categoriesRepository.AllAsNoTracking().Any(x => x.Name == model.Name))
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException($"A category with the name {model.Name} already exists.");
         }
 
         var newCategory = model.ToCategory();
@@ -40,7 +40,7 @@ public class CategoriesService : ICategoriesService
 
         if (category == null)
         {
-            throw new CategoryNotFoundException();
+            throw new CategoryNotFoundException($"A category with the id {id} doesnt exist.");
         }
 
         _categoriesRepository.SoftDelete(category);
@@ -55,7 +55,7 @@ public class CategoriesService : ICategoriesService
 
         if (category == null)
         {
-            throw new CategoryNotFoundException();
+            throw new CategoryNotFoundException($"A category with the id {model.CategoryId} doesnt exist.");
         }
 
         category.Name = model.Name;

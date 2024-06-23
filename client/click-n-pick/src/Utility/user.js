@@ -1,5 +1,4 @@
 export function SetUserImageUrl(imageUrl) {
-  console.log(imageUrl);
   localStorage.setItem("profileImageUrl", imageUrl);
 }
 

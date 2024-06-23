@@ -12,7 +12,7 @@ public class ProductDetailsResponseDto
 
     public bool IsOnDiscount { get; set; }
 
-    public decimal? DiscountPrice { get; set; }
+    public decimal DiscountPrice { get; set; }
 
     public string CategoryId { get; set; }
 
@@ -32,21 +32,22 @@ public class ProductDetailsResponseDto
 
     public static ProductDetailsResponseDto FromProduct(Product product)
     {
-        return new ProductDetailsResponseDto
-        {
-            Title = product.Title,
-            Description = product.Description,
-            Price = product.Price,
-            IsOnDiscount = product.IsOnDiscount,
-            DiscountPrice = product.DiscountPrice,
-            CategoryId = product.CategoryId,
-            CategoryName = product.Category.Name,
-            CreatorId = product.CreatorId,
-            CreatorImageUrl = product.Creator.Image.Url,
-            CreatorUsername = product.Creator.UserName,
-            CreatorPhoneNumber = product.Creator.PhoneNumber,
-            CreatorEmail = product.Creator.Email,
-            ImageUrls = product.Images.Where(x => x.IsThumbnail == false).Select(x => x.Url).ToList()
-        };
+        var dto = new ProductDetailsResponseDto();
+
+        dto.Title = product.Title;
+        dto.Description = product.Description;
+        dto.Price = product.Price;
+        dto.IsOnDiscount = product.IsOnDiscount;
+        dto.DiscountPrice = product.DiscountPrice;
+        dto.CategoryId = product.CategoryId;
+        dto.CategoryName = product.Category.Name;
+        dto.CreatorId = product.CreatorId;
+        dto.CreatorImageUrl = product.Creator.Image.Url;
+        dto.CreatorUsername = product.Creator.UserName;
+        dto.CreatorPhoneNumber = product.Creator.PhoneNumber;
+        dto.CreatorEmail = product.Creator.Email;
+        dto.ImageUrls = product.Images.Where(x => x.IsThumbnail == false).Select(x => x.Url).ToList();
+        
+        return dto;
     }
 }

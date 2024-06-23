@@ -18,14 +18,15 @@ public class ViewProfileResponseDto
 
     public static ViewProfileResponseDto FromUser(User user)
     {
-        return new ViewProfileResponseDto
-        {
-            Username = user.UserName,
-            PhoneNumber = user.PhoneNumber,
-            Address = user.Address,
-            Email = user.Email,
-            Bio = user.Bio,
-            ProfileImageUrl = user.Image.Url
-        };
+        var dto = new ViewProfileResponseDto();
+
+        dto.Username = user.UserName;
+        dto.PhoneNumber = user.PhoneNumber;
+        dto.Address = user.Address;
+        dto.Email = user.Email;
+        dto.Bio = user.Bio;
+        dto.ProfileImageUrl = user.Image.Url;
+        
+        return dto;
     }
 }

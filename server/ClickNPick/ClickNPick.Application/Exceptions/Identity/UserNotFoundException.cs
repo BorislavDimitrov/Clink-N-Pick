@@ -1,6 +1,8 @@
-﻿namespace ClickNPick.Application.Exceptions.Identity;
+﻿using ClickNPick.Application.Exceptions.General;
 
-public class UserNotFoundException : Exception
+namespace ClickNPick.Application.Exceptions.Identity;
+
+public class UserNotFoundException : NotFoundException
 {
     private const string DefaultMessage = "User is not found.";
 

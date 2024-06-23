@@ -1,10 +1,10 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
-using ClickNPick.Application.Abstractions.Services;
+using ClickNPick.Application.Abstractions.Repositories;
 using ClickNPick.Application.DtoModels.Products.Request;
+using ClickNPick.Application.Exceptions.Identity;
 using ClickNPick.Application.Services.Categories;
 using ClickNPick.Application.Services.Images;
-using ClickNPick.Application.Services.Payment;
 using ClickNPick.Application.Services.Products;
 using ClickNPick.Application.Services.PromotionPricings;
 using ClickNPick.Application.Services.Users;
@@ -21,70 +21,140 @@ namespace ClickNPick.Tests.Services;
 public class ProductServiceTests
 {
     private IFixture _fixture;
-    private Mock<ICloudinaryService> _mockedICloudinaryService;
-    private Mock<IFormFile> _mockedIFormFile;
-    private Mock<IUsersService> _mockedUsersService;
-    private Mock<ImagesService> _mockedImagesService;
-    private Mock<IPromotionPricingService> _mockedPromotionPricingService;
-    private Mock<IPaymentService> _mockedStripeSerivce;
-    private Mock<ICategoriesService> _mockedCategoriesService;
+    private ProductsService _productsService;
+    private IRepository<Product> _productsRepository;
+    private Mock<IUsersService> _mockUsersService;
+    private Mock<IImagesService> _mockImagesService;
+    private Mock<IPromotionPricingService> _mockPromotionPricingService;
+    private Mock<ICategoriesService> _mockCategoriesService;
     private DbContextOptionsBuilder<ClickNPickDbContext> _options;
-    private Repository<Product> _productRepository;
     private ClickNPickDbContext _context;
-    private IProductsService _productsService;
 
     [SetUp]
-    [TearDown]
     public void Setup()
     {
         _fixture = new Fixture().Customize(new AutoMoqCustomization());
+        _fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
+        _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+
+        _mockUsersService = _fixture.Freeze<Mock<IUsersService>>();
+        _mockImagesService = _fixture.Freeze<Mock<IImagesService>>();
+        _mockPromotionPricingService = _fixture.Freeze<Mock<IPromotionPricingService>>();
+        _mockCategoriesService = _fixture.Freeze<Mock<ICategoriesService>>();
         _options = new DbContextOptionsBuilder<ClickNPickDbContext>()
         .UseInMemoryDatabase(Guid.NewGuid().ToString());
-        _mockedICloudinaryService = new Mock<ICloudinaryService>();
-        _mockedUsersService = _fixture.Freeze< Mock<IUsersService>>();
-        _mockedPromotionPricingService = _fixture.Freeze < Mock < IPromotionPricingService >>();
-        _mockedImagesService = _fixture.Freeze < Mock < ImagesService >>();
-        _mockedStripeSerivce = _fixture.Freeze < Mock < IPaymentService >>();
-        _mockedCategoriesService = _fixture.Freeze < Mock < ICategoriesService >>();
-        _mockedIFormFile = _fixture.Freeze < Mock<IFormFile>>();
         _context = new ClickNPickDbContext(_options.Options);
-        _productRepository = new Repository<Product>(_context);
-        //_mockedUsersService.Setup(x => x.GetByIdAsync("1")).Returns(Task.FromResult(new User()));
-        //_mockedCategoriesService.Setup(x => x.GetByIdAsync("1")).Returns(Task.FromResult(new Category()));
-        //_mockedImagesService.Setup(x => x.CreateImageAsync(_mockedIFormFile.Object, 100,100)).Returns(Task.FromResult("g"));
-        //_mockedImagesService.Setup(x => x.GetImageByIdAsync("gegrg")).Returns(Task.FromResult(new Image()));
-        _productsService = new ProductsService(
-            _productRepository,
-            _mockedUsersService.Object,_mockedImagesService.Object,_mockedStripeSerivce.Object,_mockedPromotionPricingService.Object, _mockedCategoriesService.Object);
+        _productsRepository = new Repository<Product>(_context);
+
+        _productsService = _fixture.Create<ProductsService>();
     }
 
-
     [Test]
-
-    public async Task CreateProductShouldBeCreateSuccessfully()
+    public async Task CreateProductAsyncValidRequestCreatesProduct()
     {
-        var newProduct = new CreateProductRequestDto
+        var model = new CreateProductRequestDto
         {
-            Title = "Product 1",
-            CategoryId = "1",
-            Description = "Test",
-            CreatorId = "1",
-            Price = 1,
-            //Images = new List<IFormFile> { _mockedIFormFile.Object },
-            //ThumbnailImage = _mockedIFormFile.Object
+            CreatorId = "user1",
+            CategoryId = "category1",
+            ThumbnailImage = new FormFile(Stream.Null, 0, 0, "thumbnail", "thumbnail.jpg"),
+            Images = new List<IFormFile> { new FormFile(Stream.Null, 0, 0, "thumbnail", "thumbnail.jpg"), new FormFile(Stream.Null, 0, 0, "thumbnail", "thumbnail.jpg") }
+            
         };
 
-        //var newProduct = _fixture.Create<CreateProductRequestDto>();
-        await _productsService.CreateProductAsync(newProduct);
+        var user = new User { Id = "user1" };
+        var category = new Category { Id = "category1" };
+        var createdProduct = new Product { Id = "product1" };
 
+        _mockUsersService.Setup(s => s.GetByIdAsync("user1")).ReturnsAsync(user);
+        _mockCategoriesService.Setup(s => s.GetByIdAsync("category1")).ReturnsAsync(category);
+        _mockImagesService.Setup(s => s.CreateImageAsync(It.IsAny<IFormFile>(), It.IsAny<int>(), It.IsAny<int>()))
+                          .ReturnsAsync("thumbnailId");
+        _mockImagesService.Setup(s => s.GetImageByIdAsync("thumbnailId")).ReturnsAsync(new Image { Id = "thumbnailId" });
+ 
+        var result = await _productsService.CreateProductAsync(model);
+        
+        Assert.That(result, Is.Not.Null);
+    }
 
-        Assert.AreEqual(1, _productRepository.AllAsNoTracking().Count());
+    [Test]
+    public void CreateProductAsyncUserNotFoundThrowsUserNotFoundException()
+    {
+        var model = new CreateProductRequestDto { CreatorId = "nonExistingUser" };
+        _mockUsersService.Setup(s => s.GetByIdAsync("nonExistingUser")).ReturnsAsync((User)null);
 
+        Assert.ThrowsAsync<UserNotFoundException>(() => _productsService.CreateProductAsync(model));
+    }
+
+    [Test]
+    public void EditProductAsync_UnauthorizedUser_ThrowsInvalidOperationException()
+    {
+        var model = new EditProductRequestDto { ProductId = "product1", UserId = "unauthorizedUser" };
+        var product = new Product { Id = "product1", CreatorId = "user1" };
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => _productsService.EditProductAsync(model));
+    }
+
+    [Test]
+    public void DeleteAsync_UnauthorizedUser_ThrowsInvalidOperationException()
+    {
+        var model = new DeleteProductRequestDto { ProductId = "product1", UserId = "unauthorizedUser" };
+        var product = new Product { Id = "product1", CreatorId = "user1" };
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => _productsService.DeleteAsync(model));
+    }
+
+    [Test]
+    public void GetEditDetailsAsyncNonExistingProductIdThrowsInvalidOperationException()
+    {
+        var model = new GetProductEditDetailsRequestDto { ProductId = "nonExistingProduct" };
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => _productsService.GetEditDetailsAsync(model));
+    }
+
+    [Test]
+    public void GetEditDetailsAsyncUnauthorizedUserThrowsInvalidOperationException()
+    {
+        var model = new GetProductEditDetailsRequestDto { ProductId = "product1", UserId = "unauthorizedUser" };
+        var product = new Product { Id = "product1", CreatorId = "user1" };
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => _productsService.GetEditDetailsAsync(model));
+    }
+
+    [Test]
+    public void PromoteAsyncNonExistingProductIdThrowsInvalidOperationException()
+    {
+        var user = new User { Id = "user1" };
+        _mockUsersService.Setup(s => s.GetByIdAsync("user1")).ReturnsAsync(user);
+
+        var model = new PromoteProductRequestDto { ProductId = "nonExistingProduct" };
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => _productsService.PromoteAsync(model));
+    }
+
+    [Test]
+    public void PromoteAsyncUnauthorizedUserThrowsInvalidOperationException()
+    {
+        var model = new PromoteProductRequestDto { ProductId = "product1", UserId = "unauthorizedUser" };
+        var product = new Product { Id = "product1", CreatorId = "user1" };
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => _productsService.PromoteAsync(model));
     }
 
     [TearDown]
     public void TearDown()
     {
         _context.Dispose();
+    }
+
+    private IFormFile CreateFormFile(string path)
+    {
+        var fileInfo = new FileInfo(path);
+        var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+
+        return new FormFile(fileStream, 0, fileStream.Length, fileInfo.Name, fileInfo.Name)
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "image/jpeg"
+        };
     }
 }

@@ -2,7 +2,7 @@ function Home() {
   return (
     <>
       <body>
-        <div className="bg-slate-100 py-12">
+        <div className="bg-slate-100 shadow-md py-12 mt-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="lg:text-center">
               <h2 className=" text-3xl text-blue-700 font-semibold tracking-wide uppercase">
@@ -170,7 +170,7 @@ function Home() {
                     alt="For the car"
                   />
                 </div>
-                <div className="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
+                <div className="absolutebottom-0 start-0 end-0 p-2 sm:p-4">
                   <div className="text-sm font-bold text-gray-800 rounded-lg bg-white p-4 md:text-xl dark:bg-neutral-800 dark:text-neutral-200">
                     For The Car
                   </div>
@@ -233,7 +233,7 @@ function Home() {
         <h2 className="lg:mb-8 text-2xl font-extrabold tracking-tight leading-tight text-center text-gray-900 dark:text-white md:text-3xl">
           And many other cateoreis
         </h2>
-        <div className=" py-12 bg-slate-100 ">
+        <div className=" py-12 bg-slate-100 shadow-md mb-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="lg:text-center">
               <h2 className="text-xl text-blue-600 font-semibold tracking-wide uppercase">

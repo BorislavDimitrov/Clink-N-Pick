@@ -12,7 +12,7 @@ public class ProductDetailsResponseModel
 
     public bool IsOnDiscount { get; set; }
 
-    public decimal? DiscountPrice { get; set; }
+    public decimal DiscountPrice { get; set; }
 
     public string CategoryId { get; set; }
 
@@ -32,22 +32,22 @@ public class ProductDetailsResponseModel
 
     public static ProductDetailsResponseModel FromProductDetailsResponseDto(ProductDetailsResponseDto dto)
     {
-        return new ProductDetailsResponseModel
-        {
-            Title = dto.Title,
-            Description = dto.Description,
-            Price = dto.Price,
-            IsOnDiscount = dto.IsOnDiscount,
-            DiscountPrice = dto.DiscountPrice,
-            CategoryId = dto.CategoryId,
-            CategoryName = dto.CategoryName,
-            CreatorId = dto.CreatorId,
-            CreatorImageUrl = dto.CreatorImageUrl,
-            CreatorUsername = dto.CreatorUsername,
-            CreatorEmail = dto.CreatorEmail,
-            CreatorPhoneNumber = dto.CreatorPhoneNumber,
-            ImageUrls = dto.ImageUrls,
+        var model = new ProductDetailsResponseModel();
 
-        };
+        model.Title = dto.Title;
+        model.Description = dto.Description;
+        model.Price = dto.Price;
+        model.IsOnDiscount = dto.IsOnDiscount;
+        model.DiscountPrice = dto.DiscountPrice;
+        model.CategoryId = dto.CategoryId;
+        model.CategoryName = dto.CategoryName;
+        model.CreatorId = dto.CreatorId;
+        model.CreatorImageUrl = dto.CreatorImageUrl;
+        model.CreatorUsername = dto.CreatorUsername;
+        model.CreatorEmail = dto.CreatorEmail;
+        model.CreatorPhoneNumber = dto.CreatorPhoneNumber;
+        model.ImageUrls = dto.ImageUrls;
+
+        return model;
     }
 }

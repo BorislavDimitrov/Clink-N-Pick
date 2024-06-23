@@ -1,6 +1,8 @@
-﻿namespace ClickNPick.Application.Exceptions.Products;
+﻿using ClickNPick.Application.Exceptions.General;
 
-internal class ProductNotFoundException : Exception
+namespace ClickNPick.Application.Exceptions.Products;
+
+public class ProductNotFoundException : NotFoundException
 {
     private const string DefaultMessage = "Product not found";
 

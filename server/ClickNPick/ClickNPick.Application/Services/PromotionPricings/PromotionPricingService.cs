@@ -14,7 +14,7 @@ public class PromotionPricingService : IPromotionPricingService
         _promotionPricingRepository = promotionPricingRepository;
     }
 
-    public async Task<PromotionListingResponseDto> GetAll()
+    public async Task<PromotionListingResponseDto> GetAllAsync()
     {
         var promotions = await _promotionPricingRepository
             .AllAsNoTracking()

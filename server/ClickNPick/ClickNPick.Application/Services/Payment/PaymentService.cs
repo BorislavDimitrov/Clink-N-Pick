@@ -8,6 +8,8 @@ public class PaymentService : IPaymentService
 {
     private const string PaymentDescription = "Payment with amount of {0}$ was made by {1}.";
 
+    private const string Currency = "eur";
+
     public async Task<string> CreatePaymentIntent(decimal amount, string receiptEmail)
     {
         var cents = (long)amount * 100;
@@ -16,7 +18,7 @@ public class PaymentService : IPaymentService
         var paymentOptions = new PaymentIntentCreateOptions
         {
             Amount = cents,
-            Currency = "usd",
+            Currency = Currency,
             ReceiptEmail = receiptEmail,
             AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
             {

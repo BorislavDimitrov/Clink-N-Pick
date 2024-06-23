@@ -1,5 +1,4 @@
-﻿using ClickNPick.Application.Abstractions.Services;
-using ClickNPick.Application.Services.Categories;
+﻿using ClickNPick.Application.Services.Categories;
 using ClickNPick.Application.Services.Comments;
 using ClickNPick.Application.Services.Delivery;
 using ClickNPick.Application.Services.Identity;

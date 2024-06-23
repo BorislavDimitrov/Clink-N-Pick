@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Modal from "../../components/Modal";
 import { getById } from "../../fetch/requests/categories";
 import { useParams } from "react-router-dom";
-import { edit } from "../../fetch/requests/categories";
+import { editCategory } from "../../fetch/requests/categories";
 
 function EditCategory() {
   const [category, setCategory] = useState();
@@ -34,7 +34,10 @@ function EditCategory() {
     event.preventDefault();
 
     try {
-      const response = await edit({ CategoryId: params.id, Name: category });
+      const response = await editCategory({
+        CategoryId: params.id,
+        Name: category,
+      });
 
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
@@ -96,6 +99,7 @@ function EditCategory() {
                   name="text"
                   type="text"
                   required
+                  maxLength={20}
                   onChange={(e) => setCategory(e.currentTarget.value)}
                   value={category && category}
                   className="px-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

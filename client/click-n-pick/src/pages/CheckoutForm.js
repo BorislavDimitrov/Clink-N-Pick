@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { useParams } from "react-router-dom";
 
-import { promote } from "../fetch/requests/products";
+import { promoteProduct } from "../fetch/requests/products";
 import Modal from "../components/Modal";
 
 export default function CheckoutForm() {
@@ -36,9 +36,9 @@ export default function CheckoutForm() {
     });
 
     if (paymentIntent.status === "succeeded") {
-      (async function promoteProduct() {
+      (async function () {
         try {
-          var response = await promote({
+          var response = await promoteProduct({
             productId: params.productId,
             promotionPricingId: params.promotionId,
           });

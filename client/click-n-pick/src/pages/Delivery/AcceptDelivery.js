@@ -2,6 +2,7 @@ import ReactIframe from "react-iframe";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 
+import Modal from "../../components/Modal";
 import {
   acceptShipment,
   getCities,
@@ -17,12 +18,15 @@ function AcceptDelivery() {
   const [streets, setStreets] = useState([]);
   const [cityId, setCityId] = useState(1);
   const [cityPostCode, setCityPostCode] = useState();
+  const [responseResult, setResponseResult] = useState();
   const params = useParams();
 
   const [clientSenderProfile, setClientSenderProfile] = useState({
     name: "",
     phones: "",
   });
+
+  var modal = useRef();
 
   useEffect(() => {
     (async function () {
@@ -111,8 +115,12 @@ function AcceptDelivery() {
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
       }
+
+      setResponseResult("ok");
+      modal.current.open();
     } catch (error) {
-      alert("Some problem occurred.");
+      setResponseResult("bad");
+      modal.current.open();
     }
   }
 
@@ -124,8 +132,36 @@ function AcceptDelivery() {
     };
   }, []);
 
+  function redirectTo() {
+    window.location.href = "/Delivery/ShipmentsToSend";
+  }
+
   return (
     <>
+      {" "}
+      <Modal
+        ref={modal}
+        performAction={responseResult === "ok" ? redirectTo : ""}
+        buttonCaption="Okay"
+      >
+        {responseResult === "ok" && (
+          <>
+            <h2 className="text-xl font-bold text-green-700 my-4">
+              Successfully Accepted Delivery!
+            </h2>
+          </>
+        )}
+        {responseResult === "bad" && (
+          <>
+            <h2 className="text-xl font-bold text-red-700 my-4">
+              Accepting Delivery Failed!
+            </h2>
+            <p className="text-stone-600 mb-4">
+              Please check the information you provide and try again.
+            </p>
+          </>
+        )}
+      </Modal>
       <div className="flex flex-col items-center h-screen">
         <div className="w-full max-w-5xl p-4 mt-20">
           <div className="flex justify-center mb-10">
@@ -134,14 +170,14 @@ function AcceptDelivery() {
               onClick={() => setSendFrom("Office")}
               className="mx-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              To Office
+              From Office
             </button>
             <button
               disabled={sendFrom === "Address"}
               onClick={() => setSendFrom("Address")}
               className="mx-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
-              To Address
+              From Address
             </button>
           </div>
           <form
@@ -151,11 +187,12 @@ function AcceptDelivery() {
           >
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Sender Client Name
+                Sender Name
               </label>
               <input
                 type="text"
                 name="SenderName"
+                required
                 onChange={(e) => {
                   setClientSenderProfile((prevClientProfile) => ({
                     ...prevClientProfile,
@@ -168,13 +205,14 @@ function AcceptDelivery() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Sender Phone
+                Sender Phone Number
               </label>
               <input
+                required
                 type="text"
                 name="SenderPhoneNumber"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder=""
+                placeholder="+359 88 456 7890"
                 onChange={(e) => {
                   setClientSenderProfile((prevClientProfile) => ({
                     ...prevClientProfile,
@@ -202,6 +240,7 @@ function AcceptDelivery() {
                 Pack Count
               </label>
               <input
+                required
                 type="number"
                 name="PackCount"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -213,6 +252,7 @@ function AcceptDelivery() {
                 Payment Receiver Amount
               </label>
               <input
+                required
                 type="number"
                 name="PaymentReceiverAmount"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -224,6 +264,7 @@ function AcceptDelivery() {
                 Shipment Type
               </label>
               <select
+                required
                 name="ShipmentType"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               >
@@ -241,9 +282,10 @@ function AcceptDelivery() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Weight
+                Weight In Grams
               </label>
               <input
+                required
                 step="0.01"
                 type="number"
                 name="Weight"
@@ -255,11 +297,12 @@ function AcceptDelivery() {
               <label className="block text-sm font-medium text-gray-700">
                 Shipment Description
               </label>
-              <input
-                type="text"
+              <textarea
+                type="textarea"
                 name="ShipmentDescription"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Shipment Description"
+                max="2000"
               />
             </div>
             <div>
@@ -267,6 +310,7 @@ function AcceptDelivery() {
                 Order Number
               </label>
               <input
+                required
                 type="text"
                 name="OrderNumber"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -280,6 +324,7 @@ function AcceptDelivery() {
                     City / Village
                   </label>
                   <select
+                    required
                     onChange={(event) => {
                       const selectedOption = event.target.selectedOptions[0];
                       const cityId = selectedOption.getAttribute("id");
@@ -311,6 +356,7 @@ function AcceptDelivery() {
                     Quarter
                   </label>
                   <select
+                    required
                     defaultValue={quarters.length > 0 ? quarters[0].nameEn : ""}
                     name="Quarter"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -329,6 +375,7 @@ function AcceptDelivery() {
                     Street
                   </label>
                   <select
+                    required
                     name="Street"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   >
@@ -350,7 +397,20 @@ function AcceptDelivery() {
                     type="text"
                     name="StreetNumber"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Additional Info"
+                    placeholder="Street Number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Take From Address Details Info
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    name="DeliverAddressInfo"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="[Flat Number]/[Level/Floor Number]/[Block Number]/[Building/Complex Name]"
                   />
                 </div>
 
@@ -359,6 +419,7 @@ function AcceptDelivery() {
                     Request Courier From Date
                   </label>
                   <input
+                    required
                     type="datetime-local"
                     min={`${new Date().toISOString().slice(0, 11)}09:00`}
                     name="RequestTimeFrom"
@@ -371,23 +432,11 @@ function AcceptDelivery() {
                     Request Courier To Date
                   </label>
                   <input
+                    required
                     type="datetime-local"
                     min={`${new Date().toISOString().slice(0, 11)}09:00`}
                     name="RequestTimeTo"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Deliver Address Info
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    name="DeliverAddressInfo"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Additional Info"
                   />
                 </div>
               </>

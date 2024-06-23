@@ -7,12 +7,10 @@ public static class EmailContentHelper
     private const string UsernamePlaceholder = @"\[Username\]";
     private const string ConfirmationLinkPlaceholder = @"\[ConfirmationLink\]";
     private const string ResetPasswordLinkPlaceholder = @"\[ResetPasswordLink\]";
-    private const string PromotionDetailsPlaceholder = @"\[PromotionDetails\]";
 
     private static readonly Regex UsernameRegex = new Regex(UsernamePlaceholder);
     private static readonly Regex ConfirmationLinkRegex = new Regex(ConfirmationLinkPlaceholder);
     private static readonly Regex ResetPasswordLinkRegex = new Regex(ResetPasswordLinkPlaceholder);
-    private static readonly Regex PromotionDetailsRegex = new Regex(PromotionDetailsPlaceholder);
 
     private const string ConfirmEmailTextTemplate = @"
 <body style='font-family: Arial, sans-serif; margin: 100px; padding: 100px; background-color: #f4f4f4;'>
@@ -41,21 +39,6 @@ public static class EmailContentHelper
   </div>
 </body>";
 
-    private const string PromotionSuccessEmailTextTemplate = @"
-<body style='font-family: Arial, sans-serif; margin: 0; padding: 0;'>
-  <div style='max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);'>
-    <h1 style='color: #333; font-size: 24px; font-weight: bold; text-align: center;'>Congratulations! Your Ad is Successfully Promoted</h1>
-    <p style='color: #666; font-size: 16px; text-align: center;'>Dear [Username],</p>
-    <p style='color: #666; font-size: 16px; text-align: center;'>Your product promotion ad has been successfully promoted. Payment for the promotion has been processed successfully.</p>
-    <div style='text-align: center; margin-top: 20px;'>
-      <p style='color: #666; font-size: 16px; text-align: center;'>Promotion Details:</p>
-      <p style='color: #666; font-size: 16px; text-align: center;'>[PromotionDetails]</p>
-    </div>
-    <p style='color: #666; font-size: 16px; text-align: center; margin-top: 20px;'>Thank you for choosing our platform for promoting your product.</p>
-    <p style='color: #666; font-size: 16px; text-align: center; margin-top: 20px;'>Best regards,<br />Click N`Pick team</p>
-  </div>
-</body>";
-
     public static string FormatConfirmEmailText(string username, string confirmationLink)
     {
         string formattedEmail = ConfirmEmailTextTemplate;
@@ -72,16 +55,6 @@ public static class EmailContentHelper
 
         formattedEmail = UsernameRegex.Replace(formattedEmail, username);
         formattedEmail = ResetPasswordLinkRegex.Replace(formattedEmail, resetPasswordLink);
-
-        return formattedEmail;
-    }
-
-    public static string FormatPromotionSuccessEmailText(string username, string promotionDetails)
-    {
-        string formattedEmail = PromotionSuccessEmailTextTemplate;
-
-        formattedEmail = UsernameRegex.Replace(formattedEmail, username);
-        formattedEmail = PromotionDetailsRegex.Replace(formattedEmail, promotionDetails);
 
         return formattedEmail;
     }

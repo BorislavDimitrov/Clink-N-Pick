@@ -18,14 +18,15 @@ public class ViewProfileResponseModel
 
     public static ViewProfileResponseModel FromViewProfileResponseDto(ViewProfileResponseDto dto)
     {
-        return new ViewProfileResponseModel
-        {
-            Username = dto.Username,
-            PhoneNumber = dto.PhoneNumber,
-            Email = dto.Email,
-            Address = dto.Address,
-            Bio = dto.Bio,
-            ProfileImageUrl = dto.ProfileImageUrl,
-        };
+        var model = new ViewProfileResponseModel();
+
+        model.Username = dto.Username;
+        model.PhoneNumber = dto.PhoneNumber;
+        model.Email = dto.Email;
+        model.Address = dto.Address;
+        model.Bio = dto.Bio;
+        model.ProfileImageUrl = dto.ProfileImageUrl;
+
+        return model;
     }
 }

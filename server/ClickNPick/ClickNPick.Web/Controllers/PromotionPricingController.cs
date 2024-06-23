@@ -16,7 +16,7 @@ public class PromotionPricingController : ApiController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var result = await _promotionPricingService.GetAll();
+        var result = await _promotionPricingService.GetAllAsync();
         var response = PromotionListingResponseModel.FromPromotionListingResponseDto(result);
 
         return Ok(response);

@@ -8,16 +8,17 @@ public class UserProductsRequestModel : FilterPaginationModel
 
     public UserProductsRequestDto ToUserProductsRequestDto()
     {
-        return new UserProductsRequestDto
-        {
-            UserId = this.UserId,
-            Search = this.Search,
-            MinPrice = this.MinPrice,
-            MaxPrice = this.MaxPrice,
-            CategoryIds = this.CategoryIds,
-            OrderBy = this.OrderBy,
-            PageNumber = this.PageNumber,
-            TotalItems = this.TotalItems,
-        };
+        var dto = new UserProductsRequestDto();
+
+        dto.UserId = this.UserId;
+        dto.Search = this.Search;
+        dto.MinPrice = this.MinPrice;
+        dto.MaxPrice = this.MaxPrice;
+        dto.CategoryIds = this.CategoryIds;
+        dto.OrderBy = this.OrderBy;
+        dto.PageNumber = this.PageNumber;
+        dto.TotalItems = this.TotalItems;
+
+        return dto;
     }
 }

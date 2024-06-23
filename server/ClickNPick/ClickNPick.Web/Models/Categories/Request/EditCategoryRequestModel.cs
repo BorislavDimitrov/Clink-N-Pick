@@ -10,10 +10,11 @@ public class EditCategoryRequestModel
 
     public EditCategoryRequestDto ToEditCategoryRequestDto()
     {
-        return new EditCategoryRequestDto
-        {
-            CategoryId = CategoryId,
-            Name = Name,
-        };
+        var dto = new EditCategoryRequestDto();
+
+        dto.CategoryId = CategoryId;
+        dto.Name = Name;
+
+        return dto;
     }
 }

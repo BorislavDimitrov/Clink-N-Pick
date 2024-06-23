@@ -21,13 +21,14 @@ public class CreateProductRequestDto
 
     public Product ToProduct()
     {
-        return new Product
-        {
-            Title = this.Title,
-            Description = this.Description,
-            Price = this.Price,
-            CreatorId = this.CreatorId,
-            CategoryId = this.CategoryId,
-        };
+        var product = new Product();
+
+        product.Title = this.Title;
+        product.Description = this.Description;
+        product.Price = this.Price;
+        product.CreatorId = this.CreatorId;
+        product.CategoryId = this.CategoryId;
+        
+        return product;
     }
 }

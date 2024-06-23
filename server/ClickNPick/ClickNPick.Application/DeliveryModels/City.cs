@@ -28,9 +28,6 @@ public class City
     [JsonProperty("phoneCode")]
     public string? PhoneCode { get; set; }
 
-    [JsonProperty("location")]
-    public GeoLocation? Location { get; set; }
-
     [JsonProperty("expressCityDeliveries")]
     public bool? ExpressCityDeliveries { get; set; }
 

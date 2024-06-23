@@ -14,6 +14,8 @@ public static class ApplicationBuilderConfigurations
             app.UseSwaggerUI();
         }
 
+        app.UseExceptionHandler(_ => { });
+
         app.UseCors("policy-base");
         app.UseHttpsRedirection();
 

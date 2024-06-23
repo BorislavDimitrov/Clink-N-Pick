@@ -10,10 +10,11 @@ public class EmailConfirmationRequestModel
 
     public EmailConfirmationRequestDto ToEmailConfirmationRequestDto()
     {
-        return new EmailConfirmationRequestDto
-        {
-            UserId = this.UserId,
-            EmailConfirmationToken = this.EmailConfirmationToken
-        };
+        var dto = new EmailConfirmationRequestDto();
+
+        dto.UserId = this.UserId;
+        dto.EmailConfirmationToken = this.EmailConfirmationToken;
+
+        return dto;
     }
 }

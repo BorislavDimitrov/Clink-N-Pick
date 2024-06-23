@@ -16,13 +16,14 @@ public class PromotionInListResponseModel
 
     public static PromotionInListResponseModel FromPromotionInListResponseDto(PromotionInListResponseDto dto)
     {
-        return new PromotionInListResponseModel
-        {
-            Id = dto.Id,
-            Price = dto.Price,
-            DurationDays = dto.DurationDays,
-            Name = dto.Name,
-            PricePerDay = dto.PricePerDay,
-        };
+        var model = new PromotionInListResponseModel();
+
+        model.Id = dto.Id;
+        model.Price = dto.Price;
+        model.DurationDays = dto.DurationDays;
+        model.Name = dto.Name;
+        model.PricePerDay = dto.PricePerDay;
+
+        return model;
     }
 }

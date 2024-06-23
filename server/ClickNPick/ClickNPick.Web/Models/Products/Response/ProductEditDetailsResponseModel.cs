@@ -16,13 +16,14 @@ internal class ProductEditDetailsResponseModel
 
     public static ProductEditDetailsResponseModel FromProductEditDetailsResponseDto(ProductEditDetailsResponseDto dto)
     {
-        return new ProductEditDetailsResponseModel
-        {
-            Title = dto.Title,
-            Price = dto.Price,
-            DiscountPrice = dto.DiscountPrice,
-            CategoryId = dto.CategoryId,
-            Description = dto.Description,
-        };
+        var model = new ProductEditDetailsResponseModel();
+
+        model.Title = dto.Title;
+        model.Price = dto.Price;
+        model.DiscountPrice = dto.DiscountPrice;
+        model.CategoryId = dto.CategoryId;
+        model.Description = dto.Description;
+        
+        return model;
     }
 }

@@ -9,7 +9,7 @@ import {
   areImagesValid,
   isImageValid,
 } from "../../Utility/validations";
-import { create } from "../../fetch/requests/products";
+import { createProduct } from "../../fetch/requests/products";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
@@ -51,7 +51,7 @@ function CreateProduct() {
 
   const titleIsInvalid = didEdit.title && !isTitleValid(enteredValues.title);
   const priceIsInvalid =
-    didEdit.price && !isPriceValid(enteredValues.price, 1, 100000);
+    didEdit.price && !isPriceValid(enteredValues.price, 1, 50000);
   const descriptionIsInvalid =
     didEdit.description && !isDescriptionValid(enteredValues.description);
 
@@ -93,7 +93,7 @@ function CreateProduct() {
     }
 
     try {
-      var response = await create(formData, true);
+      var response = await createProduct(formData, true);
 
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
@@ -168,7 +168,7 @@ function CreateProduct() {
         {responseResult === "ok" && (
           <>
             <h2 className="text-xl font-bold text-green-700 my-4">
-              Successful creat!
+              Successful create!
             </h2>
           </>
         )}
@@ -234,9 +234,9 @@ function CreateProduct() {
                     <Tippy
                       content={
                         <p className="text-red-400 text-base font-medium">
-                          Required! Between 1 - 100 000.
+                          Required! Between 1 - 50 000.
                           <span className="text-white pl-2">
-                            Please provide a price in the range of 1 - 100 000.
+                            Please provide a price in the range of 1 - 50 000.
                           </span>
                         </p>
                       }
@@ -249,7 +249,7 @@ function CreateProduct() {
                   <input
                     name="price"
                     min="1"
-                    max="100000"
+                    max="50000"
                     step="0.01"
                     required
                     type="number"
@@ -263,7 +263,7 @@ function CreateProduct() {
 
                   <div className="text-red-500">
                     {priceIsInvalid && (
-                      <p>The price must be between 1 and 100 000.</p>
+                      <p>The price must be between 1 and 50 000.</p>
                     )}
                   </div>
                 </div>

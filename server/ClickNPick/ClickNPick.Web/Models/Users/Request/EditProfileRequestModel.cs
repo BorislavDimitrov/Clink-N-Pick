@@ -7,23 +7,24 @@ public class EditProfileRequestModel
 {
     public string Username { get; set; }
 
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 
-    public string? Address { get; set; }
+    public string Address { get; set; }
 
-    public string? Bio { get; set; }
+    public string Bio { get; set; }
 
-    public IFormFile? Image { get; set; }
+    public IFormFile Image { get; set; }
 
     public EditProfileRequestDto ToEditProfileRequestDto()
     {
-        return new EditProfileRequestDto
-        {
-            Username = this.Username,
-            PhoneNumber = this.PhoneNumber,
-            Bio = this.Bio,
-            Image = this.Image,
-            Address = this.Address,
-        };
+        var dto = new EditProfileRequestDto();
+
+        dto.Username = this.Username;
+        dto.PhoneNumber = this.PhoneNumber;
+        dto.Bio = this.Bio;
+        dto.Image = this.Image;
+        dto.Address = this.Address;
+
+        return dto;
     }
 }

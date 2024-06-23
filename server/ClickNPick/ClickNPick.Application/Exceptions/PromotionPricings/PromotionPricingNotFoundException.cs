@@ -1,6 +1,8 @@
-﻿namespace ClickNPick.Application.Exceptions.PromotionPricings;
+﻿using ClickNPick.Application.Exceptions.General;
 
-public class PromotionPricingNotFoundException : Exception
+namespace ClickNPick.Application.Exceptions.PromotionPricings;
+
+public class PromotionPricingNotFoundException : NotFoundException
 {
     private const string DefaultMessage = "Promotion pricing not found.";
 

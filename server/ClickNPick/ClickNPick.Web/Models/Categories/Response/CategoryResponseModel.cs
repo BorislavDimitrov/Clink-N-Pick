@@ -10,10 +10,11 @@ public class CategoryResponseModel
 
     public static CategoryResponseModel FromCategoryDto(CategoryDto dto)
     {
-        return new CategoryResponseModel
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-        };
+        var model = new CategoryResponseModel();
+
+        model.Id = dto.Id;
+        model.Name = dto.Name;
+        
+        return model;
     }
 }

@@ -15,7 +15,7 @@ public class EditProfileRequestModelValidator : AbstractValidator<EditProfileReq
             .MaximumLength(2000).When(x => x.Bio != null);
 
         RuleFor(x => x.Address)
-            .MaximumLength(100).When(x => x.Bio != null);
+            .MaximumLength(100).When(x => x.Address != null);
 
         RuleFor(x => x.Image)
             .Must(CommonValidations.BeAValidImage).When(x => x.Image != null).WithMessage("Only image files (jpg, jpeg, png) are allowed.")

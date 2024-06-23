@@ -10,10 +10,11 @@ public class CategoryDto
 
     public static CategoryDto FromCategory (Category category)
     {
-        return new CategoryDto
-        {
-            Id = category.Id,
-            Name = category.Name,
-        };
+        var dto = new CategoryDto();
+
+        dto.Id = category.Id;
+        dto.Name = category.Name;
+        
+        return dto;
     }
 }

@@ -10,10 +10,11 @@ public class PromoteProductRequestModel
 
     public PromoteProductRequestDto ToPromoteProductRequestDto()
     {
-        return new PromoteProductRequestDto
-        {
-            ProductId = this.ProductId,
-            PromotionPricingId = this.PromotionPricingId
-        };
+        var dto = new PromoteProductRequestDto();
+
+        dto.ProductId = this.ProductId;
+        dto.PromotionPricingId = this.PromotionPricingId;
+
+        return dto;
     }
 }

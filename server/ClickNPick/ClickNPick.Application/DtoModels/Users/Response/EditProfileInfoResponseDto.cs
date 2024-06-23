@@ -6,23 +6,24 @@ public class EditProfileInfoResponseDto
 {
     public string Username { get; set; }
 
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 
-    public string? Address { get; set; }
+    public string Address { get; set; }
 
-    public string? Bio { get; set; }
+    public string Bio { get; set; }
 
     public string ProfileImageUrl { get; set; }
 
     public static EditProfileInfoResponseDto FromUser (User user)
     {
-        return new EditProfileInfoResponseDto
-        {
-            Username = user.UserName,
-            PhoneNumber = user.PhoneNumber,
-            Address = user.Address,
-            Bio = user.Bio,
-            ProfileImageUrl = user.Image.Url,
-        };
+        var dto = new EditProfileInfoResponseDto();
+
+        dto.Username = user.UserName;
+        dto.PhoneNumber = user.PhoneNumber;
+        dto.Address = user.Address;
+        dto.Bio = user.Bio;
+        dto.ProfileImageUrl = user.Image.Url;
+        
+        return dto;
     }
 }

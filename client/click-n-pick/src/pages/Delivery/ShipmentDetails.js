@@ -113,10 +113,6 @@ function ShipmentDetails() {
                   <strong>Details:</strong>{" "}
                   {shipment.trackingEvents[0].destinationDetailsEn}
                 </p>
-                <p>
-                  <strong>Expected Delivery Date:</strong>{" "}
-                  {shipment.expectedDeliveryDate}
-                </p>
               </div>
             </div>
           </div>

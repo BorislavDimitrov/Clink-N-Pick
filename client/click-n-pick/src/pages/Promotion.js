@@ -46,7 +46,7 @@ function Promotion() {
                     </h2>
                     <div className="p-8 sm:p-10 flex flex-row justify-center align-middle text-center">
                       <div className=" flex items-baseline text-5xl tracking-tight text-gray-900 dark:text-gray-200 font-semibold">
-                        ${promotion.price}
+                        €{promotion.price}
                         <span className="text-lg font-semibold leading-8 tracking-normal text-gray-500 dark:text-gray-400">
                           /{promotion.durationDays} days
                         </span>
@@ -57,7 +57,7 @@ function Promotion() {
                         <ul role="list" className="space-y-6">
                           <li className="">
                             <p className="flex ml-3 leading-6 text-gray-600 dark:text-gray-300 text-center align-middle justify-center text-lg">
-                              {promotion.pricePerDay}$ / day
+                              {promotion.pricePerDay} € / day
                             </p>
                           </li>
                         </ul>

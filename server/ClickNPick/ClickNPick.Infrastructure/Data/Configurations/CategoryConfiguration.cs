@@ -11,6 +11,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         category
             .HasMany(x => x.Products)
             .WithOne(x => x.Category)
+            .HasForeignKey(x => x.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
         category
@@ -23,6 +24,6 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         category
             .Property(x => x.Name)
             .IsRequired(true)
-            .HasMaxLength(35);                        
+            .HasMaxLength(20);                        
     }
 }

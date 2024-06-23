@@ -8,9 +8,10 @@ public class CreateCategoryRequestModel
 
     public CreateCategoryRequestDto ToCreateCategoryRequestDto()
     {
-        return new CreateCategoryRequestDto
-        {
-            Name = Name,
-        };
+        var dto = new CreateCategoryRequestDto();
+        
+        dto.Name = Name;
+
+        return dto;
     }
 }
